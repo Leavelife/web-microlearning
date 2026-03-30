@@ -7,10 +7,11 @@ First, run the development server:
 ```bash
 npm install
 
-npm prisma init
+npx prisma init
 
+npx prisma generate
 # for looking the database (optional)
-# npm run studio
+# npx prisma studio
 
 npm run dev
 ```

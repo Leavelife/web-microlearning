@@ -1,7 +1,13 @@
+import { cookies } from "next/headers"
+
 export async function POST() {
-  return new Response(null, {
-    headers: {
-      "Set-Cookie": "token=; HttpOnly; Path=/; Max-Age=0"
-    }
+  const cookieStore = await cookies()
+
+  cookieStore.set("token", "", {
+    httpOnly: true,
+    expires: new Date(0),
+    path: "/"
   })
+
+  return Response.json({ message: "Logout berhasil" })
 }

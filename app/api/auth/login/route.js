@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import { serialize } from 'cookie'
+import { generateToken } from '@/lib/auth'
+import { cookies } from 'next/headers'
 
 export async function POST(req) {
   const body = await req.json()
@@ -12,33 +12,27 @@ export async function POST(req) {
   })
 
   if (!user) {
-    return Response.json({ error: "User not found" }, { status: 404 })
+    return Response.json({ error: "User Tidak Ditemukan" }, { status: 404 })
   }
 
   const isValid = await bcrypt.compare(password, user.password)
 
   if (!isValid) {
-    return Response.json({ error: "Wrong password" }, { status: 401 })
+    return Response.json({ error: "Password Salah" }, { status: 401 })
   }
 
-  const token = jwt.sign(
-    { userId: user.id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" }
-  )
+  const token = generateToken(user)
 
-  const cookie = serialize("token", token, {
+ const cookieStore = await cookies()
+  cookieStore.set("token", token, {
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // buat localhost
+    sameSite: "strict",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7
+    maxAge: 60 * 60 * 24 * 7 // 7 hari
   })
 
-  return new Response(
-    JSON.stringify({ message: "Login success" }),
-    {
-      headers: {
-        "Set-Cookie": cookie
-      }
-    }
-  )
+  return Response.json({
+    message: "Login berhasil"
+  })
 }

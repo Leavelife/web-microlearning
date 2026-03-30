@@ -1,23 +1,23 @@
-import { prisma } from '@/lib/prisma'
-import jwt from 'jsonwebtoken'
-import { cookies } from 'next/headers'
+import { prisma } from "@/lib/prisma"
+import { requireAuth } from "@/lib/auth-guard"
 
 export async function GET() {
-  const token = cookies().get("token")?.value
-
-  if (!token) {
-    return Response.json({ user: null })
-  }
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const authUser = await requireAuth()
 
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId }
+      where: { id: authUser.id },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        role: true
+      }
     })
 
-    return Response.json(user)
+    return Response.json({ user })
+
   } catch (err) {
-    return Response.json({ user: null })
+    return Response.json({ error: "Unauthorized" }, { status: 401 })
   }
 }
