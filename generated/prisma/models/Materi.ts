@@ -469,18 +469,6 @@ export type MateriScalarRelationFilter = {
   isNot?: Prisma.MateriWhereInput
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
-}
-
 export type MateriCreateNestedOneWithoutProgressesInput = {
   create?: Prisma.XOR<Prisma.MateriCreateWithoutProgressesInput, Prisma.MateriUncheckedCreateWithoutProgressesInput>
   connectOrCreate?: Prisma.MateriCreateOrConnectWithoutProgressesInput

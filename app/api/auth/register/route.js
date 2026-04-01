@@ -24,7 +24,7 @@ export async function POST(req) {
       password: hashedPassword,
       role: "user",
       wilayah: ""
-    }
+    }, 
   })
   const token = generateToken(user)
 
