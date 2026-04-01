@@ -61,8 +61,7 @@ export const ModelName = {
   Achievement: 'Achievement',
   UserAchievement: 'UserAchievement',
   Level: 'Level',
-  LevelUser: 'LevelUser',
-  UserExperience: 'UserExperience'
+  LevelUser: 'LevelUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -86,10 +85,11 @@ export const UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
-  image: 'image',
   role: 'role',
   wilayah: 'wilayah',
-  editCount: 'editCount'
+  image: 'image',
+  editCount: 'editCount',
+  totalExp: 'totalExp'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -101,10 +101,10 @@ export const MateriScalarFieldEnum = {
   judul: 'judul',
   deskripsi: 'deskripsi',
   tipe: 'tipe',
-  tahap: 'tahap',
   urlKonten: 'urlKonten',
   unlockType: 'unlockType',
-  unlockRefId: 'unlockRefId'
+  unlockRefId: 'unlockRefId',
+  tahap: 'tahap'
 } as const
 
 export type MateriScalarFieldEnum = (typeof MateriScalarFieldEnum)[keyof typeof MateriScalarFieldEnum]
@@ -207,15 +207,6 @@ export const LevelUserScalarFieldEnum = {
 export type LevelUserScalarFieldEnum = (typeof LevelUserScalarFieldEnum)[keyof typeof LevelUserScalarFieldEnum]
 
 
-export const UserExperienceScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  jumlahExp: 'jumlahExp'
-} as const
-
-export type UserExperienceScalarFieldEnum = (typeof UserExperienceScalarFieldEnum)[keyof typeof UserExperienceScalarFieldEnum]
-
-
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -244,9 +235,9 @@ export const UserOrderByRelevanceFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
-  image: 'image',
   role: 'role',
-  wilayah: 'wilayah'
+  wilayah: 'wilayah',
+  image: 'image'
 } as const
 
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -365,12 +356,4 @@ export const LevelUserOrderByRelevanceFieldEnum = {
 } as const
 
 export type LevelUserOrderByRelevanceFieldEnum = (typeof LevelUserOrderByRelevanceFieldEnum)[keyof typeof LevelUserOrderByRelevanceFieldEnum]
-
-
-export const UserExperienceOrderByRelevanceFieldEnum = {
-  id: 'id',
-  userId: 'userId'
-} as const
-
-export type UserExperienceOrderByRelevanceFieldEnum = (typeof UserExperienceOrderByRelevanceFieldEnum)[keyof typeof UserExperienceOrderByRelevanceFieldEnum]
 

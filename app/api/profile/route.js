@@ -20,7 +20,6 @@ export async function GET() {
         const data = await prisma.user.findUnique({
             where: { id: user.id },
             include: {
-                experiences: true,
                 achievements: {
                     include: {
                         achievement: true
@@ -43,10 +42,7 @@ export async function GET() {
         })
 
         // hitung total EXP
-        const totalExp = data.experiences.reduce(
-            (acc, exp) => acc + exp.jumlahExp,
-            0
-        )
+        const totalExp = data.totalExp
 
         // ambil level sekarang
         const currentLevel = data.levels[0]?.level || null
@@ -55,19 +51,14 @@ export async function GET() {
         let ranking = null
 
         if (data.wilayah) {
-            const users = await prisma.user.findMany({
-                where: { wilayah: data.wilayah },
-                include: { experiences: true }
-            })
-
-            const sorted = users
-                .map(u => ({
-                id: u.id,
-                totalExp: u.experiences.reduce((a, b) => a + b.jumlahExp, 0)
-                }))
-                .sort((a, b) => b.totalExp - a.totalExp)
-
-            ranking = sorted.findIndex(u => u.id === data.id) + 1
+            ranking = await prisma.user.count({
+                where: {
+                    wilayah: data.wilayah,
+                    totalExp: {
+                        gt: totalExp
+                    }
+                }
+            }) + 1
         }
 
         return Response.json({

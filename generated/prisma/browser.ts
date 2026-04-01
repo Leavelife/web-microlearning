@@ -72,8 +72,3 @@ export type Level = Prisma.LevelModel
  * 
  */
 export type LevelUser = Prisma.LevelUserModel
-/**
- * Model UserExperience
- * 
- */
-export type UserExperience = Prisma.UserExperienceModel

@@ -8,136 +8,139 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  username  String
-  email     String   @unique
-  password  String?
-  image     String?
-  role      String
-  wilayah   String?
-  editCount Int      @default(0)
+  id             String            @id @default(uuid())
+  username       String
+  email          String            @unique
+  password       String?
+  role           String
+  wilayah        String?
+  image          String?
+  editCount      Int               @default(0)
+  totalExp       Int               @default(0)
 
-  experiences UserExperience[]
-  achievements UserAchievement[]
-  levels       LevelUser[]
-  progresses   ProgressMateri[]
-  quizResults  HasilQuizUser[]
-  simulasi     HasilSimulasi[]
+  quizResults    HasilQuizUser[]
+  simulasi       HasilSimulasi[]
+  levels         LevelUser[]
+  progresses     ProgressMateri[]
+  achievements   UserAchievement[]
+
+  @@index([totalExp])
+  @@index([wilayah, totalExp])
 }
 
 model Materi {
-  id            String   @id @default(uuid())
-  nomorMateri   Int
-  judul         String
-  deskripsi     String
-  tipe          String
-  tahap         Int
-  urlKonten     String
-  unlockType    String
-  unlockRefId   String?
-
-  quiz          Quiz[]
-  progresses    ProgressMateri[]
+  id          String           @id @default(uuid())
+  nomorMateri Int
+  judul       String
+  deskripsi   String
+  tipe        String
+  urlKonten   String
+  unlockType  String
+  unlockRefId String?
+  tahap       Int
+  progresses  ProgressMateri[]
+  quiz        Quiz[]
 }
 
 model ProgressMateri {
-  id              String   @id @default(uuid())
+  id              String  @id @default(uuid())
   userId          String
   materiId        String
   progresTerakhir Int
-  completed       Boolean  @default(false)
+  completed       Boolean @default(false)
+  materi          Materi  @relation(fields: [materiId], references: [id])
+  user            User    @relation(fields: [userId], references: [id])
 
-  user   User   @relation(fields: [userId], references: [id])
-  materi Materi @relation(fields: [materiId], references: [id])
+  @@index([materiId], map: "ProgressMateri_materiId_fkey")
+  @@index([userId], map: "ProgressMateri_userId_fkey")
 }
 
 model Quiz {
-  id        String   @id @default(uuid())
-  materiId  String
-  judul     String
+  id       String          @id @default(uuid())
+  materiId String
+  judul    String
+  hasil    HasilQuizUser[]
+  materi   Materi          @relation(fields: [materiId], references: [id])
+  soal     SoalQuiz[]
 
-  materi    Materi   @relation(fields: [materiId], references: [id])
-  soal      SoalQuiz[]
-  hasil     HasilQuizUser[]
+  @@index([materiId], map: "Quiz_materiId_fkey")
 }
 
 model SoalQuiz {
-  id            String @id @default(uuid())
-  quizId        String
-  pertanyaan    String
-  opsi          Json
-  jawabanBenar  String
-  score         Int
+  id           String @id @default(uuid())
+  quizId       String
+  pertanyaan   String
+  opsi         Json
+  jawabanBenar String
+  score        Int
+  quiz         Quiz   @relation(fields: [quizId], references: [id])
 
-  quiz Quiz @relation(fields: [quizId], references: [id])
+  @@index([quizId], map: "SoalQuiz_quizId_fkey")
 }
 
 model HasilQuizUser {
-  id        String   @id @default(uuid())
-  userId    String
-  quizId    String
-  score     Int
-  tanggal   DateTime @default(now())
+  id      String   @id @default(uuid())
+  userId  String
+  quizId  String
+  score   Int
+  tanggal DateTime @default(now())
+  quiz    Quiz     @relation(fields: [quizId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
-  quiz Quiz @relation(fields: [quizId], references: [id])
+  @@index([quizId], map: "HasilQuizUser_quizId_fkey")
+  @@index([userId], map: "HasilQuizUser_userId_fkey")
 }
 
 model HasilSimulasi {
-  id                String   @id @default(uuid())
+  id                String @id @default(uuid())
   userId            String
   idSimulasi        String
   skor              Int
   waktuPenyelesaian Int
   status            String
+  user              User   @relation(fields: [userId], references: [id])
 
-  user User @relation(fields: [userId], references: [id])
+  @@index([userId], map: "HasilSimulasi_userId_fkey")
 }
 
 model Achievement {
-  id          String @id @default(uuid())
-  nama        String
-  deskripsi   String
-  syaratExp   Int
-  kondisi     String
-  urlGambar   String
-
+  id               String            @id @default(uuid())
+  nama             String
+  deskripsi        String
+  syaratExp        Int
+  kondisi          String
+  urlGambar        String
   userAchievements UserAchievement[]
 }
 
 model UserAchievement {
-  id            String   @id @default(uuid())
-  userId        String
-  achievementId String
-  tanggalDidapat DateTime @default(now())
+  id             String      @id @default(uuid())
+  userId         String
+  achievementId  String
+  tanggalDidapat DateTime    @default(now())
+  achievement    Achievement @relation(fields: [achievementId], references: [id])
+  user           User        @relation(fields: [userId], references: [id])
 
-  user        User        @relation(fields: [userId], references: [id])
-  achievement Achievement @relation(fields: [achievementId], references: [id])
+  @@index([achievementId], map: "UserAchievement_achievementId_fkey")
+  @@index([userId], map: "UserAchievement_userId_fkey")
 }
 
 model Level {
-  id        String @id @default(uuid())
+  id        String      @id @default(uuid())
   nama      String
   minExp    Int
   urlGambar String
-
-  users LevelUser[]
+  users     LevelUser[]
 }
 
 model LevelUser {
-  id              String   @id @default(uuid())
-  userId          String
-  levelId         String
-  tanggalDidapat  DateTime @default(now())
+  id             String   @id @default(uuid())
+  userId         String
+  levelId        String
+  tanggalDidapat DateTime @default(now())
+  level          Level    @relation(fields: [levelId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
 
-  user  User  @relation(fields: [userId], references: [id])
-  level Level @relation(fields: [levelId], references: [id])
-}
-
-model UserExperience {
-  id        String @id @default(uuid())
-  userId    String
-  jumlahExp Int
-
-  user User @relation(fields: [userId], references: [id])
+  @@index([levelId], map: "LevelUser_levelId_fkey")
+  @@index([userId], map: "LevelUser_userId_fkey")
 }
