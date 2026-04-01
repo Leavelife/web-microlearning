@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  editCount: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  editCount: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -29,8 +39,10 @@ export type UserMinAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
+  image: string | null
   role: string | null
   wilayah: string | null
+  editCount: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -38,8 +50,10 @@ export type UserMaxAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
+  image: string | null
   role: string | null
   wilayah: string | null
+  editCount: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -47,19 +61,31 @@ export type UserCountAggregateOutputType = {
   username: number
   email: number
   password: number
+  image: number
   role: number
   wilayah: number
+  editCount: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  editCount?: true
+}
+
+export type UserSumAggregateInputType = {
+  editCount?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
   username?: true
   email?: true
   password?: true
+  image?: true
   role?: true
   wilayah?: true
+  editCount?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -67,8 +93,10 @@ export type UserMaxAggregateInputType = {
   username?: true
   email?: true
   password?: true
+  image?: true
   role?: true
   wilayah?: true
+  editCount?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -76,8 +104,10 @@ export type UserCountAggregateInputType = {
   username?: true
   email?: true
   password?: true
+  image?: true
   role?: true
   wilayah?: true
+  editCount?: true
   _all?: true
 }
 
@@ -119,6 +149,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -149,6 +191,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -157,10 +201,14 @@ export type UserGroupByOutputType = {
   id: string
   username: string
   email: string
-  password: string
+  password: string | null
+  image: string | null
   role: string
-  wilayah: string
+  wilayah: string | null
+  editCount: number
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -187,9 +235,11 @@ export type UserWhereInput = {
   id?: Prisma.StringFilter<"User"> | string
   username?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
-  password?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringNullableFilter<"User"> | string | null
+  image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.StringFilter<"User"> | string
-  wilayah?: Prisma.StringFilter<"User"> | string
+  wilayah?: Prisma.StringNullableFilter<"User"> | string | null
+  editCount?: Prisma.IntFilter<"User"> | number
   experiences?: Prisma.UserExperienceListRelationFilter
   achievements?: Prisma.UserAchievementListRelationFilter
   levels?: Prisma.LevelUserListRelationFilter
@@ -202,9 +252,11 @@ export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
-  wilayah?: Prisma.SortOrder
+  wilayah?: Prisma.SortOrderInput | Prisma.SortOrder
+  editCount?: Prisma.SortOrder
   experiences?: Prisma.UserExperienceOrderByRelationAggregateInput
   achievements?: Prisma.UserAchievementOrderByRelationAggregateInput
   levels?: Prisma.LevelUserOrderByRelationAggregateInput
@@ -221,9 +273,11 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   username?: Prisma.StringFilter<"User"> | string
-  password?: Prisma.StringFilter<"User"> | string
+  password?: Prisma.StringNullableFilter<"User"> | string | null
+  image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.StringFilter<"User"> | string
-  wilayah?: Prisma.StringFilter<"User"> | string
+  wilayah?: Prisma.StringNullableFilter<"User"> | string | null
+  editCount?: Prisma.IntFilter<"User"> | number
   experiences?: Prisma.UserExperienceListRelationFilter
   achievements?: Prisma.UserAchievementListRelationFilter
   levels?: Prisma.LevelUserListRelationFilter
@@ -236,12 +290,16 @@ export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
-  wilayah?: Prisma.SortOrder
+  wilayah?: Prisma.SortOrderInput | Prisma.SortOrder
+  editCount?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -251,18 +309,22 @@ export type UserScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
-  password?: Prisma.StringWithAggregatesFilter<"User"> | string
+  password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.StringWithAggregatesFilter<"User"> | string
-  wilayah?: Prisma.StringWithAggregatesFilter<"User"> | string
+  wilayah?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  editCount?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
 
 export type UserCreateInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
@@ -275,9 +337,11 @@ export type UserUncheckedCreateInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
@@ -290,9 +354,11 @@ export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
@@ -305,9 +371,11 @@ export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
@@ -320,27 +388,33 @@ export type UserCreateManyInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
 }
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserOrderByRelevanceInput = {
@@ -354,8 +428,14 @@ export type UserCountOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   wilayah?: Prisma.SortOrder
+  editCount?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  editCount?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -363,8 +443,10 @@ export type UserMaxOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   wilayah?: Prisma.SortOrder
+  editCount?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -372,8 +454,14 @@ export type UserMinOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   wilayah?: Prisma.SortOrder
+  editCount?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  editCount?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -383,6 +471,18 @@ export type UserScalarRelationFilter = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type UserCreateNestedOneWithoutProgressesInput = {
@@ -473,9 +573,11 @@ export type UserCreateWithoutProgressesInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
@@ -487,9 +589,11 @@ export type UserUncheckedCreateWithoutProgressesInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
@@ -517,9 +621,11 @@ export type UserUpdateWithoutProgressesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
@@ -531,9 +637,11 @@ export type UserUncheckedUpdateWithoutProgressesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
@@ -545,9 +653,11 @@ export type UserCreateWithoutQuizResultsInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
@@ -559,9 +669,11 @@ export type UserUncheckedCreateWithoutQuizResultsInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
@@ -589,9 +701,11 @@ export type UserUpdateWithoutQuizResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
@@ -603,9 +717,11 @@ export type UserUncheckedUpdateWithoutQuizResultsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
@@ -617,9 +733,11 @@ export type UserCreateWithoutSimulasiInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
@@ -631,9 +749,11 @@ export type UserUncheckedCreateWithoutSimulasiInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
@@ -661,9 +781,11 @@ export type UserUpdateWithoutSimulasiInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
@@ -675,9 +797,11 @@ export type UserUncheckedUpdateWithoutSimulasiInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
@@ -689,9 +813,11 @@ export type UserCreateWithoutAchievementsInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
@@ -703,9 +829,11 @@ export type UserUncheckedCreateWithoutAchievementsInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
@@ -733,9 +861,11 @@ export type UserUpdateWithoutAchievementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
@@ -747,9 +877,11 @@ export type UserUncheckedUpdateWithoutAchievementsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
@@ -761,9 +893,11 @@ export type UserCreateWithoutLevelsInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
@@ -775,9 +909,11 @@ export type UserUncheckedCreateWithoutLevelsInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
   achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
@@ -805,9 +941,11 @@ export type UserUpdateWithoutLevelsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
@@ -819,9 +957,11 @@ export type UserUncheckedUpdateWithoutLevelsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
   achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
@@ -833,9 +973,11 @@ export type UserCreateWithoutExperiencesInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
@@ -847,9 +989,11 @@ export type UserUncheckedCreateWithoutExperiencesInput = {
   id?: string
   username: string
   email: string
-  password: string
+  password?: string | null
+  image?: string | null
   role: string
-  wilayah: string
+  wilayah?: string | null
+  editCount?: number
   achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
@@ -877,9 +1021,11 @@ export type UserUpdateWithoutExperiencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
@@ -891,9 +1037,11 @@ export type UserUncheckedUpdateWithoutExperiencesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.StringFieldUpdateOperationsInput | string
+  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  editCount?: Prisma.IntFieldUpdateOperationsInput | number
   achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
@@ -982,8 +1130,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   username?: boolean
   email?: boolean
   password?: boolean
+  image?: boolean
   role?: boolean
   wilayah?: boolean
+  editCount?: boolean
   experiences?: boolean | Prisma.User$experiencesArgs<ExtArgs>
   achievements?: boolean | Prisma.User$achievementsArgs<ExtArgs>
   levels?: boolean | Prisma.User$levelsArgs<ExtArgs>
@@ -1000,11 +1150,13 @@ export type UserSelectScalar = {
   username?: boolean
   email?: boolean
   password?: boolean
+  image?: boolean
   role?: boolean
   wilayah?: boolean
+  editCount?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password" | "role" | "wilayah", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password" | "image" | "role" | "wilayah" | "editCount", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   experiences?: boolean | Prisma.User$experiencesArgs<ExtArgs>
   achievements?: boolean | Prisma.User$achievementsArgs<ExtArgs>
@@ -1029,9 +1181,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     id: string
     username: string
     email: string
-    password: string
+    password: string | null
+    image: string | null
     role: string
-    wilayah: string
+    wilayah: string | null
+    editCount: number
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1411,8 +1565,10 @@ export interface UserFieldRefs {
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly image: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'String'>
   readonly wilayah: Prisma.FieldRef<"User", 'String'>
+  readonly editCount: Prisma.FieldRef<"User", 'Int'>
 }
     
 

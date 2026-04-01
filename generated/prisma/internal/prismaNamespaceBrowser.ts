@@ -86,8 +86,10 @@ export const UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
+  image: 'image',
   role: 'role',
-  wilayah: 'wilayah'
+  wilayah: 'wilayah',
+  editCount: 'editCount'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -229,24 +231,25 @@ export const JsonNullValueInput = {
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
-export const UserOrderByRelevanceFieldEnum = {
-  id: 'id',
-  username: 'username',
-  email: 'email',
-  password: 'password',
-  role: 'role',
-  wilayah: 'wilayah'
-} as const
-
-export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
-
-
 export const NullsOrder = {
   first: 'first',
   last: 'last'
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const UserOrderByRelevanceFieldEnum = {
+  id: 'id',
+  username: 'username',
+  email: 'email',
+  password: 'password',
+  image: 'image',
+  role: 'role',
+  wilayah: 'wilayah'
+} as const
+
+export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
 
 
 export const MateriOrderByRelevanceFieldEnum = {
