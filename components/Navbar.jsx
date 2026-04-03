@@ -1,11 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 
 export default function Navbar() {
   const [userExp, setUserExp] = useState(0)
+  const [isLoggedIn, setIsLoggedIn] = useState(null)
   const maxExp = 1000
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await fetch("/api/auth/me")
+        setIsLoggedIn(response.ok)
+      } catch (error) {
+        setIsLoggedIn(false)
+      }
+    }
+
+    checkAuth()
+  }, [])
 
   return (
     <nav className="flex items-center justify-between px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 shadow-lg">
@@ -45,16 +59,25 @@ export default function Navbar() {
         {/* Divider */}
         <div className="w-px h-8 bg-purple-400"></div>
 
-        {/* User Profile Icon */}
-        <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-purple-100 transition">
-          <svg
-            className="w-6 h-6 text-purple-600"
-            fill="currentColor"
-            viewBox="0 0 24 24"
+        {/* User Profile / Login Button */}
+        {isLoggedIn === null ? null : isLoggedIn ? (
+          <button className="w-10 h-10 rounded-full bg-white flex items-center justify-center hover:bg-purple-100 transition">
+            <svg
+              className="w-6 h-6 text-purple-600"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+          </button>
+        ) : (
+          <Link
+            href="/login"
+            className="px-6 py-2 bg-white text-purple-600 rounded-full font-semibold hover:bg-purple-100 transition"
           >
-            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-          </svg>
-        </button>
+            Login
+          </Link>
+        )}
       </div>
     </nav>
   )

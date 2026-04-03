@@ -216,8 +216,8 @@ export type ProgressMateriWhereInput = {
   materiId?: Prisma.StringFilter<"ProgressMateri"> | string
   progresTerakhir?: Prisma.IntFilter<"ProgressMateri"> | number
   completed?: Prisma.BoolFilter<"ProgressMateri"> | boolean
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   materi?: Prisma.XOR<Prisma.MateriScalarRelationFilter, Prisma.MateriWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type ProgressMateriOrderByWithRelationInput = {
@@ -226,8 +226,8 @@ export type ProgressMateriOrderByWithRelationInput = {
   materiId?: Prisma.SortOrder
   progresTerakhir?: Prisma.SortOrder
   completed?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
   materi?: Prisma.MateriOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   _relevance?: Prisma.ProgressMateriOrderByRelevanceInput
 }
 
@@ -240,8 +240,8 @@ export type ProgressMateriWhereUniqueInput = Prisma.AtLeast<{
   materiId?: Prisma.StringFilter<"ProgressMateri"> | string
   progresTerakhir?: Prisma.IntFilter<"ProgressMateri"> | number
   completed?: Prisma.BoolFilter<"ProgressMateri"> | boolean
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   materi?: Prisma.XOR<Prisma.MateriScalarRelationFilter, Prisma.MateriWhereInput>
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type ProgressMateriOrderByWithAggregationInput = {
@@ -272,8 +272,8 @@ export type ProgressMateriCreateInput = {
   id?: string
   progresTerakhir: number
   completed?: boolean
-  user: Prisma.UserCreateNestedOneWithoutProgressesInput
   materi: Prisma.MateriCreateNestedOneWithoutProgressesInput
+  user: Prisma.UserCreateNestedOneWithoutProgressesInput
 }
 
 export type ProgressMateriUncheckedCreateInput = {
@@ -288,8 +288,8 @@ export type ProgressMateriUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
   completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  user?: Prisma.UserUpdateOneRequiredWithoutProgressesNestedInput
   materi?: Prisma.MateriUpdateOneRequiredWithoutProgressesNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutProgressesNestedInput
 }
 
 export type ProgressMateriUncheckedUpdateInput = {
@@ -613,8 +613,8 @@ export type ProgressMateriSelect<ExtArgs extends runtime.Types.Extensions.Intern
   materiId?: boolean
   progresTerakhir?: boolean
   completed?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   materi?: boolean | Prisma.MateriDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["progressMateri"]>
 
 
@@ -629,15 +629,15 @@ export type ProgressMateriSelectScalar = {
 
 export type ProgressMateriOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "materiId" | "progresTerakhir" | "completed", ExtArgs["result"]["progressMateri"]>
 export type ProgressMateriInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   materi?: boolean | Prisma.MateriDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $ProgressMateriPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProgressMateri"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
     materi: Prisma.$MateriPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -985,8 +985,8 @@ readonly fields: ProgressMateriFieldRefs;
  */
 export interface Prisma__ProgressMateriClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   materi<T extends Prisma.MateriDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MateriDefaultArgs<ExtArgs>>): Prisma.Prisma__MateriClient<runtime.Types.Result.GetResult<Prisma.$MateriPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

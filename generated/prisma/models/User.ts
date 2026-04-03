@@ -28,10 +28,12 @@ export type AggregateUser = {
 
 export type UserAvgAggregateOutputType = {
   editCount: number | null
+  totalExp: number | null
 }
 
 export type UserSumAggregateOutputType = {
   editCount: number | null
+  totalExp: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -39,10 +41,11 @@ export type UserMinAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
-  image: string | null
   role: string | null
   wilayah: string | null
+  image: string | null
   editCount: number | null
+  totalExp: number | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -50,10 +53,11 @@ export type UserMaxAggregateOutputType = {
   username: string | null
   email: string | null
   password: string | null
-  image: string | null
   role: string | null
   wilayah: string | null
+  image: string | null
   editCount: number | null
+  totalExp: number | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -61,20 +65,23 @@ export type UserCountAggregateOutputType = {
   username: number
   email: number
   password: number
-  image: number
   role: number
   wilayah: number
+  image: number
   editCount: number
+  totalExp: number
   _all: number
 }
 
 
 export type UserAvgAggregateInputType = {
   editCount?: true
+  totalExp?: true
 }
 
 export type UserSumAggregateInputType = {
   editCount?: true
+  totalExp?: true
 }
 
 export type UserMinAggregateInputType = {
@@ -82,10 +89,11 @@ export type UserMinAggregateInputType = {
   username?: true
   email?: true
   password?: true
-  image?: true
   role?: true
   wilayah?: true
+  image?: true
   editCount?: true
+  totalExp?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -93,10 +101,11 @@ export type UserMaxAggregateInputType = {
   username?: true
   email?: true
   password?: true
-  image?: true
   role?: true
   wilayah?: true
+  image?: true
   editCount?: true
+  totalExp?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -104,10 +113,11 @@ export type UserCountAggregateInputType = {
   username?: true
   email?: true
   password?: true
-  image?: true
   role?: true
   wilayah?: true
+  image?: true
   editCount?: true
+  totalExp?: true
   _all?: true
 }
 
@@ -202,10 +212,11 @@ export type UserGroupByOutputType = {
   username: string
   email: string
   password: string | null
-  image: string | null
   role: string
   wilayah: string | null
+  image: string | null
   editCount: number
+  totalExp: number
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -236,16 +247,16 @@ export type UserWhereInput = {
   username?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringNullableFilter<"User"> | string | null
-  image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.StringFilter<"User"> | string
   wilayah?: Prisma.StringNullableFilter<"User"> | string | null
+  image?: Prisma.StringNullableFilter<"User"> | string | null
   editCount?: Prisma.IntFilter<"User"> | number
-  experiences?: Prisma.UserExperienceListRelationFilter
-  achievements?: Prisma.UserAchievementListRelationFilter
-  levels?: Prisma.LevelUserListRelationFilter
-  progresses?: Prisma.ProgressMateriListRelationFilter
+  totalExp?: Prisma.IntFilter<"User"> | number
   quizResults?: Prisma.HasilQuizUserListRelationFilter
   simulasi?: Prisma.HasilSimulasiListRelationFilter
+  levels?: Prisma.LevelUserListRelationFilter
+  progresses?: Prisma.ProgressMateriListRelationFilter
+  achievements?: Prisma.UserAchievementListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -253,16 +264,16 @@ export type UserOrderByWithRelationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
-  image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   wilayah?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   editCount?: Prisma.SortOrder
-  experiences?: Prisma.UserExperienceOrderByRelationAggregateInput
-  achievements?: Prisma.UserAchievementOrderByRelationAggregateInput
-  levels?: Prisma.LevelUserOrderByRelationAggregateInput
-  progresses?: Prisma.ProgressMateriOrderByRelationAggregateInput
+  totalExp?: Prisma.SortOrder
   quizResults?: Prisma.HasilQuizUserOrderByRelationAggregateInput
   simulasi?: Prisma.HasilSimulasiOrderByRelationAggregateInput
+  levels?: Prisma.LevelUserOrderByRelationAggregateInput
+  progresses?: Prisma.ProgressMateriOrderByRelationAggregateInput
+  achievements?: Prisma.UserAchievementOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
 
@@ -274,16 +285,16 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   username?: Prisma.StringFilter<"User"> | string
   password?: Prisma.StringNullableFilter<"User"> | string | null
-  image?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.StringFilter<"User"> | string
   wilayah?: Prisma.StringNullableFilter<"User"> | string | null
+  image?: Prisma.StringNullableFilter<"User"> | string | null
   editCount?: Prisma.IntFilter<"User"> | number
-  experiences?: Prisma.UserExperienceListRelationFilter
-  achievements?: Prisma.UserAchievementListRelationFilter
-  levels?: Prisma.LevelUserListRelationFilter
-  progresses?: Prisma.ProgressMateriListRelationFilter
+  totalExp?: Prisma.IntFilter<"User"> | number
   quizResults?: Prisma.HasilQuizUserListRelationFilter
   simulasi?: Prisma.HasilSimulasiListRelationFilter
+  levels?: Prisma.LevelUserListRelationFilter
+  progresses?: Prisma.ProgressMateriListRelationFilter
+  achievements?: Prisma.UserAchievementListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -291,10 +302,11 @@ export type UserOrderByWithAggregationInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
-  image?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   wilayah?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   editCount?: Prisma.SortOrder
+  totalExp?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -310,10 +322,11 @@ export type UserScalarWhereWithAggregatesInput = {
   username?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
   password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
-  image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   role?: Prisma.StringWithAggregatesFilter<"User"> | string
   wilayah?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   editCount?: Prisma.IntWithAggregatesFilter<"User"> | number
+  totalExp?: Prisma.IntWithAggregatesFilter<"User"> | number
 }
 
 export type UserCreateInput = {
@@ -321,16 +334,16 @@ export type UserCreateInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
-  levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
-  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
+  totalExp?: number
   quizResults?: Prisma.HasilQuizUserCreateNestedManyWithoutUserInput
   simulasi?: Prisma.HasilSimulasiCreateNestedManyWithoutUserInput
+  levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
+  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -338,16 +351,16 @@ export type UserUncheckedCreateInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
-  levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
-  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
+  totalExp?: number
   quizResults?: Prisma.HasilQuizUserUncheckedCreateNestedManyWithoutUserInput
   simulasi?: Prisma.HasilSimulasiUncheckedCreateNestedManyWithoutUserInput
+  levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
+  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -355,16 +368,16 @@ export type UserUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
-  levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
-  progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
   quizResults?: Prisma.HasilQuizUserUpdateManyWithoutUserNestedInput
   simulasi?: Prisma.HasilSimulasiUpdateManyWithoutUserNestedInput
+  levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
+  progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -372,16 +385,16 @@ export type UserUncheckedUpdateInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
-  levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
-  progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
   quizResults?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutUserNestedInput
   simulasi?: Prisma.HasilSimulasiUncheckedUpdateManyWithoutUserNestedInput
+  levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
+  progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -389,10 +402,11 @@ export type UserCreateManyInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
+  totalExp?: number
 }
 
 export type UserUpdateManyMutationInput = {
@@ -400,10 +414,11 @@ export type UserUpdateManyMutationInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -411,10 +426,11 @@ export type UserUncheckedUpdateManyInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type UserOrderByRelevanceInput = {
@@ -428,14 +444,16 @@ export type UserCountOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   wilayah?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   editCount?: Prisma.SortOrder
+  totalExp?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
   editCount?: Prisma.SortOrder
+  totalExp?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -443,10 +461,11 @@ export type UserMaxOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   wilayah?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   editCount?: Prisma.SortOrder
+  totalExp?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -454,14 +473,16 @@ export type UserMinOrderByAggregateInput = {
   username?: Prisma.SortOrder
   email?: Prisma.SortOrder
   password?: Prisma.SortOrder
-  image?: Prisma.SortOrder
   role?: Prisma.SortOrder
   wilayah?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   editCount?: Prisma.SortOrder
+  totalExp?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
   editCount?: Prisma.SortOrder
+  totalExp?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -555,34 +576,20 @@ export type UserUpdateOneRequiredWithoutLevelsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLevelsInput, Prisma.UserUpdateWithoutLevelsInput>, Prisma.UserUncheckedUpdateWithoutLevelsInput>
 }
 
-export type UserCreateNestedOneWithoutExperiencesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutExperiencesInput, Prisma.UserUncheckedCreateWithoutExperiencesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExperiencesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutExperiencesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutExperiencesInput, Prisma.UserUncheckedCreateWithoutExperiencesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutExperiencesInput
-  upsert?: Prisma.UserUpsertWithoutExperiencesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutExperiencesInput, Prisma.UserUpdateWithoutExperiencesInput>, Prisma.UserUncheckedUpdateWithoutExperiencesInput>
-}
-
 export type UserCreateWithoutProgressesInput = {
   id?: string
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
-  levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
+  totalExp?: number
   quizResults?: Prisma.HasilQuizUserCreateNestedManyWithoutUserInput
   simulasi?: Prisma.HasilSimulasiCreateNestedManyWithoutUserInput
+  levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutProgressesInput = {
@@ -590,15 +597,15 @@ export type UserUncheckedCreateWithoutProgressesInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
-  levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
+  totalExp?: number
   quizResults?: Prisma.HasilQuizUserUncheckedCreateNestedManyWithoutUserInput
   simulasi?: Prisma.HasilSimulasiUncheckedCreateNestedManyWithoutUserInput
+  levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutProgressesInput = {
@@ -622,15 +629,15 @@ export type UserUpdateWithoutProgressesInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
-  levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
   quizResults?: Prisma.HasilQuizUserUpdateManyWithoutUserNestedInput
   simulasi?: Prisma.HasilSimulasiUpdateManyWithoutUserNestedInput
+  levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProgressesInput = {
@@ -638,15 +645,15 @@ export type UserUncheckedUpdateWithoutProgressesInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
-  levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
   quizResults?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutUserNestedInput
   simulasi?: Prisma.HasilSimulasiUncheckedUpdateManyWithoutUserNestedInput
+  levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutQuizResultsInput = {
@@ -654,15 +661,15 @@ export type UserCreateWithoutQuizResultsInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  totalExp?: number
+  simulasi?: Prisma.HasilSimulasiCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
-  simulasi?: Prisma.HasilSimulasiCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutQuizResultsInput = {
@@ -670,15 +677,15 @@ export type UserUncheckedCreateWithoutQuizResultsInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  totalExp?: number
+  simulasi?: Prisma.HasilSimulasiUncheckedCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
-  simulasi?: Prisma.HasilSimulasiUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutQuizResultsInput = {
@@ -702,15 +709,15 @@ export type UserUpdateWithoutQuizResultsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
+  simulasi?: Prisma.HasilSimulasiUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
-  simulasi?: Prisma.HasilSimulasiUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutQuizResultsInput = {
@@ -718,15 +725,15 @@ export type UserUncheckedUpdateWithoutQuizResultsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
+  simulasi?: Prisma.HasilSimulasiUncheckedUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
-  simulasi?: Prisma.HasilSimulasiUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSimulasiInput = {
@@ -734,15 +741,15 @@ export type UserCreateWithoutSimulasiInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
+  totalExp?: number
+  quizResults?: Prisma.HasilQuizUserCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
-  quizResults?: Prisma.HasilQuizUserCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSimulasiInput = {
@@ -750,15 +757,15 @@ export type UserUncheckedCreateWithoutSimulasiInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
+  totalExp?: number
+  quizResults?: Prisma.HasilQuizUserUncheckedCreateNestedManyWithoutUserInput
   levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
   progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
-  quizResults?: Prisma.HasilQuizUserUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSimulasiInput = {
@@ -782,15 +789,15 @@ export type UserUpdateWithoutSimulasiInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
+  quizResults?: Prisma.HasilQuizUserUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
-  quizResults?: Prisma.HasilQuizUserUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSimulasiInput = {
@@ -798,15 +805,15 @@ export type UserUncheckedUpdateWithoutSimulasiInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
+  quizResults?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutUserNestedInput
   levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
-  quizResults?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAchievementsInput = {
@@ -814,15 +821,15 @@ export type UserCreateWithoutAchievementsInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
-  levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
-  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
+  totalExp?: number
   quizResults?: Prisma.HasilQuizUserCreateNestedManyWithoutUserInput
   simulasi?: Prisma.HasilSimulasiCreateNestedManyWithoutUserInput
+  levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
+  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAchievementsInput = {
@@ -830,15 +837,15 @@ export type UserUncheckedCreateWithoutAchievementsInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
-  levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
-  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
+  totalExp?: number
   quizResults?: Prisma.HasilQuizUserUncheckedCreateNestedManyWithoutUserInput
   simulasi?: Prisma.HasilSimulasiUncheckedCreateNestedManyWithoutUserInput
+  levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
+  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAchievementsInput = {
@@ -862,15 +869,15 @@ export type UserUpdateWithoutAchievementsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
-  levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
-  progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
   quizResults?: Prisma.HasilQuizUserUpdateManyWithoutUserNestedInput
   simulasi?: Prisma.HasilSimulasiUpdateManyWithoutUserNestedInput
+  levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
+  progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAchievementsInput = {
@@ -878,15 +885,15 @@ export type UserUncheckedUpdateWithoutAchievementsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
-  levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
-  progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
   quizResults?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutUserNestedInput
   simulasi?: Prisma.HasilSimulasiUncheckedUpdateManyWithoutUserNestedInput
+  levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
+  progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutLevelsInput = {
@@ -894,15 +901,15 @@ export type UserCreateWithoutLevelsInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
-  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
+  totalExp?: number
   quizResults?: Prisma.HasilQuizUserCreateNestedManyWithoutUserInput
   simulasi?: Prisma.HasilSimulasiCreateNestedManyWithoutUserInput
+  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutLevelsInput = {
@@ -910,15 +917,15 @@ export type UserUncheckedCreateWithoutLevelsInput = {
   username: string
   email: string
   password?: string | null
-  image?: string | null
   role: string
   wilayah?: string | null
+  image?: string | null
   editCount?: number
-  experiences?: Prisma.UserExperienceUncheckedCreateNestedManyWithoutUserInput
-  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
-  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
+  totalExp?: number
   quizResults?: Prisma.HasilQuizUserUncheckedCreateNestedManyWithoutUserInput
   simulasi?: Prisma.HasilSimulasiUncheckedCreateNestedManyWithoutUserInput
+  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
+  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutLevelsInput = {
@@ -942,15 +949,15 @@ export type UserUpdateWithoutLevelsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
-  progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
   quizResults?: Prisma.HasilQuizUserUpdateManyWithoutUserNestedInput
   simulasi?: Prisma.HasilSimulasiUpdateManyWithoutUserNestedInput
+  progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLevelsInput = {
@@ -958,95 +965,15 @@ export type UserUncheckedUpdateWithoutLevelsInput = {
   username?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  experiences?: Prisma.UserExperienceUncheckedUpdateManyWithoutUserNestedInput
-  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
-  progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
+  totalExp?: Prisma.IntFieldUpdateOperationsInput | number
   quizResults?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutUserNestedInput
   simulasi?: Prisma.HasilSimulasiUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutExperiencesInput = {
-  id?: string
-  username: string
-  email: string
-  password?: string | null
-  image?: string | null
-  role: string
-  wilayah?: string | null
-  editCount?: number
-  achievements?: Prisma.UserAchievementCreateNestedManyWithoutUserInput
-  levels?: Prisma.LevelUserCreateNestedManyWithoutUserInput
-  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutUserInput
-  quizResults?: Prisma.HasilQuizUserCreateNestedManyWithoutUserInput
-  simulasi?: Prisma.HasilSimulasiCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutExperiencesInput = {
-  id?: string
-  username: string
-  email: string
-  password?: string | null
-  image?: string | null
-  role: string
-  wilayah?: string | null
-  editCount?: number
-  achievements?: Prisma.UserAchievementUncheckedCreateNestedManyWithoutUserInput
-  levels?: Prisma.LevelUserUncheckedCreateNestedManyWithoutUserInput
-  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutUserInput
-  quizResults?: Prisma.HasilQuizUserUncheckedCreateNestedManyWithoutUserInput
-  simulasi?: Prisma.HasilSimulasiUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutExperiencesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutExperiencesInput, Prisma.UserUncheckedCreateWithoutExperiencesInput>
-}
-
-export type UserUpsertWithoutExperiencesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutExperiencesInput, Prisma.UserUncheckedUpdateWithoutExperiencesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutExperiencesInput, Prisma.UserUncheckedCreateWithoutExperiencesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutExperiencesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutExperiencesInput, Prisma.UserUncheckedUpdateWithoutExperiencesInput>
-}
-
-export type UserUpdateWithoutExperiencesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  achievements?: Prisma.UserAchievementUpdateManyWithoutUserNestedInput
-  levels?: Prisma.LevelUserUpdateManyWithoutUserNestedInput
-  progresses?: Prisma.ProgressMateriUpdateManyWithoutUserNestedInput
-  quizResults?: Prisma.HasilQuizUserUpdateManyWithoutUserNestedInput
-  simulasi?: Prisma.HasilSimulasiUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutExperiencesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  username?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  wilayah?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  editCount?: Prisma.IntFieldUpdateOperationsInput | number
-  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
-  levels?: Prisma.LevelUserUncheckedUpdateManyWithoutUserNestedInput
   progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutUserNestedInput
-  quizResults?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutUserNestedInput
-  simulasi?: Prisma.HasilSimulasiUncheckedUpdateManyWithoutUserNestedInput
+  achievements?: Prisma.UserAchievementUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1055,21 +982,19 @@ export type UserUncheckedUpdateWithoutExperiencesInput = {
  */
 
 export type UserCountOutputType = {
-  experiences: number
-  achievements: number
-  levels: number
-  progresses: number
   quizResults: number
   simulasi: number
+  levels: number
+  progresses: number
+  achievements: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  experiences?: boolean | UserCountOutputTypeCountExperiencesArgs
-  achievements?: boolean | UserCountOutputTypeCountAchievementsArgs
-  levels?: boolean | UserCountOutputTypeCountLevelsArgs
-  progresses?: boolean | UserCountOutputTypeCountProgressesArgs
   quizResults?: boolean | UserCountOutputTypeCountQuizResultsArgs
   simulasi?: boolean | UserCountOutputTypeCountSimulasiArgs
+  levels?: boolean | UserCountOutputTypeCountLevelsArgs
+  progresses?: boolean | UserCountOutputTypeCountProgressesArgs
+  achievements?: boolean | UserCountOutputTypeCountAchievementsArgs
 }
 
 /**
@@ -1085,15 +1010,15 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountExperiencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserExperienceWhereInput
+export type UserCountOutputTypeCountQuizResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HasilQuizUserWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAchievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.UserAchievementWhereInput
+export type UserCountOutputTypeCountSimulasiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HasilSimulasiWhereInput
 }
 
 /**
@@ -1113,15 +1038,8 @@ export type UserCountOutputTypeCountProgressesArgs<ExtArgs extends runtime.Types
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountQuizResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.HasilQuizUserWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountSimulasiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.HasilSimulasiWhereInput
+export type UserCountOutputTypeCountAchievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.UserAchievementWhereInput
 }
 
 
@@ -1130,16 +1048,16 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   username?: boolean
   email?: boolean
   password?: boolean
-  image?: boolean
   role?: boolean
   wilayah?: boolean
+  image?: boolean
   editCount?: boolean
-  experiences?: boolean | Prisma.User$experiencesArgs<ExtArgs>
-  achievements?: boolean | Prisma.User$achievementsArgs<ExtArgs>
-  levels?: boolean | Prisma.User$levelsArgs<ExtArgs>
-  progresses?: boolean | Prisma.User$progressesArgs<ExtArgs>
+  totalExp?: boolean
   quizResults?: boolean | Prisma.User$quizResultsArgs<ExtArgs>
   simulasi?: boolean | Prisma.User$simulasiArgs<ExtArgs>
+  levels?: boolean | Prisma.User$levelsArgs<ExtArgs>
+  progresses?: boolean | Prisma.User$progressesArgs<ExtArgs>
+  achievements?: boolean | Prisma.User$achievementsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1150,42 +1068,42 @@ export type UserSelectScalar = {
   username?: boolean
   email?: boolean
   password?: boolean
-  image?: boolean
   role?: boolean
   wilayah?: boolean
+  image?: boolean
   editCount?: boolean
+  totalExp?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password" | "image" | "role" | "wilayah" | "editCount", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "username" | "email" | "password" | "role" | "wilayah" | "image" | "editCount" | "totalExp", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  experiences?: boolean | Prisma.User$experiencesArgs<ExtArgs>
-  achievements?: boolean | Prisma.User$achievementsArgs<ExtArgs>
-  levels?: boolean | Prisma.User$levelsArgs<ExtArgs>
-  progresses?: boolean | Prisma.User$progressesArgs<ExtArgs>
   quizResults?: boolean | Prisma.User$quizResultsArgs<ExtArgs>
   simulasi?: boolean | Prisma.User$simulasiArgs<ExtArgs>
+  levels?: boolean | Prisma.User$levelsArgs<ExtArgs>
+  progresses?: boolean | Prisma.User$progressesArgs<ExtArgs>
+  achievements?: boolean | Prisma.User$achievementsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    experiences: Prisma.$UserExperiencePayload<ExtArgs>[]
-    achievements: Prisma.$UserAchievementPayload<ExtArgs>[]
-    levels: Prisma.$LevelUserPayload<ExtArgs>[]
-    progresses: Prisma.$ProgressMateriPayload<ExtArgs>[]
     quizResults: Prisma.$HasilQuizUserPayload<ExtArgs>[]
     simulasi: Prisma.$HasilSimulasiPayload<ExtArgs>[]
+    levels: Prisma.$LevelUserPayload<ExtArgs>[]
+    progresses: Prisma.$ProgressMateriPayload<ExtArgs>[]
+    achievements: Prisma.$UserAchievementPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     username: string
     email: string
     password: string | null
-    image: string | null
     role: string
     wilayah: string | null
+    image: string | null
     editCount: number
+    totalExp: number
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1526,12 +1444,11 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  experiences<T extends Prisma.User$experiencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$experiencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserExperiencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  achievements<T extends Prisma.User$achievementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  levels<T extends Prisma.User$levelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$levelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LevelUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  progresses<T extends Prisma.User$progressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$progressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgressMateriPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   quizResults<T extends Prisma.User$quizResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$quizResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HasilQuizUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   simulasi<T extends Prisma.User$simulasiArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$simulasiArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HasilSimulasiPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  levels<T extends Prisma.User$levelsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$levelsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LevelUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  progresses<T extends Prisma.User$progressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$progressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgressMateriPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  achievements<T extends Prisma.User$achievementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$achievementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserAchievementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1565,10 +1482,11 @@ export interface UserFieldRefs {
   readonly username: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
   readonly password: Prisma.FieldRef<"User", 'String'>
-  readonly image: Prisma.FieldRef<"User", 'String'>
   readonly role: Prisma.FieldRef<"User", 'String'>
   readonly wilayah: Prisma.FieldRef<"User", 'String'>
+  readonly image: Prisma.FieldRef<"User", 'String'>
   readonly editCount: Prisma.FieldRef<"User", 'Int'>
+  readonly totalExp: Prisma.FieldRef<"User", 'Int'>
 }
     
 
@@ -1917,51 +1835,51 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.experiences
+ * User.quizResults
  */
-export type User$experiencesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$quizResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the UserExperience
+   * Select specific fields to fetch from the HasilQuizUser
    */
-  select?: Prisma.UserExperienceSelect<ExtArgs> | null
+  select?: Prisma.HasilQuizUserSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the UserExperience
+   * Omit specific fields from the HasilQuizUser
    */
-  omit?: Prisma.UserExperienceOmit<ExtArgs> | null
+  omit?: Prisma.HasilQuizUserOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserExperienceInclude<ExtArgs> | null
-  where?: Prisma.UserExperienceWhereInput
-  orderBy?: Prisma.UserExperienceOrderByWithRelationInput | Prisma.UserExperienceOrderByWithRelationInput[]
-  cursor?: Prisma.UserExperienceWhereUniqueInput
+  include?: Prisma.HasilQuizUserInclude<ExtArgs> | null
+  where?: Prisma.HasilQuizUserWhereInput
+  orderBy?: Prisma.HasilQuizUserOrderByWithRelationInput | Prisma.HasilQuizUserOrderByWithRelationInput[]
+  cursor?: Prisma.HasilQuizUserWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.UserExperienceScalarFieldEnum | Prisma.UserExperienceScalarFieldEnum[]
+  distinct?: Prisma.HasilQuizUserScalarFieldEnum | Prisma.HasilQuizUserScalarFieldEnum[]
 }
 
 /**
- * User.achievements
+ * User.simulasi
  */
-export type User$achievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$simulasiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the UserAchievement
+   * Select specific fields to fetch from the HasilSimulasi
    */
-  select?: Prisma.UserAchievementSelect<ExtArgs> | null
+  select?: Prisma.HasilSimulasiSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the UserAchievement
+   * Omit specific fields from the HasilSimulasi
    */
-  omit?: Prisma.UserAchievementOmit<ExtArgs> | null
+  omit?: Prisma.HasilSimulasiOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.UserAchievementInclude<ExtArgs> | null
-  where?: Prisma.UserAchievementWhereInput
-  orderBy?: Prisma.UserAchievementOrderByWithRelationInput | Prisma.UserAchievementOrderByWithRelationInput[]
-  cursor?: Prisma.UserAchievementWhereUniqueInput
+  include?: Prisma.HasilSimulasiInclude<ExtArgs> | null
+  where?: Prisma.HasilSimulasiWhereInput
+  orderBy?: Prisma.HasilSimulasiOrderByWithRelationInput | Prisma.HasilSimulasiOrderByWithRelationInput[]
+  cursor?: Prisma.HasilSimulasiWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.UserAchievementScalarFieldEnum | Prisma.UserAchievementScalarFieldEnum[]
+  distinct?: Prisma.HasilSimulasiScalarFieldEnum | Prisma.HasilSimulasiScalarFieldEnum[]
 }
 
 /**
@@ -2013,51 +1931,27 @@ export type User$progressesArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 /**
- * User.quizResults
+ * User.achievements
  */
-export type User$quizResultsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$achievementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the HasilQuizUser
+   * Select specific fields to fetch from the UserAchievement
    */
-  select?: Prisma.HasilQuizUserSelect<ExtArgs> | null
+  select?: Prisma.UserAchievementSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the HasilQuizUser
+   * Omit specific fields from the UserAchievement
    */
-  omit?: Prisma.HasilQuizUserOmit<ExtArgs> | null
+  omit?: Prisma.UserAchievementOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.HasilQuizUserInclude<ExtArgs> | null
-  where?: Prisma.HasilQuizUserWhereInput
-  orderBy?: Prisma.HasilQuizUserOrderByWithRelationInput | Prisma.HasilQuizUserOrderByWithRelationInput[]
-  cursor?: Prisma.HasilQuizUserWhereUniqueInput
+  include?: Prisma.UserAchievementInclude<ExtArgs> | null
+  where?: Prisma.UserAchievementWhereInput
+  orderBy?: Prisma.UserAchievementOrderByWithRelationInput | Prisma.UserAchievementOrderByWithRelationInput[]
+  cursor?: Prisma.UserAchievementWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.HasilQuizUserScalarFieldEnum | Prisma.HasilQuizUserScalarFieldEnum[]
-}
-
-/**
- * User.simulasi
- */
-export type User$simulasiArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the HasilSimulasi
-   */
-  select?: Prisma.HasilSimulasiSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the HasilSimulasi
-   */
-  omit?: Prisma.HasilSimulasiOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.HasilSimulasiInclude<ExtArgs> | null
-  where?: Prisma.HasilSimulasiWhereInput
-  orderBy?: Prisma.HasilSimulasiOrderByWithRelationInput | Prisma.HasilSimulasiOrderByWithRelationInput[]
-  cursor?: Prisma.HasilSimulasiWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.HasilSimulasiScalarFieldEnum | Prisma.HasilSimulasiScalarFieldEnum[]
+  distinct?: Prisma.UserAchievementScalarFieldEnum | Prisma.UserAchievementScalarFieldEnum[]
 }
 
 /**

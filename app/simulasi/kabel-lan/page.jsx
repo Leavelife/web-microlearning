@@ -1,7 +1,7 @@
 "use client";
 
+import VirtualLabSimulasi from "@/components/simulasi/kabel-lan/VirtualLabSimulasi";
 import Navbar from "@/components/Navbar";
-import VirtualLabSimulasi from "@/components/VirtualLabSimulasi";
 
 export default function SimulasiKabelLanPage() {
   return (
@@ -10,7 +10,7 @@ export default function SimulasiKabelLanPage() {
       <section className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-2">Simulasi Kabel LAN (RJ-45)</h1>
         <p className="text-gray-600 mb-6">
-          Susun kabel sesuai urutan straight (T568B). Klik untuk unassign jika ingin mengulangi.
+          Susun kabel sesuai urutan straight (T568B). Kabel dapat diseret dari bawah ke konektor di atas.
         </p>
         <VirtualLabSimulasi />
       </section>

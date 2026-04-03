@@ -394,8 +394,7 @@ export const ModelName = {
   Achievement: 'Achievement',
   UserAchievement: 'UserAchievement',
   Level: 'Level',
-  LevelUser: 'LevelUser',
-  UserExperience: 'UserExperience'
+  LevelUser: 'LevelUser'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "materi" | "progressMateri" | "quiz" | "soalQuiz" | "hasilQuizUser" | "hasilSimulasi" | "achievement" | "userAchievement" | "level" | "levelUser" | "userExperience"
+    modelProps: "user" | "materi" | "progressMateri" | "quiz" | "soalQuiz" | "hasilQuizUser" | "hasilSimulasi" | "achievement" | "userAchievement" | "level" | "levelUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1141,72 +1140,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    UserExperience: {
-      payload: Prisma.$UserExperiencePayload<ExtArgs>
-      fields: Prisma.UserExperienceFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.UserExperienceFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.UserExperienceFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload>
-        }
-        findFirst: {
-          args: Prisma.UserExperienceFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.UserExperienceFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload>
-        }
-        findMany: {
-          args: Prisma.UserExperienceFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload>[]
-        }
-        create: {
-          args: Prisma.UserExperienceCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload>
-        }
-        createMany: {
-          args: Prisma.UserExperienceCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        delete: {
-          args: Prisma.UserExperienceDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload>
-        }
-        update: {
-          args: Prisma.UserExperienceUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload>
-        }
-        deleteMany: {
-          args: Prisma.UserExperienceDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.UserExperienceUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        upsert: {
-          args: Prisma.UserExperienceUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserExperiencePayload>
-        }
-        aggregate: {
-          args: Prisma.UserExperienceAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUserExperience>
-        }
-        groupBy: {
-          args: Prisma.UserExperienceGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserExperienceGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.UserExperienceCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UserExperienceCountAggregateOutputType> | number
-        }
-      }
-    }
   }
 } & {
   other: {
@@ -1251,10 +1184,11 @@ export const UserScalarFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
-  image: 'image',
   role: 'role',
   wilayah: 'wilayah',
-  editCount: 'editCount'
+  image: 'image',
+  editCount: 'editCount',
+  totalExp: 'totalExp'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -1266,10 +1200,10 @@ export const MateriScalarFieldEnum = {
   judul: 'judul',
   deskripsi: 'deskripsi',
   tipe: 'tipe',
-  tahap: 'tahap',
   urlKonten: 'urlKonten',
   unlockType: 'unlockType',
-  unlockRefId: 'unlockRefId'
+  unlockRefId: 'unlockRefId',
+  tahap: 'tahap'
 } as const
 
 export type MateriScalarFieldEnum = (typeof MateriScalarFieldEnum)[keyof typeof MateriScalarFieldEnum]
@@ -1372,15 +1306,6 @@ export const LevelUserScalarFieldEnum = {
 export type LevelUserScalarFieldEnum = (typeof LevelUserScalarFieldEnum)[keyof typeof LevelUserScalarFieldEnum]
 
 
-export const UserExperienceScalarFieldEnum = {
-  id: 'id',
-  userId: 'userId',
-  jumlahExp: 'jumlahExp'
-} as const
-
-export type UserExperienceScalarFieldEnum = (typeof UserExperienceScalarFieldEnum)[keyof typeof UserExperienceScalarFieldEnum]
-
-
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1409,9 +1334,9 @@ export const UserOrderByRelevanceFieldEnum = {
   username: 'username',
   email: 'email',
   password: 'password',
-  image: 'image',
   role: 'role',
-  wilayah: 'wilayah'
+  wilayah: 'wilayah',
+  image: 'image'
 } as const
 
 export type UserOrderByRelevanceFieldEnum = (typeof UserOrderByRelevanceFieldEnum)[keyof typeof UserOrderByRelevanceFieldEnum]
@@ -1530,14 +1455,6 @@ export const LevelUserOrderByRelevanceFieldEnum = {
 } as const
 
 export type LevelUserOrderByRelevanceFieldEnum = (typeof LevelUserOrderByRelevanceFieldEnum)[keyof typeof LevelUserOrderByRelevanceFieldEnum]
-
-
-export const UserExperienceOrderByRelevanceFieldEnum = {
-  id: 'id',
-  userId: 'userId'
-} as const
-
-export type UserExperienceOrderByRelevanceFieldEnum = (typeof UserExperienceOrderByRelevanceFieldEnum)[keyof typeof UserExperienceOrderByRelevanceFieldEnum]
 
 
 
@@ -1700,7 +1617,6 @@ export type GlobalOmitConfig = {
   userAchievement?: Prisma.UserAchievementOmit
   level?: Prisma.LevelOmit
   levelUser?: Prisma.LevelUserOmit
-  userExperience?: Prisma.UserExperienceOmit
 }
 
 /* Types for Logging */

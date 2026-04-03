@@ -20,10 +20,15 @@ export default function SimulasiPage() {
               Latih urutan kabel straight T568B dengan drag and drop ke konektor RJ-45.
             </p>
           </Link>
-          <div className="block rounded-xl border border-gray-200 bg-white p-6 text-gray-400">
-            <h2 className="text-xl font-semibold">Virtual Lab Lainnya (Coming Soon)</h2>
-            <p className="mt-2 text-sm">Simulasi konfigurasi jaringan, topologi, dan troubleshooting.</p>
-          </div>
+          <Link
+            href="/simulasi/pc-building"
+            className="block rounded-xl border border-emerald-300 bg-white p-6 shadow hover:shadow-lg transition"
+          >
+            <h2 className="text-xl font-semibold">PC Building Virtual Lab</h2>
+            <p className="mt-2 text-gray-600 text-sm">
+              Simulasi pemasangan komponen utama PC pada motherboard dengan drag and drop.
+            </p>
+          </Link>
         </div>
       </section>
     </main>
