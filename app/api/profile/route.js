@@ -65,6 +65,8 @@ export async function GET() {
             username: data.username,
             email: data.email,
             wilayah: data.wilayah,
+            image: data.image,
+            editCount: data.editCount,
             totalExp,
             level: currentLevel,
             badge: currentLevel?.urlGambar || null,

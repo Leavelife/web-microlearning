@@ -27,16 +27,19 @@ export type AggregateSoalQuiz = {
 }
 
 export type SoalQuizAvgAggregateOutputType = {
+  nomorSoal: number | null
   score: number | null
 }
 
 export type SoalQuizSumAggregateOutputType = {
+  nomorSoal: number | null
   score: number | null
 }
 
 export type SoalQuizMinAggregateOutputType = {
   id: string | null
   quizId: string | null
+  nomorSoal: number | null
   pertanyaan: string | null
   jawabanBenar: string | null
   score: number | null
@@ -45,6 +48,7 @@ export type SoalQuizMinAggregateOutputType = {
 export type SoalQuizMaxAggregateOutputType = {
   id: string | null
   quizId: string | null
+  nomorSoal: number | null
   pertanyaan: string | null
   jawabanBenar: string | null
   score: number | null
@@ -53,6 +57,7 @@ export type SoalQuizMaxAggregateOutputType = {
 export type SoalQuizCountAggregateOutputType = {
   id: number
   quizId: number
+  nomorSoal: number
   pertanyaan: number
   opsi: number
   jawabanBenar: number
@@ -62,16 +67,19 @@ export type SoalQuizCountAggregateOutputType = {
 
 
 export type SoalQuizAvgAggregateInputType = {
+  nomorSoal?: true
   score?: true
 }
 
 export type SoalQuizSumAggregateInputType = {
+  nomorSoal?: true
   score?: true
 }
 
 export type SoalQuizMinAggregateInputType = {
   id?: true
   quizId?: true
+  nomorSoal?: true
   pertanyaan?: true
   jawabanBenar?: true
   score?: true
@@ -80,6 +88,7 @@ export type SoalQuizMinAggregateInputType = {
 export type SoalQuizMaxAggregateInputType = {
   id?: true
   quizId?: true
+  nomorSoal?: true
   pertanyaan?: true
   jawabanBenar?: true
   score?: true
@@ -88,6 +97,7 @@ export type SoalQuizMaxAggregateInputType = {
 export type SoalQuizCountAggregateInputType = {
   id?: true
   quizId?: true
+  nomorSoal?: true
   pertanyaan?: true
   opsi?: true
   jawabanBenar?: true
@@ -184,6 +194,7 @@ export type SoalQuizGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type SoalQuizGroupByOutputType = {
   id: string
   quizId: string
+  nomorSoal: number
   pertanyaan: string
   opsi: runtime.JsonValue
   jawabanBenar: string
@@ -216,6 +227,7 @@ export type SoalQuizWhereInput = {
   NOT?: Prisma.SoalQuizWhereInput | Prisma.SoalQuizWhereInput[]
   id?: Prisma.StringFilter<"SoalQuiz"> | string
   quizId?: Prisma.StringFilter<"SoalQuiz"> | string
+  nomorSoal?: Prisma.IntFilter<"SoalQuiz"> | number
   pertanyaan?: Prisma.StringFilter<"SoalQuiz"> | string
   opsi?: Prisma.JsonFilter<"SoalQuiz">
   jawabanBenar?: Prisma.StringFilter<"SoalQuiz"> | string
@@ -226,6 +238,7 @@ export type SoalQuizWhereInput = {
 export type SoalQuizOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   quizId?: Prisma.SortOrder
+  nomorSoal?: Prisma.SortOrder
   pertanyaan?: Prisma.SortOrder
   opsi?: Prisma.SortOrder
   jawabanBenar?: Prisma.SortOrder
@@ -240,6 +253,7 @@ export type SoalQuizWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.SoalQuizWhereInput[]
   NOT?: Prisma.SoalQuizWhereInput | Prisma.SoalQuizWhereInput[]
   quizId?: Prisma.StringFilter<"SoalQuiz"> | string
+  nomorSoal?: Prisma.IntFilter<"SoalQuiz"> | number
   pertanyaan?: Prisma.StringFilter<"SoalQuiz"> | string
   opsi?: Prisma.JsonFilter<"SoalQuiz">
   jawabanBenar?: Prisma.StringFilter<"SoalQuiz"> | string
@@ -250,6 +264,7 @@ export type SoalQuizWhereUniqueInput = Prisma.AtLeast<{
 export type SoalQuizOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   quizId?: Prisma.SortOrder
+  nomorSoal?: Prisma.SortOrder
   pertanyaan?: Prisma.SortOrder
   opsi?: Prisma.SortOrder
   jawabanBenar?: Prisma.SortOrder
@@ -267,6 +282,7 @@ export type SoalQuizScalarWhereWithAggregatesInput = {
   NOT?: Prisma.SoalQuizScalarWhereWithAggregatesInput | Prisma.SoalQuizScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"SoalQuiz"> | string
   quizId?: Prisma.StringWithAggregatesFilter<"SoalQuiz"> | string
+  nomorSoal?: Prisma.IntWithAggregatesFilter<"SoalQuiz"> | number
   pertanyaan?: Prisma.StringWithAggregatesFilter<"SoalQuiz"> | string
   opsi?: Prisma.JsonWithAggregatesFilter<"SoalQuiz">
   jawabanBenar?: Prisma.StringWithAggregatesFilter<"SoalQuiz"> | string
@@ -275,6 +291,7 @@ export type SoalQuizScalarWhereWithAggregatesInput = {
 
 export type SoalQuizCreateInput = {
   id?: string
+  nomorSoal?: number
   pertanyaan: string
   opsi: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar: string
@@ -285,6 +302,7 @@ export type SoalQuizCreateInput = {
 export type SoalQuizUncheckedCreateInput = {
   id?: string
   quizId: string
+  nomorSoal?: number
   pertanyaan: string
   opsi: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar: string
@@ -293,6 +311,7 @@ export type SoalQuizUncheckedCreateInput = {
 
 export type SoalQuizUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomorSoal?: Prisma.IntFieldUpdateOperationsInput | number
   pertanyaan?: Prisma.StringFieldUpdateOperationsInput | string
   opsi?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar?: Prisma.StringFieldUpdateOperationsInput | string
@@ -303,6 +322,7 @@ export type SoalQuizUpdateInput = {
 export type SoalQuizUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quizId?: Prisma.StringFieldUpdateOperationsInput | string
+  nomorSoal?: Prisma.IntFieldUpdateOperationsInput | number
   pertanyaan?: Prisma.StringFieldUpdateOperationsInput | string
   opsi?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar?: Prisma.StringFieldUpdateOperationsInput | string
@@ -312,6 +332,7 @@ export type SoalQuizUncheckedUpdateInput = {
 export type SoalQuizCreateManyInput = {
   id?: string
   quizId: string
+  nomorSoal?: number
   pertanyaan: string
   opsi: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar: string
@@ -320,6 +341,7 @@ export type SoalQuizCreateManyInput = {
 
 export type SoalQuizUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomorSoal?: Prisma.IntFieldUpdateOperationsInput | number
   pertanyaan?: Prisma.StringFieldUpdateOperationsInput | string
   opsi?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar?: Prisma.StringFieldUpdateOperationsInput | string
@@ -329,6 +351,7 @@ export type SoalQuizUpdateManyMutationInput = {
 export type SoalQuizUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quizId?: Prisma.StringFieldUpdateOperationsInput | string
+  nomorSoal?: Prisma.IntFieldUpdateOperationsInput | number
   pertanyaan?: Prisma.StringFieldUpdateOperationsInput | string
   opsi?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar?: Prisma.StringFieldUpdateOperationsInput | string
@@ -354,6 +377,7 @@ export type SoalQuizOrderByRelevanceInput = {
 export type SoalQuizCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   quizId?: Prisma.SortOrder
+  nomorSoal?: Prisma.SortOrder
   pertanyaan?: Prisma.SortOrder
   opsi?: Prisma.SortOrder
   jawabanBenar?: Prisma.SortOrder
@@ -361,12 +385,14 @@ export type SoalQuizCountOrderByAggregateInput = {
 }
 
 export type SoalQuizAvgOrderByAggregateInput = {
+  nomorSoal?: Prisma.SortOrder
   score?: Prisma.SortOrder
 }
 
 export type SoalQuizMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   quizId?: Prisma.SortOrder
+  nomorSoal?: Prisma.SortOrder
   pertanyaan?: Prisma.SortOrder
   jawabanBenar?: Prisma.SortOrder
   score?: Prisma.SortOrder
@@ -375,12 +401,14 @@ export type SoalQuizMaxOrderByAggregateInput = {
 export type SoalQuizMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   quizId?: Prisma.SortOrder
+  nomorSoal?: Prisma.SortOrder
   pertanyaan?: Prisma.SortOrder
   jawabanBenar?: Prisma.SortOrder
   score?: Prisma.SortOrder
 }
 
 export type SoalQuizSumOrderByAggregateInput = {
+  nomorSoal?: Prisma.SortOrder
   score?: Prisma.SortOrder
 }
 
@@ -428,6 +456,7 @@ export type SoalQuizUncheckedUpdateManyWithoutQuizNestedInput = {
 
 export type SoalQuizCreateWithoutQuizInput = {
   id?: string
+  nomorSoal?: number
   pertanyaan: string
   opsi: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar: string
@@ -436,6 +465,7 @@ export type SoalQuizCreateWithoutQuizInput = {
 
 export type SoalQuizUncheckedCreateWithoutQuizInput = {
   id?: string
+  nomorSoal?: number
   pertanyaan: string
   opsi: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar: string
@@ -474,6 +504,7 @@ export type SoalQuizScalarWhereInput = {
   NOT?: Prisma.SoalQuizScalarWhereInput | Prisma.SoalQuizScalarWhereInput[]
   id?: Prisma.StringFilter<"SoalQuiz"> | string
   quizId?: Prisma.StringFilter<"SoalQuiz"> | string
+  nomorSoal?: Prisma.IntFilter<"SoalQuiz"> | number
   pertanyaan?: Prisma.StringFilter<"SoalQuiz"> | string
   opsi?: Prisma.JsonFilter<"SoalQuiz">
   jawabanBenar?: Prisma.StringFilter<"SoalQuiz"> | string
@@ -482,6 +513,7 @@ export type SoalQuizScalarWhereInput = {
 
 export type SoalQuizCreateManyQuizInput = {
   id?: string
+  nomorSoal?: number
   pertanyaan: string
   opsi: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar: string
@@ -490,6 +522,7 @@ export type SoalQuizCreateManyQuizInput = {
 
 export type SoalQuizUpdateWithoutQuizInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomorSoal?: Prisma.IntFieldUpdateOperationsInput | number
   pertanyaan?: Prisma.StringFieldUpdateOperationsInput | string
   opsi?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar?: Prisma.StringFieldUpdateOperationsInput | string
@@ -498,6 +531,7 @@ export type SoalQuizUpdateWithoutQuizInput = {
 
 export type SoalQuizUncheckedUpdateWithoutQuizInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomorSoal?: Prisma.IntFieldUpdateOperationsInput | number
   pertanyaan?: Prisma.StringFieldUpdateOperationsInput | string
   opsi?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar?: Prisma.StringFieldUpdateOperationsInput | string
@@ -506,6 +540,7 @@ export type SoalQuizUncheckedUpdateWithoutQuizInput = {
 
 export type SoalQuizUncheckedUpdateManyWithoutQuizInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  nomorSoal?: Prisma.IntFieldUpdateOperationsInput | number
   pertanyaan?: Prisma.StringFieldUpdateOperationsInput | string
   opsi?: Prisma.JsonNullValueInput | runtime.InputJsonValue
   jawabanBenar?: Prisma.StringFieldUpdateOperationsInput | string
@@ -517,6 +552,7 @@ export type SoalQuizUncheckedUpdateManyWithoutQuizInput = {
 export type SoalQuizSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   quizId?: boolean
+  nomorSoal?: boolean
   pertanyaan?: boolean
   opsi?: boolean
   jawabanBenar?: boolean
@@ -529,13 +565,14 @@ export type SoalQuizSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type SoalQuizSelectScalar = {
   id?: boolean
   quizId?: boolean
+  nomorSoal?: boolean
   pertanyaan?: boolean
   opsi?: boolean
   jawabanBenar?: boolean
   score?: boolean
 }
 
-export type SoalQuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "quizId" | "pertanyaan" | "opsi" | "jawabanBenar" | "score", ExtArgs["result"]["soalQuiz"]>
+export type SoalQuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "quizId" | "nomorSoal" | "pertanyaan" | "opsi" | "jawabanBenar" | "score", ExtArgs["result"]["soalQuiz"]>
 export type SoalQuizInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   quiz?: boolean | Prisma.QuizDefaultArgs<ExtArgs>
 }
@@ -548,6 +585,7 @@ export type $SoalQuizPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     quizId: string
+    nomorSoal: number
     pertanyaan: string
     opsi: runtime.JsonValue
     jawabanBenar: string
@@ -924,6 +962,7 @@ export interface Prisma__SoalQuizClient<T, Null = never, ExtArgs extends runtime
 export interface SoalQuizFieldRefs {
   readonly id: Prisma.FieldRef<"SoalQuiz", 'String'>
   readonly quizId: Prisma.FieldRef<"SoalQuiz", 'String'>
+  readonly nomorSoal: Prisma.FieldRef<"SoalQuiz", 'Int'>
   readonly pertanyaan: Prisma.FieldRef<"SoalQuiz", 'String'>
   readonly opsi: Prisma.FieldRef<"SoalQuiz", 'Json'>
   readonly jawabanBenar: Prisma.FieldRef<"SoalQuiz", 'String'>
