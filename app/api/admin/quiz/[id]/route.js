@@ -6,11 +6,21 @@ export async function PUT(req, { params }) {
     await requireRole("admin")
 
     const { id } = await params
-    const { judul } = await req.json()
+    const { materiId, judul, deskripsi, durasi, passingScore } = await req.json()
+
+    const updateData = {
+      judul
+    };
+
+    // Only update optional fields if provided
+    if (materiId) updateData.materiId = materiId;
+    if (deskripsi !== undefined) updateData.deskripsi = deskripsi;
+    if (durasi !== undefined) updateData.durasi = Number(durasi);
+    if (passingScore !== undefined) updateData.passingScore = Number(passingScore);
 
     const quiz = await prisma.quiz.update({
       where: { id },
-      data: { judul }
+      data: updateData
     })
 
     return Response.json({

@@ -1223,7 +1223,10 @@ export type ProgressMateriScalarFieldEnum = (typeof ProgressMateriScalarFieldEnu
 export const QuizScalarFieldEnum = {
   id: 'id',
   materiId: 'materiId',
-  judul: 'judul'
+  judul: 'judul',
+  deskripsi: 'deskripsi',
+  durasi: 'durasi',
+  passingScore: 'passingScore'
 } as const
 
 export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
@@ -1232,6 +1235,7 @@ export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof Quiz
 export const SoalQuizScalarFieldEnum = {
   id: 'id',
   quizId: 'quizId',
+  nomorSoal: 'nomorSoal',
   pertanyaan: 'pertanyaan',
   opsi: 'opsi',
   jawabanBenar: 'jawabanBenar',
@@ -1367,7 +1371,8 @@ export type ProgressMateriOrderByRelevanceFieldEnum = (typeof ProgressMateriOrde
 export const QuizOrderByRelevanceFieldEnum = {
   id: 'id',
   materiId: 'materiId',
-  judul: 'judul'
+  judul: 'judul',
+  deskripsi: 'deskripsi'
 } as const
 
 export type QuizOrderByRelevanceFieldEnum = (typeof QuizOrderByRelevanceFieldEnum)[keyof typeof QuizOrderByRelevanceFieldEnum]

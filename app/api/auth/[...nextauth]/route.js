@@ -11,6 +11,10 @@ const handler = NextAuth({
             clientSecret: process.env.CLIENT_SECRET,
         }),
     ],
+    pages: {
+        signIn: "/login",
+        error: "/login",
+    },
     callbacks: {
         async signIn({ user }) {
             let dbUser = await prisma.user.findUnique({
@@ -34,7 +38,6 @@ const handler = NextAuth({
                 httpOnly: true,
                 path: "/",
             })
-
             return true
         },
         async jwt({ token, user }) {
@@ -47,6 +50,10 @@ const handler = NextAuth({
         async session({ session, token }) {
             session.user.email = token.email
             return session
+        },
+        async redirect({ url, baseUrl }) {
+            // Redirect ke home page setelah sign in berhasil
+            return baseUrl
         },
     }
 })
