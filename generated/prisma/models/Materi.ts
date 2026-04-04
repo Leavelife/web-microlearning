@@ -20,104 +20,64 @@ export type MateriModel = runtime.Types.Result.DefaultSelection<Prisma.$MateriPa
 
 export type AggregateMateri = {
   _count: MateriCountAggregateOutputType | null
-  _avg: MateriAvgAggregateOutputType | null
-  _sum: MateriSumAggregateOutputType | null
   _min: MateriMinAggregateOutputType | null
   _max: MateriMaxAggregateOutputType | null
 }
 
-export type MateriAvgAggregateOutputType = {
-  nomorMateri: number | null
-  tahap: number | null
-}
-
-export type MateriSumAggregateOutputType = {
-  nomorMateri: number | null
-  tahap: number | null
-}
-
 export type MateriMinAggregateOutputType = {
   id: string | null
-  nomorMateri: number | null
   judul: string | null
   deskripsi: string | null
-  tipe: string | null
-  urlKonten: string | null
-  unlockType: string | null
-  unlockRefId: string | null
-  tahap: number | null
+  genre: string | null
+  thumbnail: string | null
+  createdAt: Date | null
 }
 
 export type MateriMaxAggregateOutputType = {
   id: string | null
-  nomorMateri: number | null
   judul: string | null
   deskripsi: string | null
-  tipe: string | null
-  urlKonten: string | null
-  unlockType: string | null
-  unlockRefId: string | null
-  tahap: number | null
+  genre: string | null
+  thumbnail: string | null
+  createdAt: Date | null
 }
 
 export type MateriCountAggregateOutputType = {
   id: number
-  nomorMateri: number
   judul: number
   deskripsi: number
-  tipe: number
-  urlKonten: number
-  unlockType: number
-  unlockRefId: number
-  tahap: number
+  genre: number
+  thumbnail: number
+  createdAt: number
   _all: number
 }
 
 
-export type MateriAvgAggregateInputType = {
-  nomorMateri?: true
-  tahap?: true
-}
-
-export type MateriSumAggregateInputType = {
-  nomorMateri?: true
-  tahap?: true
-}
-
 export type MateriMinAggregateInputType = {
   id?: true
-  nomorMateri?: true
   judul?: true
   deskripsi?: true
-  tipe?: true
-  urlKonten?: true
-  unlockType?: true
-  unlockRefId?: true
-  tahap?: true
+  genre?: true
+  thumbnail?: true
+  createdAt?: true
 }
 
 export type MateriMaxAggregateInputType = {
   id?: true
-  nomorMateri?: true
   judul?: true
   deskripsi?: true
-  tipe?: true
-  urlKonten?: true
-  unlockType?: true
-  unlockRefId?: true
-  tahap?: true
+  genre?: true
+  thumbnail?: true
+  createdAt?: true
 }
 
 export type MateriCountAggregateInputType = {
   id?: true
-  nomorMateri?: true
   judul?: true
   deskripsi?: true
-  tipe?: true
-  urlKonten?: true
-  unlockType?: true
-  unlockRefId?: true
-  tahap?: true
+  genre?: true
+  thumbnail?: true
+  createdAt?: true
   _all?: true
 }
 
@@ -159,18 +119,6 @@ export type MateriAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: MateriAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: MateriSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: MateriMinAggregateInputType
@@ -201,25 +149,18 @@ export type MateriGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: MateriCountAggregateInputType | true
-  _avg?: MateriAvgAggregateInputType
-  _sum?: MateriSumAggregateInputType
   _min?: MateriMinAggregateInputType
   _max?: MateriMaxAggregateInputType
 }
 
 export type MateriGroupByOutputType = {
   id: string
-  nomorMateri: number
   judul: string
   deskripsi: string
-  tipe: string
-  urlKonten: string
-  unlockType: string
-  unlockRefId: string | null
-  tahap: number
+  genre: string
+  thumbnail: string | null
+  createdAt: Date
   _count: MateriCountAggregateOutputType | null
-  _avg: MateriAvgAggregateOutputType | null
-  _sum: MateriSumAggregateOutputType | null
   _min: MateriMinAggregateOutputType | null
   _max: MateriMaxAggregateOutputType | null
 }
@@ -244,30 +185,24 @@ export type MateriWhereInput = {
   OR?: Prisma.MateriWhereInput[]
   NOT?: Prisma.MateriWhereInput | Prisma.MateriWhereInput[]
   id?: Prisma.StringFilter<"Materi"> | string
-  nomorMateri?: Prisma.IntFilter<"Materi"> | number
   judul?: Prisma.StringFilter<"Materi"> | string
   deskripsi?: Prisma.StringFilter<"Materi"> | string
-  tipe?: Prisma.StringFilter<"Materi"> | string
-  urlKonten?: Prisma.StringFilter<"Materi"> | string
-  unlockType?: Prisma.StringFilter<"Materi"> | string
-  unlockRefId?: Prisma.StringNullableFilter<"Materi"> | string | null
-  tahap?: Prisma.IntFilter<"Materi"> | number
+  genre?: Prisma.StringFilter<"Materi"> | string
+  thumbnail?: Prisma.StringNullableFilter<"Materi"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Materi"> | Date | string
+  steps?: Prisma.MateriStepListRelationFilter
   progresses?: Prisma.ProgressMateriListRelationFilter
-  quiz?: Prisma.QuizListRelationFilter
 }
 
 export type MateriOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  nomorMateri?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrder
-  tipe?: Prisma.SortOrder
-  urlKonten?: Prisma.SortOrder
-  unlockType?: Prisma.SortOrder
-  unlockRefId?: Prisma.SortOrderInput | Prisma.SortOrder
-  tahap?: Prisma.SortOrder
+  genre?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
+  steps?: Prisma.MateriStepOrderByRelationAggregateInput
   progresses?: Prisma.ProgressMateriOrderByRelationAggregateInput
-  quiz?: Prisma.QuizOrderByRelationAggregateInput
   _relevance?: Prisma.MateriOrderByRelevanceInput
 }
 
@@ -276,33 +211,25 @@ export type MateriWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.MateriWhereInput | Prisma.MateriWhereInput[]
   OR?: Prisma.MateriWhereInput[]
   NOT?: Prisma.MateriWhereInput | Prisma.MateriWhereInput[]
-  nomorMateri?: Prisma.IntFilter<"Materi"> | number
   judul?: Prisma.StringFilter<"Materi"> | string
   deskripsi?: Prisma.StringFilter<"Materi"> | string
-  tipe?: Prisma.StringFilter<"Materi"> | string
-  urlKonten?: Prisma.StringFilter<"Materi"> | string
-  unlockType?: Prisma.StringFilter<"Materi"> | string
-  unlockRefId?: Prisma.StringNullableFilter<"Materi"> | string | null
-  tahap?: Prisma.IntFilter<"Materi"> | number
+  genre?: Prisma.StringFilter<"Materi"> | string
+  thumbnail?: Prisma.StringNullableFilter<"Materi"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Materi"> | Date | string
+  steps?: Prisma.MateriStepListRelationFilter
   progresses?: Prisma.ProgressMateriListRelationFilter
-  quiz?: Prisma.QuizListRelationFilter
 }, "id">
 
 export type MateriOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  nomorMateri?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrder
-  tipe?: Prisma.SortOrder
-  urlKonten?: Prisma.SortOrder
-  unlockType?: Prisma.SortOrder
-  unlockRefId?: Prisma.SortOrderInput | Prisma.SortOrder
-  tahap?: Prisma.SortOrder
+  genre?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
   _count?: Prisma.MateriCountOrderByAggregateInput
-  _avg?: Prisma.MateriAvgOrderByAggregateInput
   _max?: Prisma.MateriMaxOrderByAggregateInput
   _min?: Prisma.MateriMinOrderByAggregateInput
-  _sum?: Prisma.MateriSumOrderByAggregateInput
 }
 
 export type MateriScalarWhereWithAggregatesInput = {
@@ -310,106 +237,82 @@ export type MateriScalarWhereWithAggregatesInput = {
   OR?: Prisma.MateriScalarWhereWithAggregatesInput[]
   NOT?: Prisma.MateriScalarWhereWithAggregatesInput | Prisma.MateriScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Materi"> | string
-  nomorMateri?: Prisma.IntWithAggregatesFilter<"Materi"> | number
   judul?: Prisma.StringWithAggregatesFilter<"Materi"> | string
   deskripsi?: Prisma.StringWithAggregatesFilter<"Materi"> | string
-  tipe?: Prisma.StringWithAggregatesFilter<"Materi"> | string
-  urlKonten?: Prisma.StringWithAggregatesFilter<"Materi"> | string
-  unlockType?: Prisma.StringWithAggregatesFilter<"Materi"> | string
-  unlockRefId?: Prisma.StringNullableWithAggregatesFilter<"Materi"> | string | null
-  tahap?: Prisma.IntWithAggregatesFilter<"Materi"> | number
+  genre?: Prisma.StringWithAggregatesFilter<"Materi"> | string
+  thumbnail?: Prisma.StringNullableWithAggregatesFilter<"Materi"> | string | null
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Materi"> | Date | string
 }
 
 export type MateriCreateInput = {
   id?: string
-  nomorMateri: number
   judul: string
   deskripsi: string
-  tipe: string
-  urlKonten: string
-  unlockType: string
-  unlockRefId?: string | null
-  tahap: number
+  genre: string
+  thumbnail?: string | null
+  createdAt?: Date | string
+  steps?: Prisma.MateriStepCreateNestedManyWithoutMateriInput
   progresses?: Prisma.ProgressMateriCreateNestedManyWithoutMateriInput
-  quiz?: Prisma.QuizCreateNestedManyWithoutMateriInput
 }
 
 export type MateriUncheckedCreateInput = {
   id?: string
-  nomorMateri: number
   judul: string
   deskripsi: string
-  tipe: string
-  urlKonten: string
-  unlockType: string
-  unlockRefId?: string | null
-  tahap: number
+  genre: string
+  thumbnail?: string | null
+  createdAt?: Date | string
+  steps?: Prisma.MateriStepUncheckedCreateNestedManyWithoutMateriInput
   progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutMateriInput
-  quiz?: Prisma.QuizUncheckedCreateNestedManyWithoutMateriInput
 }
 
 export type MateriUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  nomorMateri?: Prisma.IntFieldUpdateOperationsInput | number
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
-  tipe?: Prisma.StringFieldUpdateOperationsInput | string
-  urlKonten?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockType?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tahap?: Prisma.IntFieldUpdateOperationsInput | number
+  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  steps?: Prisma.MateriStepUpdateManyWithoutMateriNestedInput
   progresses?: Prisma.ProgressMateriUpdateManyWithoutMateriNestedInput
-  quiz?: Prisma.QuizUpdateManyWithoutMateriNestedInput
 }
 
 export type MateriUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  nomorMateri?: Prisma.IntFieldUpdateOperationsInput | number
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
-  tipe?: Prisma.StringFieldUpdateOperationsInput | string
-  urlKonten?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockType?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tahap?: Prisma.IntFieldUpdateOperationsInput | number
+  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  steps?: Prisma.MateriStepUncheckedUpdateManyWithoutMateriNestedInput
   progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutMateriNestedInput
-  quiz?: Prisma.QuizUncheckedUpdateManyWithoutMateriNestedInput
 }
 
 export type MateriCreateManyInput = {
   id?: string
-  nomorMateri: number
   judul: string
   deskripsi: string
-  tipe: string
-  urlKonten: string
-  unlockType: string
-  unlockRefId?: string | null
-  tahap: number
+  genre: string
+  thumbnail?: string | null
+  createdAt?: Date | string
 }
 
 export type MateriUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  nomorMateri?: Prisma.IntFieldUpdateOperationsInput | number
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
-  tipe?: Prisma.StringFieldUpdateOperationsInput | string
-  urlKonten?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockType?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tahap?: Prisma.IntFieldUpdateOperationsInput | number
+  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MateriUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  nomorMateri?: Prisma.IntFieldUpdateOperationsInput | number
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
-  tipe?: Prisma.StringFieldUpdateOperationsInput | string
-  urlKonten?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockType?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tahap?: Prisma.IntFieldUpdateOperationsInput | number
+  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MateriOrderByRelevanceInput = {
@@ -420,53 +323,52 @@ export type MateriOrderByRelevanceInput = {
 
 export type MateriCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  nomorMateri?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrder
-  tipe?: Prisma.SortOrder
-  urlKonten?: Prisma.SortOrder
-  unlockType?: Prisma.SortOrder
-  unlockRefId?: Prisma.SortOrder
-  tahap?: Prisma.SortOrder
-}
-
-export type MateriAvgOrderByAggregateInput = {
-  nomorMateri?: Prisma.SortOrder
-  tahap?: Prisma.SortOrder
+  genre?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type MateriMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  nomorMateri?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrder
-  tipe?: Prisma.SortOrder
-  urlKonten?: Prisma.SortOrder
-  unlockType?: Prisma.SortOrder
-  unlockRefId?: Prisma.SortOrder
-  tahap?: Prisma.SortOrder
+  genre?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type MateriMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  nomorMateri?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrder
-  tipe?: Prisma.SortOrder
-  urlKonten?: Prisma.SortOrder
-  unlockType?: Prisma.SortOrder
-  unlockRefId?: Prisma.SortOrder
-  tahap?: Prisma.SortOrder
-}
-
-export type MateriSumOrderByAggregateInput = {
-  nomorMateri?: Prisma.SortOrder
-  tahap?: Prisma.SortOrder
+  genre?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrder
 }
 
 export type MateriScalarRelationFilter = {
   is?: Prisma.MateriWhereInput
   isNot?: Prisma.MateriWhereInput
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type MateriCreateNestedOneWithoutStepsInput = {
+  create?: Prisma.XOR<Prisma.MateriCreateWithoutStepsInput, Prisma.MateriUncheckedCreateWithoutStepsInput>
+  connectOrCreate?: Prisma.MateriCreateOrConnectWithoutStepsInput
+  connect?: Prisma.MateriWhereUniqueInput
+}
+
+export type MateriUpdateOneRequiredWithoutStepsNestedInput = {
+  create?: Prisma.XOR<Prisma.MateriCreateWithoutStepsInput, Prisma.MateriUncheckedCreateWithoutStepsInput>
+  connectOrCreate?: Prisma.MateriCreateOrConnectWithoutStepsInput
+  upsert?: Prisma.MateriUpsertWithoutStepsInput
+  connect?: Prisma.MateriWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MateriUpdateToOneWithWhereWithoutStepsInput, Prisma.MateriUpdateWithoutStepsInput>, Prisma.MateriUncheckedUpdateWithoutStepsInput>
 }
 
 export type MateriCreateNestedOneWithoutProgressesInput = {
@@ -483,44 +385,80 @@ export type MateriUpdateOneRequiredWithoutProgressesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MateriUpdateToOneWithWhereWithoutProgressesInput, Prisma.MateriUpdateWithoutProgressesInput>, Prisma.MateriUncheckedUpdateWithoutProgressesInput>
 }
 
-export type MateriCreateNestedOneWithoutQuizInput = {
-  create?: Prisma.XOR<Prisma.MateriCreateWithoutQuizInput, Prisma.MateriUncheckedCreateWithoutQuizInput>
-  connectOrCreate?: Prisma.MateriCreateOrConnectWithoutQuizInput
-  connect?: Prisma.MateriWhereUniqueInput
+export type MateriCreateWithoutStepsInput = {
+  id?: string
+  judul: string
+  deskripsi: string
+  genre: string
+  thumbnail?: string | null
+  createdAt?: Date | string
+  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutMateriInput
 }
 
-export type MateriUpdateOneRequiredWithoutQuizNestedInput = {
-  create?: Prisma.XOR<Prisma.MateriCreateWithoutQuizInput, Prisma.MateriUncheckedCreateWithoutQuizInput>
-  connectOrCreate?: Prisma.MateriCreateOrConnectWithoutQuizInput
-  upsert?: Prisma.MateriUpsertWithoutQuizInput
-  connect?: Prisma.MateriWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.MateriUpdateToOneWithWhereWithoutQuizInput, Prisma.MateriUpdateWithoutQuizInput>, Prisma.MateriUncheckedUpdateWithoutQuizInput>
+export type MateriUncheckedCreateWithoutStepsInput = {
+  id?: string
+  judul: string
+  deskripsi: string
+  genre: string
+  thumbnail?: string | null
+  createdAt?: Date | string
+  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutMateriInput
+}
+
+export type MateriCreateOrConnectWithoutStepsInput = {
+  where: Prisma.MateriWhereUniqueInput
+  create: Prisma.XOR<Prisma.MateriCreateWithoutStepsInput, Prisma.MateriUncheckedCreateWithoutStepsInput>
+}
+
+export type MateriUpsertWithoutStepsInput = {
+  update: Prisma.XOR<Prisma.MateriUpdateWithoutStepsInput, Prisma.MateriUncheckedUpdateWithoutStepsInput>
+  create: Prisma.XOR<Prisma.MateriCreateWithoutStepsInput, Prisma.MateriUncheckedCreateWithoutStepsInput>
+  where?: Prisma.MateriWhereInput
+}
+
+export type MateriUpdateToOneWithWhereWithoutStepsInput = {
+  where?: Prisma.MateriWhereInput
+  data: Prisma.XOR<Prisma.MateriUpdateWithoutStepsInput, Prisma.MateriUncheckedUpdateWithoutStepsInput>
+}
+
+export type MateriUpdateWithoutStepsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  judul?: Prisma.StringFieldUpdateOperationsInput | string
+  deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  progresses?: Prisma.ProgressMateriUpdateManyWithoutMateriNestedInput
+}
+
+export type MateriUncheckedUpdateWithoutStepsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  judul?: Prisma.StringFieldUpdateOperationsInput | string
+  deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
+  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutMateriNestedInput
 }
 
 export type MateriCreateWithoutProgressesInput = {
   id?: string
-  nomorMateri: number
   judul: string
   deskripsi: string
-  tipe: string
-  urlKonten: string
-  unlockType: string
-  unlockRefId?: string | null
-  tahap: number
-  quiz?: Prisma.QuizCreateNestedManyWithoutMateriInput
+  genre: string
+  thumbnail?: string | null
+  createdAt?: Date | string
+  steps?: Prisma.MateriStepCreateNestedManyWithoutMateriInput
 }
 
 export type MateriUncheckedCreateWithoutProgressesInput = {
   id?: string
-  nomorMateri: number
   judul: string
   deskripsi: string
-  tipe: string
-  urlKonten: string
-  unlockType: string
-  unlockRefId?: string | null
-  tahap: number
-  quiz?: Prisma.QuizUncheckedCreateNestedManyWithoutMateriInput
+  genre: string
+  thumbnail?: string | null
+  createdAt?: Date | string
+  steps?: Prisma.MateriStepUncheckedCreateNestedManyWithoutMateriInput
 }
 
 export type MateriCreateOrConnectWithoutProgressesInput = {
@@ -541,96 +479,22 @@ export type MateriUpdateToOneWithWhereWithoutProgressesInput = {
 
 export type MateriUpdateWithoutProgressesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  nomorMateri?: Prisma.IntFieldUpdateOperationsInput | number
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
-  tipe?: Prisma.StringFieldUpdateOperationsInput | string
-  urlKonten?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockType?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tahap?: Prisma.IntFieldUpdateOperationsInput | number
-  quiz?: Prisma.QuizUpdateManyWithoutMateriNestedInput
+  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  steps?: Prisma.MateriStepUpdateManyWithoutMateriNestedInput
 }
 
 export type MateriUncheckedUpdateWithoutProgressesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  nomorMateri?: Prisma.IntFieldUpdateOperationsInput | number
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
-  tipe?: Prisma.StringFieldUpdateOperationsInput | string
-  urlKonten?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockType?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tahap?: Prisma.IntFieldUpdateOperationsInput | number
-  quiz?: Prisma.QuizUncheckedUpdateManyWithoutMateriNestedInput
-}
-
-export type MateriCreateWithoutQuizInput = {
-  id?: string
-  nomorMateri: number
-  judul: string
-  deskripsi: string
-  tipe: string
-  urlKonten: string
-  unlockType: string
-  unlockRefId?: string | null
-  tahap: number
-  progresses?: Prisma.ProgressMateriCreateNestedManyWithoutMateriInput
-}
-
-export type MateriUncheckedCreateWithoutQuizInput = {
-  id?: string
-  nomorMateri: number
-  judul: string
-  deskripsi: string
-  tipe: string
-  urlKonten: string
-  unlockType: string
-  unlockRefId?: string | null
-  tahap: number
-  progresses?: Prisma.ProgressMateriUncheckedCreateNestedManyWithoutMateriInput
-}
-
-export type MateriCreateOrConnectWithoutQuizInput = {
-  where: Prisma.MateriWhereUniqueInput
-  create: Prisma.XOR<Prisma.MateriCreateWithoutQuizInput, Prisma.MateriUncheckedCreateWithoutQuizInput>
-}
-
-export type MateriUpsertWithoutQuizInput = {
-  update: Prisma.XOR<Prisma.MateriUpdateWithoutQuizInput, Prisma.MateriUncheckedUpdateWithoutQuizInput>
-  create: Prisma.XOR<Prisma.MateriCreateWithoutQuizInput, Prisma.MateriUncheckedCreateWithoutQuizInput>
-  where?: Prisma.MateriWhereInput
-}
-
-export type MateriUpdateToOneWithWhereWithoutQuizInput = {
-  where?: Prisma.MateriWhereInput
-  data: Prisma.XOR<Prisma.MateriUpdateWithoutQuizInput, Prisma.MateriUncheckedUpdateWithoutQuizInput>
-}
-
-export type MateriUpdateWithoutQuizInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  nomorMateri?: Prisma.IntFieldUpdateOperationsInput | number
-  judul?: Prisma.StringFieldUpdateOperationsInput | string
-  deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
-  tipe?: Prisma.StringFieldUpdateOperationsInput | string
-  urlKonten?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockType?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tahap?: Prisma.IntFieldUpdateOperationsInput | number
-  progresses?: Prisma.ProgressMateriUpdateManyWithoutMateriNestedInput
-}
-
-export type MateriUncheckedUpdateWithoutQuizInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  nomorMateri?: Prisma.IntFieldUpdateOperationsInput | number
-  judul?: Prisma.StringFieldUpdateOperationsInput | string
-  deskripsi?: Prisma.StringFieldUpdateOperationsInput | string
-  tipe?: Prisma.StringFieldUpdateOperationsInput | string
-  urlKonten?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockType?: Prisma.StringFieldUpdateOperationsInput | string
-  unlockRefId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tahap?: Prisma.IntFieldUpdateOperationsInput | number
-  progresses?: Prisma.ProgressMateriUncheckedUpdateManyWithoutMateriNestedInput
+  genre?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  steps?: Prisma.MateriStepUncheckedUpdateManyWithoutMateriNestedInput
 }
 
 
@@ -639,13 +503,13 @@ export type MateriUncheckedUpdateWithoutQuizInput = {
  */
 
 export type MateriCountOutputType = {
+  steps: number
   progresses: number
-  quiz: number
 }
 
 export type MateriCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  steps?: boolean | MateriCountOutputTypeCountStepsArgs
   progresses?: boolean | MateriCountOutputTypeCountProgressesArgs
-  quiz?: boolean | MateriCountOutputTypeCountQuizArgs
 }
 
 /**
@@ -661,30 +525,27 @@ export type MateriCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exten
 /**
  * MateriCountOutputType without action
  */
-export type MateriCountOutputTypeCountProgressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ProgressMateriWhereInput
+export type MateriCountOutputTypeCountStepsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MateriStepWhereInput
 }
 
 /**
  * MateriCountOutputType without action
  */
-export type MateriCountOutputTypeCountQuizArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.QuizWhereInput
+export type MateriCountOutputTypeCountProgressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProgressMateriWhereInput
 }
 
 
 export type MateriSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  nomorMateri?: boolean
   judul?: boolean
   deskripsi?: boolean
-  tipe?: boolean
-  urlKonten?: boolean
-  unlockType?: boolean
-  unlockRefId?: boolean
-  tahap?: boolean
+  genre?: boolean
+  thumbnail?: boolean
+  createdAt?: boolean
+  steps?: boolean | Prisma.Materi$stepsArgs<ExtArgs>
   progresses?: boolean | Prisma.Materi$progressesArgs<ExtArgs>
-  quiz?: boolean | Prisma.Materi$quizArgs<ExtArgs>
   _count?: boolean | Prisma.MateriCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["materi"]>
 
@@ -692,39 +553,33 @@ export type MateriSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 
 export type MateriSelectScalar = {
   id?: boolean
-  nomorMateri?: boolean
   judul?: boolean
   deskripsi?: boolean
-  tipe?: boolean
-  urlKonten?: boolean
-  unlockType?: boolean
-  unlockRefId?: boolean
-  tahap?: boolean
+  genre?: boolean
+  thumbnail?: boolean
+  createdAt?: boolean
 }
 
-export type MateriOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "nomorMateri" | "judul" | "deskripsi" | "tipe" | "urlKonten" | "unlockType" | "unlockRefId" | "tahap", ExtArgs["result"]["materi"]>
+export type MateriOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "judul" | "deskripsi" | "genre" | "thumbnail" | "createdAt", ExtArgs["result"]["materi"]>
 export type MateriInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  steps?: boolean | Prisma.Materi$stepsArgs<ExtArgs>
   progresses?: boolean | Prisma.Materi$progressesArgs<ExtArgs>
-  quiz?: boolean | Prisma.Materi$quizArgs<ExtArgs>
   _count?: boolean | Prisma.MateriCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $MateriPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Materi"
   objects: {
+    steps: Prisma.$MateriStepPayload<ExtArgs>[]
     progresses: Prisma.$ProgressMateriPayload<ExtArgs>[]
-    quiz: Prisma.$QuizPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    nomorMateri: number
     judul: string
     deskripsi: string
-    tipe: string
-    urlKonten: string
-    unlockType: string
-    unlockRefId: string | null
-    tahap: number
+    genre: string
+    thumbnail: string | null
+    createdAt: Date
   }, ExtArgs["result"]["materi"]>
   composites: {}
 }
@@ -1065,8 +920,8 @@ readonly fields: MateriFieldRefs;
  */
 export interface Prisma__MateriClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  steps<T extends Prisma.Materi$stepsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Materi$stepsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MateriStepPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   progresses<T extends Prisma.Materi$progressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Materi$progressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgressMateriPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  quiz<T extends Prisma.Materi$quizArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Materi$quizArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1097,14 +952,11 @@ export interface Prisma__MateriClient<T, Null = never, ExtArgs extends runtime.T
  */
 export interface MateriFieldRefs {
   readonly id: Prisma.FieldRef<"Materi", 'String'>
-  readonly nomorMateri: Prisma.FieldRef<"Materi", 'Int'>
   readonly judul: Prisma.FieldRef<"Materi", 'String'>
   readonly deskripsi: Prisma.FieldRef<"Materi", 'String'>
-  readonly tipe: Prisma.FieldRef<"Materi", 'String'>
-  readonly urlKonten: Prisma.FieldRef<"Materi", 'String'>
-  readonly unlockType: Prisma.FieldRef<"Materi", 'String'>
-  readonly unlockRefId: Prisma.FieldRef<"Materi", 'String'>
-  readonly tahap: Prisma.FieldRef<"Materi", 'Int'>
+  readonly genre: Prisma.FieldRef<"Materi", 'String'>
+  readonly thumbnail: Prisma.FieldRef<"Materi", 'String'>
+  readonly createdAt: Prisma.FieldRef<"Materi", 'DateTime'>
 }
     
 
@@ -1453,6 +1305,30 @@ export type MateriDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * Materi.steps
+ */
+export type Materi$stepsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MateriStep
+   */
+  select?: Prisma.MateriStepSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MateriStep
+   */
+  omit?: Prisma.MateriStepOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MateriStepInclude<ExtArgs> | null
+  where?: Prisma.MateriStepWhereInput
+  orderBy?: Prisma.MateriStepOrderByWithRelationInput | Prisma.MateriStepOrderByWithRelationInput[]
+  cursor?: Prisma.MateriStepWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MateriStepScalarFieldEnum | Prisma.MateriStepScalarFieldEnum[]
+}
+
+/**
  * Materi.progresses
  */
 export type Materi$progressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1474,30 +1350,6 @@ export type Materi$progressesArgs<ExtArgs extends runtime.Types.Extensions.Inter
   take?: number
   skip?: number
   distinct?: Prisma.ProgressMateriScalarFieldEnum | Prisma.ProgressMateriScalarFieldEnum[]
-}
-
-/**
- * Materi.quiz
- */
-export type Materi$quizArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Quiz
-   */
-  select?: Prisma.QuizSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Quiz
-   */
-  omit?: Prisma.QuizOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.QuizInclude<ExtArgs> | null
-  where?: Prisma.QuizWhereInput
-  orderBy?: Prisma.QuizOrderByWithRelationInput | Prisma.QuizOrderByWithRelationInput[]
-  cursor?: Prisma.QuizWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.QuizScalarFieldEnum | Prisma.QuizScalarFieldEnum[]
 }
 
 /**

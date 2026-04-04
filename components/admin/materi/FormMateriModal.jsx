@@ -4,13 +4,10 @@ import { useState, useRef, useEffect } from "react";
 
 export default function FormMateriModal({ isOpen, onClose, initialData, onSuccess }) {
   const defaultForm = {
-    nomorMateri: "",
     judul: "",
     deskripsi: "",
-    tipe: "",
-    urlKonten: "",
-    unlockType: "",
-    tahap: 1,
+    genre: "",
+    thumbnail: "",
   };
 
   const prevInitialDataRef = useRef(null);
@@ -77,13 +74,10 @@ export default function FormMateriModal({ isOpen, onClose, initialData, onSucces
           {initialData ? "Edit Materi" : "Tambah Materi"}
         </h2>
 
-        <input name="nomorMateri" type="number" placeholder="Nomor Materi" onChange={handleChange} value={form.nomorMateri} className="w-full p-2 bg-white/10 rounded" />
         <input name="judul" placeholder="Judul" onChange={handleChange} value={form.judul} className="w-full p-2 bg-white/10 rounded" />
         <input name="deskripsi" placeholder="Deskripsi" onChange={handleChange} value={form.deskripsi} className="w-full p-2 bg-white/10 rounded" />
-        <input name="tipe" placeholder="Tipe" onChange={handleChange} value={form.tipe} className="w-full p-2 bg-white/10 rounded" />
-        <input name="urlKonten" placeholder="URL" onChange={handleChange} value={form.urlKonten} className="w-full p-2 bg-white/10 rounded" />
-        <input name="tahap" type="number" placeholder="Tahap" onChange={handleChange} value={form.tahap} className="w-full p-2 bg-white/10 rounded" />
-        <input name="unlockType" placeholder="Tipe Unlock" onChange={handleChange} value={form.unlockType} className="w-full p-2 bg-white/10 rounded" />
+        <input name="genre" placeholder="Genre" onChange={handleChange} value={form.genre} className="w-full p-2 bg-white/10 rounded" />
+        <input name="thumbnail" placeholder="Thumbnail URL" onChange={handleChange} value={form.thumbnail} className="w-full p-2 bg-white/10 rounded" />
 
         <div className="flex justify-end space-x-2">
           <button onClick={handleClose} className="px-3 py-1 bg-gray-500 rounded">

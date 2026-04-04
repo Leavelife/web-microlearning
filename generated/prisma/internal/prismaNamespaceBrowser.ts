@@ -53,6 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Materi: 'Materi',
+  MateriStep: 'MateriStep',
   ProgressMateri: 'ProgressMateri',
   Quiz: 'Quiz',
   SoalQuiz: 'SoalQuiz',
@@ -97,25 +98,36 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const MateriScalarFieldEnum = {
   id: 'id',
-  nomorMateri: 'nomorMateri',
   judul: 'judul',
   deskripsi: 'deskripsi',
-  tipe: 'tipe',
-  urlKonten: 'urlKonten',
-  unlockType: 'unlockType',
-  unlockRefId: 'unlockRefId',
-  tahap: 'tahap'
+  genre: 'genre',
+  thumbnail: 'thumbnail',
+  createdAt: 'createdAt'
 } as const
 
 export type MateriScalarFieldEnum = (typeof MateriScalarFieldEnum)[keyof typeof MateriScalarFieldEnum]
+
+
+export const MateriStepScalarFieldEnum = {
+  id: 'id',
+  materiId: 'materiId',
+  urutan: 'urutan',
+  judul: 'judul',
+  tipe: 'tipe',
+  konten: 'konten',
+  createdAt: 'createdAt'
+} as const
+
+export type MateriStepScalarFieldEnum = (typeof MateriStepScalarFieldEnum)[keyof typeof MateriStepScalarFieldEnum]
 
 
 export const ProgressMateriScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   materiId: 'materiId',
-  progresTerakhir: 'progresTerakhir',
-  completed: 'completed'
+  stepSekarang: 'stepSekarang',
+  selesai: 'selesai',
+  updateAt: 'updateAt'
 } as const
 
 export type ProgressMateriScalarFieldEnum = (typeof ProgressMateriScalarFieldEnum)[keyof typeof ProgressMateriScalarFieldEnum]
@@ -123,7 +135,7 @@ export type ProgressMateriScalarFieldEnum = (typeof ProgressMateriScalarFieldEnu
 
 export const QuizScalarFieldEnum = {
   id: 'id',
-  materiId: 'materiId',
+  materiStepId: 'materiStepId',
   judul: 'judul',
   deskripsi: 'deskripsi',
   durasi: 'durasi',
@@ -251,13 +263,22 @@ export const MateriOrderByRelevanceFieldEnum = {
   id: 'id',
   judul: 'judul',
   deskripsi: 'deskripsi',
-  tipe: 'tipe',
-  urlKonten: 'urlKonten',
-  unlockType: 'unlockType',
-  unlockRefId: 'unlockRefId'
+  genre: 'genre',
+  thumbnail: 'thumbnail'
 } as const
 
 export type MateriOrderByRelevanceFieldEnum = (typeof MateriOrderByRelevanceFieldEnum)[keyof typeof MateriOrderByRelevanceFieldEnum]
+
+
+export const MateriStepOrderByRelevanceFieldEnum = {
+  id: 'id',
+  materiId: 'materiId',
+  judul: 'judul',
+  tipe: 'tipe',
+  konten: 'konten'
+} as const
+
+export type MateriStepOrderByRelevanceFieldEnum = (typeof MateriStepOrderByRelevanceFieldEnum)[keyof typeof MateriStepOrderByRelevanceFieldEnum]
 
 
 export const ProgressMateriOrderByRelevanceFieldEnum = {
@@ -271,7 +292,7 @@ export type ProgressMateriOrderByRelevanceFieldEnum = (typeof ProgressMateriOrde
 
 export const QuizOrderByRelevanceFieldEnum = {
   id: 'id',
-  materiId: 'materiId',
+  materiStepId: 'materiStepId',
   judul: 'judul',
   deskripsi: 'deskripsi'
 } as const

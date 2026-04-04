@@ -10,6 +10,7 @@ export default function FormQuizModal({
 }) {
   const emptyForm = {
     materiId: "",
+    materiStepId: "",
     judul: "",
     deskripsi: "",
     durasi: 30,
@@ -18,20 +19,47 @@ export default function FormQuizModal({
 
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
+  const [steps, setSteps] = useState([]);
 
   useEffect(() => {
     if (initialData) {
       setForm({
-        materiId: initialData.materiId || "",
+        materiId: initialData.materiStep?.materi?.id || "",
+        materiStepId: initialData.materiStepId || "",
         judul: initialData.judul || "",
         deskripsi: initialData.deskripsi || "",
         durasi: initialData.durasi || 30,
         passingScore: initialData.passingScore || 70,
       });
+      // If editing, load steps for the materi
+      if (initialData.materiStep?.materi?.id) {
+        fetchSteps(initialData.materiStep.materi.id);
+      }
     } else {
       setForm(emptyForm);
+      setSteps([]);
     }
   }, [initialData]);
+
+  const fetchSteps = async (materiId) => {
+    try {
+      const res = await fetch(`/api/admin/materi/${materiId}/step`);
+      if (res.ok) {
+        const data = await res.json();
+        setSteps(data.steps || []);
+      }
+    } catch (err) {
+      console.error("Failed to fetch steps", err);
+    }
+  };
+
+  const handleMateriChange = (materiId) => {
+    setForm({ ...form, materiId, materiStepId: "" });
+    setSteps([]);
+    if (materiId) {
+      fetchSteps(materiId);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -45,7 +73,13 @@ export default function FormQuizModal({
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          materiStepId: form.materiStepId,
+          judul: form.judul,
+          deskripsi: form.deskripsi,
+          durasi: form.durasi,
+          passingScore: form.passingScore,
+        }),
       });
 
       if (!res.ok) {
@@ -77,15 +111,30 @@ export default function FormQuizModal({
         {/* 🔥 Pilih Materi */}
         <select
           value={form.materiId}
-          onChange={(e) =>
-            setForm({ ...form, materiId: e.target.value })
-          }
+          onChange={(e) => handleMateriChange(e.target.value)}
           className="w-full p-2 bg-white/10 rounded"
         >
           <option value="">Pilih Materi</option>
           {materiList.map((m) => (
             <option key={m.id} value={m.id}>
               {m.judul}
+            </option>
+          ))}
+        </select>
+
+        {/* 🔥 Pilih Step */}
+        <select
+          value={form.materiStepId}
+          onChange={(e) =>
+            setForm({ ...form, materiStepId: e.target.value })
+          }
+          className="w-full p-2 bg-white/10 rounded"
+          disabled={!form.materiId}
+        >
+          <option value="">Pilih Step</option>
+          {steps.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.urutan}. {s.judul}
             </option>
           ))}
         </select>

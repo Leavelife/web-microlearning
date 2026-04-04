@@ -6,15 +6,26 @@ import Link from "next/link"
 export default function Navbar() {
   const [userExp, setUserExp] = useState(0)
   const [isLoggedIn, setIsLoggedIn] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(false)
   const maxExp = 1000
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
         const response = await fetch("/api/auth/me")
-        setIsLoggedIn(response.ok)
+
+        if (!response.ok) {
+          setIsLoggedIn(false)
+          setIsAdmin(false)
+          return
+        }
+
+        const data = await response.json()
+        setIsLoggedIn(true)
+        setIsAdmin(data.user?.role === "admin")
       } catch (error) {
         setIsLoggedIn(false)
+        setIsAdmin(false)
       }
     }
 
@@ -30,10 +41,15 @@ export default function Navbar() {
 
       {/* Menu Items */}
       <div className="flex gap-8 text-white">
+        {isAdmin && (
+          <Link href="/admin/dashboard" className="hover:text-purple-200 transition font-medium">
+            Dashboard
+          </Link>
+        )}
         <Link href="/" className="hover:text-purple-200 transition font-medium">
           Home
         </Link>
-        <Link href="/materi" className="hover:text-purple-200 transition font-medium">
+        <Link href="/learn" className="hover:text-purple-200 transition font-medium">
           Materi
         </Link>
         <Link href="/quiz" className="hover:text-purple-200 transition font-medium">

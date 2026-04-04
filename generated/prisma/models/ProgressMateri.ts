@@ -27,69 +27,75 @@ export type AggregateProgressMateri = {
 }
 
 export type ProgressMateriAvgAggregateOutputType = {
-  progresTerakhir: number | null
+  stepSekarang: number | null
 }
 
 export type ProgressMateriSumAggregateOutputType = {
-  progresTerakhir: number | null
+  stepSekarang: number | null
 }
 
 export type ProgressMateriMinAggregateOutputType = {
   id: string | null
   userId: string | null
   materiId: string | null
-  progresTerakhir: number | null
-  completed: boolean | null
+  stepSekarang: number | null
+  selesai: boolean | null
+  updateAt: Date | null
 }
 
 export type ProgressMateriMaxAggregateOutputType = {
   id: string | null
   userId: string | null
   materiId: string | null
-  progresTerakhir: number | null
-  completed: boolean | null
+  stepSekarang: number | null
+  selesai: boolean | null
+  updateAt: Date | null
 }
 
 export type ProgressMateriCountAggregateOutputType = {
   id: number
   userId: number
   materiId: number
-  progresTerakhir: number
-  completed: number
+  stepSekarang: number
+  selesai: number
+  updateAt: number
   _all: number
 }
 
 
 export type ProgressMateriAvgAggregateInputType = {
-  progresTerakhir?: true
+  stepSekarang?: true
 }
 
 export type ProgressMateriSumAggregateInputType = {
-  progresTerakhir?: true
+  stepSekarang?: true
 }
 
 export type ProgressMateriMinAggregateInputType = {
   id?: true
   userId?: true
   materiId?: true
-  progresTerakhir?: true
-  completed?: true
+  stepSekarang?: true
+  selesai?: true
+  updateAt?: true
 }
 
 export type ProgressMateriMaxAggregateInputType = {
   id?: true
   userId?: true
   materiId?: true
-  progresTerakhir?: true
-  completed?: true
+  stepSekarang?: true
+  selesai?: true
+  updateAt?: true
 }
 
 export type ProgressMateriCountAggregateInputType = {
   id?: true
   userId?: true
   materiId?: true
-  progresTerakhir?: true
-  completed?: true
+  stepSekarang?: true
+  selesai?: true
+  updateAt?: true
   _all?: true
 }
 
@@ -183,8 +189,9 @@ export type ProgressMateriGroupByOutputType = {
   id: string
   userId: string
   materiId: string
-  progresTerakhir: number
-  completed: boolean
+  stepSekarang: number
+  selesai: boolean
+  updateAt: Date
   _count: ProgressMateriCountAggregateOutputType | null
   _avg: ProgressMateriAvgAggregateOutputType | null
   _sum: ProgressMateriSumAggregateOutputType | null
@@ -214,8 +221,9 @@ export type ProgressMateriWhereInput = {
   id?: Prisma.StringFilter<"ProgressMateri"> | string
   userId?: Prisma.StringFilter<"ProgressMateri"> | string
   materiId?: Prisma.StringFilter<"ProgressMateri"> | string
-  progresTerakhir?: Prisma.IntFilter<"ProgressMateri"> | number
-  completed?: Prisma.BoolFilter<"ProgressMateri"> | boolean
+  stepSekarang?: Prisma.IntFilter<"ProgressMateri"> | number
+  selesai?: Prisma.BoolFilter<"ProgressMateri"> | boolean
+  updateAt?: Prisma.DateTimeFilter<"ProgressMateri"> | Date | string
   materi?: Prisma.XOR<Prisma.MateriScalarRelationFilter, Prisma.MateriWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -224,8 +232,9 @@ export type ProgressMateriOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   materiId?: Prisma.SortOrder
-  progresTerakhir?: Prisma.SortOrder
-  completed?: Prisma.SortOrder
+  stepSekarang?: Prisma.SortOrder
+  selesai?: Prisma.SortOrder
+  updateAt?: Prisma.SortOrder
   materi?: Prisma.MateriOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
   _relevance?: Prisma.ProgressMateriOrderByRelevanceInput
@@ -238,8 +247,9 @@ export type ProgressMateriWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.ProgressMateriWhereInput | Prisma.ProgressMateriWhereInput[]
   userId?: Prisma.StringFilter<"ProgressMateri"> | string
   materiId?: Prisma.StringFilter<"ProgressMateri"> | string
-  progresTerakhir?: Prisma.IntFilter<"ProgressMateri"> | number
-  completed?: Prisma.BoolFilter<"ProgressMateri"> | boolean
+  stepSekarang?: Prisma.IntFilter<"ProgressMateri"> | number
+  selesai?: Prisma.BoolFilter<"ProgressMateri"> | boolean
+  updateAt?: Prisma.DateTimeFilter<"ProgressMateri"> | Date | string
   materi?: Prisma.XOR<Prisma.MateriScalarRelationFilter, Prisma.MateriWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
@@ -248,8 +258,9 @@ export type ProgressMateriOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   materiId?: Prisma.SortOrder
-  progresTerakhir?: Prisma.SortOrder
-  completed?: Prisma.SortOrder
+  stepSekarang?: Prisma.SortOrder
+  selesai?: Prisma.SortOrder
+  updateAt?: Prisma.SortOrder
   _count?: Prisma.ProgressMateriCountOrderByAggregateInput
   _avg?: Prisma.ProgressMateriAvgOrderByAggregateInput
   _max?: Prisma.ProgressMateriMaxOrderByAggregateInput
@@ -264,14 +275,16 @@ export type ProgressMateriScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"ProgressMateri"> | string
   userId?: Prisma.StringWithAggregatesFilter<"ProgressMateri"> | string
   materiId?: Prisma.StringWithAggregatesFilter<"ProgressMateri"> | string
-  progresTerakhir?: Prisma.IntWithAggregatesFilter<"ProgressMateri"> | number
-  completed?: Prisma.BoolWithAggregatesFilter<"ProgressMateri"> | boolean
+  stepSekarang?: Prisma.IntWithAggregatesFilter<"ProgressMateri"> | number
+  selesai?: Prisma.BoolWithAggregatesFilter<"ProgressMateri"> | boolean
+  updateAt?: Prisma.DateTimeWithAggregatesFilter<"ProgressMateri"> | Date | string
 }
 
 export type ProgressMateriCreateInput = {
   id?: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
   materi: Prisma.MateriCreateNestedOneWithoutProgressesInput
   user: Prisma.UserCreateNestedOneWithoutProgressesInput
 }
@@ -280,14 +293,16 @@ export type ProgressMateriUncheckedCreateInput = {
   id?: string
   userId: string
   materiId: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
 }
 
 export type ProgressMateriUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   materi?: Prisma.MateriUpdateOneRequiredWithoutProgressesNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutProgressesNestedInput
 }
@@ -296,30 +311,34 @@ export type ProgressMateriUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   materiId?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProgressMateriCreateManyInput = {
   id?: string
   userId: string
   materiId: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
 }
 
 export type ProgressMateriUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProgressMateriUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   materiId?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProgressMateriListRelationFilter = {
@@ -342,32 +361,35 @@ export type ProgressMateriCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   materiId?: Prisma.SortOrder
-  progresTerakhir?: Prisma.SortOrder
-  completed?: Prisma.SortOrder
+  stepSekarang?: Prisma.SortOrder
+  selesai?: Prisma.SortOrder
+  updateAt?: Prisma.SortOrder
 }
 
 export type ProgressMateriAvgOrderByAggregateInput = {
-  progresTerakhir?: Prisma.SortOrder
+  stepSekarang?: Prisma.SortOrder
 }
 
 export type ProgressMateriMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   materiId?: Prisma.SortOrder
-  progresTerakhir?: Prisma.SortOrder
-  completed?: Prisma.SortOrder
+  stepSekarang?: Prisma.SortOrder
+  selesai?: Prisma.SortOrder
+  updateAt?: Prisma.SortOrder
 }
 
 export type ProgressMateriMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
   materiId?: Prisma.SortOrder
-  progresTerakhir?: Prisma.SortOrder
-  completed?: Prisma.SortOrder
+  stepSekarang?: Prisma.SortOrder
+  selesai?: Prisma.SortOrder
+  updateAt?: Prisma.SortOrder
 }
 
 export type ProgressMateriSumOrderByAggregateInput = {
-  progresTerakhir?: Prisma.SortOrder
+  stepSekarang?: Prisma.SortOrder
 }
 
 export type ProgressMateriCreateNestedManyWithoutUserInput = {
@@ -460,16 +482,18 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type ProgressMateriCreateWithoutUserInput = {
   id?: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
   materi: Prisma.MateriCreateNestedOneWithoutProgressesInput
 }
 
 export type ProgressMateriUncheckedCreateWithoutUserInput = {
   id?: string
   materiId: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
 }
 
 export type ProgressMateriCreateOrConnectWithoutUserInput = {
@@ -505,22 +529,25 @@ export type ProgressMateriScalarWhereInput = {
   id?: Prisma.StringFilter<"ProgressMateri"> | string
   userId?: Prisma.StringFilter<"ProgressMateri"> | string
   materiId?: Prisma.StringFilter<"ProgressMateri"> | string
-  progresTerakhir?: Prisma.IntFilter<"ProgressMateri"> | number
-  completed?: Prisma.BoolFilter<"ProgressMateri"> | boolean
+  stepSekarang?: Prisma.IntFilter<"ProgressMateri"> | number
+  selesai?: Prisma.BoolFilter<"ProgressMateri"> | boolean
+  updateAt?: Prisma.DateTimeFilter<"ProgressMateri"> | Date | string
 }
 
 export type ProgressMateriCreateWithoutMateriInput = {
   id?: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProgressesInput
 }
 
 export type ProgressMateriUncheckedCreateWithoutMateriInput = {
   id?: string
   userId: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
 }
 
 export type ProgressMateriCreateOrConnectWithoutMateriInput = {
@@ -552,57 +579,65 @@ export type ProgressMateriUpdateManyWithWhereWithoutMateriInput = {
 export type ProgressMateriCreateManyUserInput = {
   id?: string
   materiId: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
 }
 
 export type ProgressMateriUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   materi?: Prisma.MateriUpdateOneRequiredWithoutProgressesNestedInput
 }
 
 export type ProgressMateriUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   materiId?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProgressMateriUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   materiId?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProgressMateriCreateManyMateriInput = {
   id?: string
   userId: string
-  progresTerakhir: number
-  completed?: boolean
+  stepSekarang: number
+  selesai?: boolean
+  updateAt?: Date | string
 }
 
 export type ProgressMateriUpdateWithoutMateriInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProgressesNestedInput
 }
 
 export type ProgressMateriUncheckedUpdateWithoutMateriInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ProgressMateriUncheckedUpdateManyWithoutMateriInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
-  progresTerakhir?: Prisma.IntFieldUpdateOperationsInput | number
-  completed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  stepSekarang?: Prisma.IntFieldUpdateOperationsInput | number
+  selesai?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  updateAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -611,8 +646,9 @@ export type ProgressMateriSelect<ExtArgs extends runtime.Types.Extensions.Intern
   id?: boolean
   userId?: boolean
   materiId?: boolean
-  progresTerakhir?: boolean
-  completed?: boolean
+  stepSekarang?: boolean
+  selesai?: boolean
+  updateAt?: boolean
   materi?: boolean | Prisma.MateriDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["progressMateri"]>
@@ -623,11 +659,12 @@ export type ProgressMateriSelectScalar = {
   id?: boolean
   userId?: boolean
   materiId?: boolean
-  progresTerakhir?: boolean
-  completed?: boolean
+  stepSekarang?: boolean
+  selesai?: boolean
+  updateAt?: boolean
 }
 
-export type ProgressMateriOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "materiId" | "progresTerakhir" | "completed", ExtArgs["result"]["progressMateri"]>
+export type ProgressMateriOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "materiId" | "stepSekarang" | "selesai" | "updateAt", ExtArgs["result"]["progressMateri"]>
 export type ProgressMateriInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   materi?: boolean | Prisma.MateriDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -643,8 +680,9 @@ export type $ProgressMateriPayload<ExtArgs extends runtime.Types.Extensions.Inte
     id: string
     userId: string
     materiId: string
-    progresTerakhir: number
-    completed: boolean
+    stepSekarang: number
+    selesai: boolean
+    updateAt: Date
   }, ExtArgs["result"]["progressMateri"]>
   composites: {}
 }
@@ -1019,8 +1057,9 @@ export interface ProgressMateriFieldRefs {
   readonly id: Prisma.FieldRef<"ProgressMateri", 'String'>
   readonly userId: Prisma.FieldRef<"ProgressMateri", 'String'>
   readonly materiId: Prisma.FieldRef<"ProgressMateri", 'String'>
-  readonly progresTerakhir: Prisma.FieldRef<"ProgressMateri", 'Int'>
-  readonly completed: Prisma.FieldRef<"ProgressMateri", 'Boolean'>
+  readonly stepSekarang: Prisma.FieldRef<"ProgressMateri", 'Int'>
+  readonly selesai: Prisma.FieldRef<"ProgressMateri", 'Boolean'>
+  readonly updateAt: Prisma.FieldRef<"ProgressMateri", 'DateTime'>
 }
     
 

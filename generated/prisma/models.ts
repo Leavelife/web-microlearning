@@ -10,6 +10,7 @@
  */
 export type * from './models/User.ts'
 export type * from './models/Materi.ts'
+export type * from './models/MateriStep.ts'
 export type * from './models/ProgressMateri.ts'
 export type * from './models/Quiz.ts'
 export type * from './models/SoalQuiz.ts'

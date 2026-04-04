@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import ChartCard from "./ChartCard";
 import FormMateriModal from "@/components/admin/materi/FormMateriModal";
+import TableStep from "@/components/admin/materi/TableStep";
 import TableQuiz from "@/components/admin/quiz/TableQuiz";
 import FormQuizModal from "@/components/admin/quiz/FormQuizModal";
 import DetailQuiz from "@/components/admin/quiz/DetailQuiz";
@@ -18,7 +19,7 @@ function StatCard({ title, value }) {
 function Sidebar() {
   const menu = ["Dashboard", "Materi", "Quiz", "Simulasi", "Gamifikasi"];
   return (
-    <div className="w-64 h-screen bg-black/40 backdrop-blur p-4">
+    <div className="fixed left-0 top-0 z-40 w-64 h-screen bg-black/40 backdrop-blur p-4">
       <h1 className="text-xl font-bold mb-6">MICROLAB</h1>
       <ul className="space-y-3">
         {menu.map((item) => (
@@ -43,7 +44,7 @@ function Topbar() {
   );
 }
 
-function TableMateri({ initialData = [] }) {
+function TableMateri({ initialData = [], onManageSteps }) {
   const [data, setData] = useState(initialData);
   const [loading, setLoading] = useState(!initialData || initialData.length === 0);
   const [error, setError] = useState(null);
@@ -78,7 +79,7 @@ function TableMateri({ initialData = [] }) {
         if (!res.ok) throw new Error("Failed to fetch materi");
         const result = await res.json();
         if (!cancelled) {
-          setData(result.lessons || result.data || []);
+          setData(result.materis || result.data || []);
           setLoading(false);
         }
       } catch (err) {
@@ -133,40 +134,47 @@ function TableMateri({ initialData = [] }) {
         <thead>
           <tr className="text-gray-400">
             <th>No</th>
-            <th>Tipe</th>
+            <th>Genre</th>
             <th>Tahap</th>
             <th>Judul</th>
             <th>Deskripsi</th>
-            <th>URL</th>
-            <th>Tipe Unlock</th>
+            <th>Thumbnail</th>
+            <th>Total Steps</th>
           </tr>
         </thead>
 
         <tbody>
           {loading ? (
             <tr key="loading-row">
-              <td colSpan="8">Loading...</td>
+              <td colSpan="7">Loading...</td>
             </tr>
           ) : data.length === 0 ? (
             <tr key="empty-row">
-              <td colSpan="8">Tidak ada data</td>
+              <td colSpan="7">Tidak ada data</td>
             </tr>
           ) : (
             data.map((item, i) => (
               <tr key={item.id || `item-${i}`} className="border-t border-white/10">
                 <td>{ i + 1}</td>
-                <td>{item.tipe}</td>
+                <td>{item.genre}</td>
                 <td>{item.tahap}</td>
                 <td>{item.judul}</td>
                 <td className="max-w-xs truncate">{item.deskripsi}</td>
-                <td>{item.urlKonten || item.url || "-"}</td>
-                <td>{item.unlockType || "-"}</td>
+                <td>{item.thumbnail || "-"}</td>
+                <td>{item.totalStep}</td>
                 <td className="space-x-2">
                     <button
                         onClick={() => handleEdit(item)}
                         className="bg-green-500 px-2 m-3 rounded"
                     >
                         Edit
+                    </button>
+
+                    <button
+                        onClick={() => onManageSteps && onManageSteps(item.id)}
+                        className="bg-blue-500 px-2 m-3 rounded"
+                    >
+                        Steps
                     </button>
 
                     <button
@@ -217,11 +225,13 @@ export default function DashboardClient({ stats, initialMateri, initialQuiz, cha
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'detail'
   const [selectedQuizForDetail, setSelectedQuizForDetail] = useState(null);
+  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'materi', 'steps', 'quiz'
+  const [selectedMateriId, setSelectedMateriId] = useState(null);
   return (
     <div className="flex text-white min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
       <Sidebar />
 
-      <div className="flex-1">
+      <div className="ml-64 flex-1 min-w-0">
         <Topbar />
 
         <div className="p-6 space-y-6">
@@ -241,34 +251,51 @@ export default function DashboardClient({ stats, initialMateri, initialQuiz, cha
             </div>
           </div>
 
-          <TableMateri initialData={initialMateri} />
+          {currentView === 'dashboard' && (
+            <>
+              <TableMateri
+                initialData={initialMateri}
+                onManageSteps={(materiId) => {
+                  setSelectedMateriId(materiId);
+                  setCurrentView('steps');
+                }}
+              />
 
-          {viewMode === 'list' ? (
-            <TableQuiz
-              initialData={initialQuiz}
-              onEdit={(quiz) => {
-                setSelectedQuiz(quiz);
-                setIsQuizModalOpen(true);
-              }}
-              onAdd={() => {
-                setSelectedQuiz(null);
-                setIsQuizModalOpen(true);
-              }}
-              onViewSoal={(quiz) => {
-                setSelectedQuizForDetail(quiz);
-                setViewMode('detail');
-              }}
+              {viewMode === 'list' ? (
+                <TableQuiz
+                  initialData={initialQuiz}
+                  onEdit={(quiz) => {
+                    setSelectedQuiz(quiz);
+                    setIsQuizModalOpen(true);
+                  }}
+                  onAdd={() => {
+                    setSelectedQuiz(null);
+                    setIsQuizModalOpen(true);
+                  }}
+                  onViewSoal={(quiz) => {
+                    setSelectedQuizForDetail(quiz);
+                    setViewMode('detail');
+                  }}
+                />
+              ) : (
+                <div className="space-y-4">
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className="bg-gray-500 px-4 py-2 rounded hover:bg-gray-600 transition-colors"
+                  >
+                    ← Back to Quiz List
+                  </button>
+                  <DetailQuiz quiz={selectedQuizForDetail} />
+                </div>
+              )}
+            </>
+          )}
+
+          {currentView === 'steps' && (
+            <TableStep
+              materiId={selectedMateriId}
+              onClose={() => setCurrentView('dashboard')}
             />
-          ) : (
-            <div className="space-y-4">
-              <button
-                onClick={() => setViewMode('list')}
-                className="bg-gray-500 px-4 py-2 rounded hover:bg-gray-600 transition-colors"
-              >
-                ← Back to Quiz List
-              </button>
-              <DetailQuiz quiz={selectedQuizForDetail} />
-            </div>
           )}
         </div>
       </div>
@@ -281,6 +308,7 @@ export default function DashboardClient({ stats, initialMateri, initialQuiz, cha
           // Reset selectedQuiz after operation
           setSelectedQuiz(null);
         }}
+        materiList={initialMateri}
       />
     </div>
   );
