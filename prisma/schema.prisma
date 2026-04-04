@@ -56,12 +56,15 @@ model ProgressMateri {
 }
 
 model Quiz {
-  id       String          @id @default(uuid())
-  materiId String
-  judul    String
-  hasil    HasilQuizUser[]
-  materi   Materi          @relation(fields: [materiId], references: [id])
-  soal     SoalQuiz[]
+  id           String          @id @default(uuid())
+  materiId     String
+  judul        String
+  deskripsi    String?
+  durasi       Int?            @default(30)
+  passingScore Int?            @default(70)
+  hasil        HasilQuizUser[]
+  materi       Materi          @relation(fields: [materiId], references: [id])
+  soal         SoalQuiz[]
 
   @@index([materiId], map: "Quiz_materiId_fkey")
 }
@@ -69,6 +72,7 @@ model Quiz {
 model SoalQuiz {
   id           String @id @default(uuid())
   quizId       String
+  nomorSoal    Int    @default(0)
   pertanyaan   String
   opsi         Json
   jawabanBenar String

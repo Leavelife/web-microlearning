@@ -17,6 +17,7 @@ export async function POST(req, { params }) {
     const soal = await prisma.soalQuiz.create({
       data: {
         quizId,
+        nomorSoal: Number(nomorSoal),
         pertanyaan,
         opsi, // JSON
         jawabanBenar,

@@ -5,7 +5,7 @@ export async function POST(req) {
   try {
     await requireRole("admin")
 
-    const { materiId, judul } = await req.json()
+    const { materiId, judul, deskripsi, durasi, passingScore } = await req.json()
 
     if (!materiId || !judul) {
       return Response.json({
@@ -16,7 +16,10 @@ export async function POST(req) {
     const quiz = await prisma.quiz.create({
       data: {
         materiId,
-        judul
+        judul,
+        deskripsi: deskripsi || null,
+        durasi: durasi ? Number(durasi) : 30,
+        passingScore: passingScore ? Number(passingScore) : 70
       }
     })
 

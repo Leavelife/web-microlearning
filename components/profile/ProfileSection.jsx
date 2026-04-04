@@ -1,7 +1,31 @@
+'use client'
+
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import EditProfile from "./EditProfile"
 
 export default function ProfileSection({ user }) {
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+
+      if (res.ok) {
+        router.push("/login")
+      } else {
+        alert("Logout gagal")
+      }
+    } catch (error) {
+      alert("Terjadi kesalahan saat logout")
+    }
+  }
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
 
@@ -27,6 +51,16 @@ export default function ProfileSection({ user }) {
         </div>
 
         <EditProfile user={user} />
+
+        {/* Tombol Logout */}
+        <div className="mt-6">
+          <button
+            onClick={handleLogout}
+            className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* RIGHT: PROGRESS */}
@@ -40,12 +74,15 @@ export default function ProfileSection({ user }) {
         <div className="mt-4">
           <h4 className="font-semibold">Top Achievement</h4>
           <ul className="mt-2 space-y-2">
-            {user.topAchievements.map((a, i) => (
+            {(user?.topAchievements || []).map((a, i) => (
               <li key={i} className="text-sm">
-                🏅 {a.nama}
+                🏅 {a?.nama || "-"}
               </li>
             ))}
           </ul>
+          {(!user?.topAchievements || user.topAchievements.length === 0) && (
+            <p className="text-sm text-gray-500">Belum ada achievement</p>
+          )}
         </div>
       </div>
 
