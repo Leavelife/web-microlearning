@@ -1,52 +1,82 @@
-import { prisma } from "@/lib/prisma"
-import { requireRole } from "@/lib/auth-guard"
+import { prisma } from "@/lib/prisma";
+import { requireRole } from "@/lib/auth-guard";
 
-export async function PUT(req, { params }) {
+// ✅ GET DETAIL (STEP + QUIZ)
+export async function GET(req, { params }) {
   try {
-    await requireRole("admin")
+    const { id } = await params;
 
-    const { id } = await params
-    const { nomorMateri, judul, deskripsi, tipe, tahap, urlKonten, unlockType } = await req.json()
-
-    const lesson = await prisma.materi.update({
+    const materi = await prisma.materi.findUnique({
       where: { id },
-      data: {
-        nomorMateri: Number(nomorMateri),
-        judul,
-        deskripsi,
-        tipe,
-        tahap: Number(tahap),
-        urlKonten,
-        unlockType
-      }
-    })
+      include: {
+        steps: {
+          orderBy: { urutan: "asc" },
+          include: {
+            quiz: {
+              include: {
+                soal: true,
+              },
+            },
+          },
+        },
+      },
+    });
 
-    return Response.json({
-      message: "Materi berhasil diupdate",
-      lesson
-    })
+    if (!materi) {
+      return Response.json({ error: "Materi tidak ditemukan" }, { status: 404 });
+    }
+
+    return Response.json({ materi });
 
   } catch (err) {
-
-    return Response.json({ error: "Error update" }, { status: 500 })
+    return Response.json({ error: "Error get detail" }, { status: 500 });
   }
 }
 
-export async function DELETE(req, { params }) {
+// ✅ UPDATE MATERI
+export async function PUT(req, { params }) {
   try {
-    await requireRole("admin")
+    await requireRole("admin");
 
-    const { id } = await params
+    const { id } = await params;
+    const { judul, deskripsi, genre, thumbnail } = await req.json();
 
-    await prisma.materi.delete({
-      where: { id }
-    })
+    const materi = await prisma.materi.update({
+      where: { id },
+      data: {
+        judul,
+        deskripsi,
+        genre,
+        thumbnail,
+      },
+    });
 
     return Response.json({
-      message: "Materi berhasil dihapus"
-    })
+      message: "Materi berhasil diupdate",
+      materi,
+    });
 
   } catch (err) {
-    return Response.json({ error: "Error delete" }, { status: 500 })
+    return Response.json({ error: "Error update" }, { status: 500 });
+  }
+}
+
+// ✅ DELETE
+export async function DELETE(req, { params }) {
+  try {
+    await requireRole("admin");
+
+    const { id } = await params;
+
+    await prisma.materi.delete({
+      where: { id },
+    });
+
+    return Response.json({
+      message: "Materi berhasil dihapus",
+    });
+
+  } catch (err) {
+    return Response.json({ error: "Error delete" }, { status: 500 });
   }
 }

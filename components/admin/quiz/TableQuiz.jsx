@@ -60,8 +60,9 @@ function TableQuiz({ initialData = [], onViewSoal }) {
     const fetchMateri = async () => {
       try {
         const res = await fetch("/api/admin/materi");
+        if (!res.ok) return;
         const result = await res.json();
-        setMateriList(result.lessons || result.data || []);
+        setMateriList(result.materis || result.lessons || result.data || []);
       } catch (err) {
         console.error("Failed to fetch materi:", err);
       }
@@ -140,7 +141,7 @@ function TableQuiz({ initialData = [], onViewSoal }) {
             data.map((item, i) => (
               <tr key={item.id || `quiz-${i}`} className="border-t border-white/10">
                 <td>{i + 1}</td>
-                <td>{item.materi?.judul || "N/A"}</td>
+                <td>{item.materiStep?.materi?.judul || "N/A"}</td>
                 <td>{item.judul}</td>
                 <td>{item._count?.soal || item.soal?.length || 0}</td>
                 <td className="space-x-2">

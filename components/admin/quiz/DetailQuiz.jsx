@@ -7,6 +7,8 @@ export default function DetailQuiz({ quiz }) {
   const [selectedSoal, setSelectedSoal] = useState(null);
   const [isSoalModalOpen, setIsSoalModalOpen] = useState(false);
   const [refreshSoal, setRefreshSoal] = useState(0);
+  /** Naikkan setiap buka modal agar FormSoalModal di-remount dan form tidak bawa isi lama. */
+  const [soalModalKey, setSoalModalKey] = useState(0);
 
   const onSoalSaved = () => {
     setSelectedSoal(null);
@@ -40,16 +42,19 @@ export default function DetailQuiz({ quiz }) {
         refresh={refreshSoal}
         onEdit={(soal) => {
           setSelectedSoal(soal);
+          setSoalModalKey((k) => k + 1);
           setIsSoalModalOpen(true);
         }}
         onAdd={() => {
           setSelectedSoal(null);
+          setSoalModalKey((k) => k + 1);
           setIsSoalModalOpen(true);
         }}
       />
 
       {/* Soal Modal */}
       <FormSoalModal
+        key={soalModalKey}
         isOpen={isSoalModalOpen}
         onClose={() => setIsSoalModalOpen(false)}
         quizId={quiz.id}

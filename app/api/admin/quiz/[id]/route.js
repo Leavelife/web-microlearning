@@ -6,14 +6,14 @@ export async function PUT(req, { params }) {
     await requireRole("admin")
 
     const { id } = await params
-    const { materiId, judul, deskripsi, durasi, passingScore } = await req.json()
+    const { materiStepId, judul, deskripsi, durasi, passingScore } = await req.json()
 
     const updateData = {
       judul
     };
 
     // Only update optional fields if provided
-    if (materiId) updateData.materiId = materiId;
+    if (materiStepId) updateData.materiStepId = materiStepId;
     if (deskripsi !== undefined) updateData.deskripsi = deskripsi;
     if (durasi !== undefined) updateData.durasi = Number(durasi);
     if (passingScore !== undefined) updateData.passingScore = Number(passingScore);
@@ -52,4 +52,18 @@ export async function DELETE(req, { params }) {
     console.error(err)
     return Response.json({ error: "Error delete" }, { status: 500 })
   }
+}
+
+export async function GET(req, { params }) {
+
+  const { id } = await params
+
+  const quiz = await prisma.quiz.findUnique({
+    where: { id },
+    include: {
+      soal: true,
+    },
+  });
+
+  return Response.json({ quiz });
 }

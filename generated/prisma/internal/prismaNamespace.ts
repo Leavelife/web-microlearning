@@ -386,6 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Materi: 'Materi',
+  MateriStep: 'MateriStep',
   ProgressMateri: 'ProgressMateri',
   Quiz: 'Quiz',
   SoalQuiz: 'SoalQuiz',
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "materi" | "progressMateri" | "quiz" | "soalQuiz" | "hasilQuizUser" | "hasilSimulasi" | "achievement" | "userAchievement" | "level" | "levelUser"
+    modelProps: "user" | "materi" | "materiStep" | "progressMateri" | "quiz" | "soalQuiz" | "hasilQuizUser" | "hasilSimulasi" | "achievement" | "userAchievement" | "level" | "levelUser"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -543,6 +544,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.MateriCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.MateriCountAggregateOutputType> | number
+        }
+      }
+    }
+    MateriStep: {
+      payload: Prisma.$MateriStepPayload<ExtArgs>
+      fields: Prisma.MateriStepFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MateriStepFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MateriStepFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload>
+        }
+        findFirst: {
+          args: Prisma.MateriStepFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MateriStepFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload>
+        }
+        findMany: {
+          args: Prisma.MateriStepFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload>[]
+        }
+        create: {
+          args: Prisma.MateriStepCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload>
+        }
+        createMany: {
+          args: Prisma.MateriStepCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.MateriStepDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload>
+        }
+        update: {
+          args: Prisma.MateriStepUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload>
+        }
+        deleteMany: {
+          args: Prisma.MateriStepDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MateriStepUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.MateriStepUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MateriStepPayload>
+        }
+        aggregate: {
+          args: Prisma.MateriStepAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMateriStep>
+        }
+        groupBy: {
+          args: Prisma.MateriStepGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MateriStepGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MateriStepCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MateriStepCountAggregateOutputType> | number
         }
       }
     }
@@ -1196,25 +1263,36 @@ export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof User
 
 export const MateriScalarFieldEnum = {
   id: 'id',
-  nomorMateri: 'nomorMateri',
   judul: 'judul',
   deskripsi: 'deskripsi',
-  tipe: 'tipe',
-  urlKonten: 'urlKonten',
-  unlockType: 'unlockType',
-  unlockRefId: 'unlockRefId',
-  tahap: 'tahap'
+  genre: 'genre',
+  thumbnail: 'thumbnail',
+  createdAt: 'createdAt'
 } as const
 
 export type MateriScalarFieldEnum = (typeof MateriScalarFieldEnum)[keyof typeof MateriScalarFieldEnum]
+
+
+export const MateriStepScalarFieldEnum = {
+  id: 'id',
+  materiId: 'materiId',
+  urutan: 'urutan',
+  judul: 'judul',
+  tipe: 'tipe',
+  konten: 'konten',
+  createdAt: 'createdAt'
+} as const
+
+export type MateriStepScalarFieldEnum = (typeof MateriStepScalarFieldEnum)[keyof typeof MateriStepScalarFieldEnum]
 
 
 export const ProgressMateriScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   materiId: 'materiId',
-  progresTerakhir: 'progresTerakhir',
-  completed: 'completed'
+  stepSekarang: 'stepSekarang',
+  selesai: 'selesai',
+  updateAt: 'updateAt'
 } as const
 
 export type ProgressMateriScalarFieldEnum = (typeof ProgressMateriScalarFieldEnum)[keyof typeof ProgressMateriScalarFieldEnum]
@@ -1222,7 +1300,7 @@ export type ProgressMateriScalarFieldEnum = (typeof ProgressMateriScalarFieldEnu
 
 export const QuizScalarFieldEnum = {
   id: 'id',
-  materiId: 'materiId',
+  materiStepId: 'materiStepId',
   judul: 'judul',
   deskripsi: 'deskripsi',
   durasi: 'durasi',
@@ -1350,13 +1428,22 @@ export const MateriOrderByRelevanceFieldEnum = {
   id: 'id',
   judul: 'judul',
   deskripsi: 'deskripsi',
-  tipe: 'tipe',
-  urlKonten: 'urlKonten',
-  unlockType: 'unlockType',
-  unlockRefId: 'unlockRefId'
+  genre: 'genre',
+  thumbnail: 'thumbnail'
 } as const
 
 export type MateriOrderByRelevanceFieldEnum = (typeof MateriOrderByRelevanceFieldEnum)[keyof typeof MateriOrderByRelevanceFieldEnum]
+
+
+export const MateriStepOrderByRelevanceFieldEnum = {
+  id: 'id',
+  materiId: 'materiId',
+  judul: 'judul',
+  tipe: 'tipe',
+  konten: 'konten'
+} as const
+
+export type MateriStepOrderByRelevanceFieldEnum = (typeof MateriStepOrderByRelevanceFieldEnum)[keyof typeof MateriStepOrderByRelevanceFieldEnum]
 
 
 export const ProgressMateriOrderByRelevanceFieldEnum = {
@@ -1370,7 +1457,7 @@ export type ProgressMateriOrderByRelevanceFieldEnum = (typeof ProgressMateriOrde
 
 export const QuizOrderByRelevanceFieldEnum = {
   id: 'id',
-  materiId: 'materiId',
+  materiStepId: 'materiStepId',
   judul: 'judul',
   deskripsi: 'deskripsi'
 } as const
@@ -1483,6 +1570,13 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 
 
 /**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
@@ -1500,13 +1594,6 @@ export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'J
  * Reference to a field of type 'QueryMode'
  */
 export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
- * Reference to a field of type 'DateTime'
- */
-export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
     
 
 
@@ -1613,6 +1700,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   materi?: Prisma.MateriOmit
+  materiStep?: Prisma.MateriStepOmit
   progressMateri?: Prisma.ProgressMateriOmit
   quiz?: Prisma.QuizOmit
   soalQuiz?: Prisma.SoalQuizOmit

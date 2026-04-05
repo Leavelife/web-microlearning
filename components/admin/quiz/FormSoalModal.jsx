@@ -1,5 +1,37 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+
+function getEmptyForm() {
+  return {
+    pertanyaan: "",
+    opsi: { A: "", B: "", C: "", D: "" },
+    jawabanBenar: "A",
+    score: 10,
+  };
+}
+
+function mapSoalToForm(data) {
+  let opsi = data?.opsi;
+  if (typeof opsi === "string") {
+    try {
+      opsi = JSON.parse(opsi);
+    } catch {
+      opsi = {};
+    }
+  }
+  if (!opsi || typeof opsi !== "object") opsi = {};
+  return {
+    pertanyaan: data?.pertanyaan ?? "",
+    opsi: {
+      A: opsi.A ?? "",
+      B: opsi.B ?? "",
+      C: opsi.C ?? "",
+      D: opsi.D ?? "",
+    },
+    jawabanBenar: data?.jawabanBenar ?? "A",
+    score: Number(data?.score ?? 10),
+  };
+}
 
 export default function FormSoalModal({
   isOpen,
@@ -8,22 +40,10 @@ export default function FormSoalModal({
   initialData,
   onSuccess
 }) {
-  const emptyForm = {
-    pertanyaan: "",
-    opsi: { A: "", B: "", C: "", D: "" },
-    jawabanBenar: "A",
-    score: 10
-  };
-
-  const [form, setForm] = useState(emptyForm);
-
-  useEffect(() => {
-    if (initialData) {
-      setForm(initialData);
-    } else {
-      setForm(emptyForm);
-    }
-  }, [initialData]);
+  // State awal hanya dipakai saat instance baru (parent mengatur key saat buka modal).
+  const [form, setForm] = useState(() =>
+    initialData ? mapSoalToForm(initialData) : getEmptyForm()
+  );
 
   const handleSubmit = async () => {
     const method = initialData ? "PUT" : "POST";

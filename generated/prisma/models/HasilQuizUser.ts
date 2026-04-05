@@ -454,10 +454,6 @@ export type HasilQuizUserUncheckedUpdateManyWithoutQuizNestedInput = {
   deleteMany?: Prisma.HasilQuizUserScalarWhereInput | Prisma.HasilQuizUserScalarWhereInput[]
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
 export type HasilQuizUserCreateWithoutUserInput = {
   id?: string
   score: number
