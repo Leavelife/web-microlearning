@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import VirtualLabRJ45 from "@/components/simulasi/kabel-lan/VirtualLabRJ45";
 import VirtualLabCables from "@/components/simulasi/kabel-lan/VirtualLabCables";
 
@@ -77,7 +77,7 @@ const CABLE_LIBRARY = [
     value: "brown",
     label: "Coklat",
     colorHex: "#7c2d12",
-    colorText: "#fff",
+    colorText: "#7c2d12",
     imageSrc: "/images/virtual-lab/cables/brown.png",
   },
 ];
@@ -92,7 +92,12 @@ function shuffle(array) {
 }
 
 export default function VirtualLabSimulasi() {
-  const [availableCables, setAvailableCables] = useState(() => shuffle(CABLE_LIBRARY));
+  // Urutan awal harus deterministik (sama SSR & klien) agar tidak hydration mismatch.
+  // Acak kabel hanya setelah mount di klien.
+  const [availableCables, setAvailableCables] = useState(() => [...CABLE_LIBRARY]);
+  useEffect(() => {
+    setAvailableCables(shuffle([...CABLE_LIBRARY]));
+  }, []);
   const [slots, setSlots] = useState(Array(8).fill(null));
   const [score, setScore] = useState(0);
   const [mistakes, setMistakes] = useState(0);
@@ -139,6 +144,10 @@ export default function VirtualLabSimulasi() {
     const slotValue = slots[slotIndex];
     if (!slotValue || finished) return;
 
+    const intended = TARGET_ORDER[slotIndex];
+    const wasCorrect = slotValue.value === intended;
+    const pointsAddedOnDrop = wasCorrect ? 20 : 5;
+
     setSlots((prev) => {
       const next = [...prev];
       next[slotIndex] = null;
@@ -146,8 +155,8 @@ export default function VirtualLabSimulasi() {
     });
     setAvailableCables((prev) => [...prev, slotValue]);
     setMoves((prev) => prev + 1);
-    setScore((prev) => Math.max(0, prev - 5));
-    if (slotValue.value !== TARGET_ORDER[slotIndex]) {
+    setScore((prev) => Math.max(0, prev - pointsAddedOnDrop));
+    if (!wasCorrect) {
       setMistakes((prev) => Math.max(0, prev - 1));
     }
   };
@@ -174,8 +183,7 @@ export default function VirtualLabSimulasi() {
 
           <div className="mt-4 text-sm text-gray-700">
             <p>
-              Urutan straight (T568B): 1. Putih/Oranye, 2. Oranye, 3. Putih/Hijau, 4. Biru, 5.
-              Putih/Biru, 6. Hijau, 7. Putih/Coklat, 8. Coklat.
+              Urutkan untuk kabel LAN straight (T568B)
             </p>
             <p className="mt-2">Klik pin untuk membatalkan penempatan.</p>
           </div>
