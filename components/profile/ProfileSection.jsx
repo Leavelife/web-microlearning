@@ -27,7 +27,7 @@ export default function ProfileSection({ user }) {
   }
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
+    <div className="grid md:grid-cols-2 gap-6 mt-15">
 
       {/* LEFT: DATA DIRI */}
       <div className="bg-white rounded-2xl shadow p-6">
@@ -85,7 +85,6 @@ export default function ProfileSection({ user }) {
           )}
         </div>
       </div>
-
     </div>
   )
 }

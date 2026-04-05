@@ -102,90 +102,108 @@ export default function FormQuizModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-gray-900 p-6 rounded-2xl w-96 space-y-4 text-white">
+      <div className="bg-gray-900 p-6 rounded-2xl w-96 space-y-1 text-white">
 
         <h2 className="text-lg font-bold">
           {initialData ? "Edit Quiz" : "Tambah Quiz"}
         </h2>
 
-        {/* 🔥 Pilih Materi */}
-        <select
-          value={form.materiId}
-          onChange={(e) => handleMateriChange(e.target.value)}
-          className="w-full p-2 bg-white/10 rounded"
-        >
-          <option value="">Pilih Materi</option>
-          {materiList.map((m) => (
-            <option key={m.id} value={m.id}>
-              {m.judul}
-            </option>
-          ))}
-        </select>
+        {/* Pilih Materi */}
+        <div>
+          <label htmlFor="materiId" className="block text-sm font-medium p-2 text-white">Materi</label>
+          <select
+            value={form.materiId}
+            onChange={(e) => handleMateriChange(e.target.value)}
+            className="w-full p-2 bg-white/10 rounded"
+          >
+            <option className="text-white bg-gray-900" value="">Pilih Materi</option>
+            {materiList.map((m) => (
+              <option className="text-white bg-gray-900" key={m.id} value={m.id}>
+                {m.judul}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        {/* 🔥 Pilih Step */}
-        <select
-          value={form.materiStepId}
-          onChange={(e) =>
-            setForm({ ...form, materiStepId: e.target.value })
-          }
-          className="w-full p-2 bg-white/10 rounded"
-          disabled={!form.materiId}
-        >
-          <option value="">Pilih Step</option>
-          {steps.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.urutan}. {s.judul}
-            </option>
-          ))}
-        </select>
+        {/* Pilih Step */}
+        <div>
+          <label htmlFor="materiStepId" className="block text-sm font-medium p-2 text-white">Step</label>
+          <select
+            value={form.materiStepId}
+            onChange={(e) =>
+              setForm({ ...form, materiStepId: e.target.value })
+            }
+            className="w-full p-2 bg-white/10 rounded"
+            disabled={!form.materiId}
+          >
+            <option className="text-white bg-gray-900" value="">Pilih Step</option>
+            {steps.map((s) => (
+              <option className="text-white bg-gray-900" key={s.id} value={s.id}>
+                {s.urutan}. {s.judul}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        {/* 🔥 Judul Quiz */}
-        <input
-          type="text"
-          placeholder="Judul Quiz"
-          value={form.judul}
-          onChange={(e) =>
-            setForm({ ...form, judul: e.target.value })
-          }
-          className="w-full p-2 bg-white/10 rounded"
-        />
+        {/* Judul Quiz */}
+        <div>
+          <label htmlFor="judul" className="block text-sm font-medium p-2 text-white">Judul</label>
+          <input
+            type="text"
+            placeholder="Judul Quiz"
+            value={form.judul}
+            onChange={(e) =>
+              setForm({ ...form, judul: e.target.value })
+              }
+            className="w-full p-2 bg-white/10 rounded"
+          />
+        </div>
 
-        {/* 🔥 Deskripsi Quiz */}
-        <textarea
-          placeholder="Deskripsi Quiz"
-          value={form.deskripsi}
-          onChange={(e) =>
-            setForm({ ...form, deskripsi: e.target.value })
-          }
-          className="w-full p-2 bg-white/10 rounded h-20 resize-none"
-        />
+        {/* Deskripsi Quiz */}
+        <div>
+          <label htmlFor="deskripsi" className="block text-sm font-medium p-2 text-white">Deskripsi</label>
+          <textarea
+            placeholder="Deskripsi Quiz"
+            value={form.deskripsi}
+            onChange={(e) =>
+              setForm({ ...form, deskripsi: e.target.value })
+            }
+            className="w-full p-2 bg-white/10 rounded h-20 resize-none"
+          />
+        </div>
 
-        {/* 🔥 Durasi (menit) */}
-        <input
-          type="number"
-          placeholder="Durasi (menit)"
-          value={form.durasi}
-          onChange={(e) =>
-            setForm({ ...form, durasi: Number(e.target.value) })
-          }
-          className="w-full p-2 bg-white/10 rounded"
-          min="1"
-        />
+        {/* Durasi (menit) */}
+        <div>
+          <label htmlFor="durasi" className="block text-sm font-medium p-2 text-white">Durasi (menit)</label>
+          <input
+            type="number"
+            placeholder="Durasi (menit)"
+            value={form.durasi}
+            onChange={(e) =>
+              setForm({ ...form, durasi: Number(e.target.value) })
+            }
+            className="w-full p-2 bg-white/10 rounded"
+            min="1"
+          />
+        </div>
 
-        {/* 🔥 Passing Score */}
-        <input
-          type="number"
-          placeholder="Passing Score"
-          value={form.passingScore}
-          onChange={(e) =>
-            setForm({ ...form, passingScore: Number(e.target.value) })
-          }
-          className="w-full p-2 bg-white/10 rounded"
-          min="0"
-          max="100"
-        />
+        {/* Passing Score */}
+        <div>
+          <label htmlFor="passingScore" className="block text-sm font-medium p-2 text-white">Passing Score</label>
+          <input
+            type="number"
+            placeholder="Passing Score"
+            value={form.passingScore}
+            onChange={(e) =>
+              setForm({ ...form, passingScore: Number(e.target.value) })
+            }
+            className="w-full p-2 bg-white/10 rounded"
+            min="0"
+            max="100"
+          />
+        </div>
 
-        {/* 🔥 Action */}
+        {/* Action */}
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}

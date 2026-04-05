@@ -33,7 +33,7 @@ export default function Navbar() {
   }, [])
 
   return (
-    <nav className="flex items-center justify-between px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 shadow-lg">
+    <nav className="fixed top-0 w-full z-50 flex items-center justify-between px-8 py-4 bg-[#6F27FF] shadow-lg">
       {/* Logo */}
       <Link href="/" className="text-2xl font-bold text-white">
         MICROLAB

@@ -71,32 +71,41 @@ export default function FormStepModal({
         </h2>
 
         {/* Judul Step */}
-        <input
+        <div>
+          <label htmlFor="judul" className="block text-sm font-medium p-2 text-white">Judul</label>
+          <input
           type="text"
           placeholder="Judul Step"
           value={form.judul}
           onChange={(e) => setForm({ ...form, judul: e.target.value })}
           className="w-full p-2 bg-white/10 rounded"
-        />
+          />
+        </div>
 
         {/* Tipe */}
-        <select
-          value={form.tipe}
-          onChange={(e) => setForm({ ...form, tipe: e.target.value })}
-          className="w-full p-2 bg-white/10 rounded"
-        >
-          <option value="text">Text</option>
-          <option value="video">Video</option>
-          <option value="image">Image</option>
-        </select>
+        <div>
+          <label htmlFor="tipe" className="block text-sm font-medium p-2 text-white">Tipe</label>
+          <select
+            value={form.tipe}
+            onChange={(e) => setForm({ ...form, tipe: e.target.value })}
+            className="w-full p-2 bg-white/10 rounded"
+            >
+            <option className="text-white bg-gray-900" value="text">Text</option>
+            <option className="text-white bg-gray-900" value="video">Video</option>
+            <option className="text-white bg-gray-900" value="image">Image</option>
+          </select>
+        </div>
 
         {/* Konten */}
-        <textarea
-          placeholder="Konten"
-          value={form.konten}
-          onChange={(e) => setForm({ ...form, konten: e.target.value })}
-          className="w-full p-2 bg-white/10 rounded h-32"
-        />
+        <div>
+          <label htmlFor="konten" className="block text-sm font-medium p-2 text-white">Isi Konten</label>
+          <textarea
+            placeholder="Konten"
+            value={form.konten}
+            onChange={(e) => setForm({ ...form, konten: e.target.value })}
+            className="w-full p-2 bg-white/10 rounded h-32"
+          />
+        </div>
 
         <div className="flex justify-end space-x-2">
           <button onClick={onClose} className="px-3 py-1 bg-gray-500 rounded">
