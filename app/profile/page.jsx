@@ -9,7 +9,8 @@ import { getMateriListFormatted } from "@/lib/materi-list";
 async function getProfile() {
   const cookieStore = await cookies()
 
-  const res = await fetch("http://localhost:3000/api/profile", {
+  const baseUrl = process.env.NODE_ENV === 'production' ? 'https://web-microlearning.vercel.app' : 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/profile`, {
     headers: {
       Cookie: `token=${cookieStore.get("token")?.value}`
     },
