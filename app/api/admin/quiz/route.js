@@ -5,17 +5,17 @@ export async function POST(req) {
   try {
     await requireRole("admin")
 
-    const { materiId, judul, deskripsi, durasi, passingScore } = await req.json()
+    const { materiStepId, judul, deskripsi, durasi, passingScore } = await req.json()
 
-    if (!materiId || !judul) {
+    if (!materiStepId || !judul) {
       return Response.json({
-        error: "materiId dan judul wajib"
+        error: "materiStepId dan judul wajib"
       }, { status: 400 })
     }
 
     const quiz = await prisma.quiz.create({
       data: {
-        materiId,
+        materiStepId,
         judul,
         deskripsi: deskripsi || null,
         durasi: durasi ? Number(durasi) : 30,
@@ -36,18 +36,30 @@ export async function POST(req) {
 
 export async function GET() {
   try {
-    await requireRole("admin")
-
     const quizzes = await prisma.quiz.findMany({
       include: {
-        materi: true,
-        soal: true
-      }
-    })
+        materiStep: {
+          include: {
+            materi: true,
+          },
+        },
+        _count: {
+          select: {
+            soal: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-    return Response.json({ quizzes })
+    return Response.json({ quizzes });
 
-  } catch {
-    return Response.json({ error: "Forbidden" }, { status: 403 })
+  } catch (err) {
+    return Response.json(
+      { error: "Error fetch quiz" },
+      { status: 500 }
+    );
   }
 }
