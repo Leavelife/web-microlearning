@@ -37,6 +37,9 @@ npm run dev
 - Pemilik repo ACC Request
 - Collabolator lainnya bisa melihat perubahan di branch lain dengan cara
     ```bash
+    #mengambil dan download branch lain
+    git fetch --all
+    
     #cek list branch
     git branch -a
     
