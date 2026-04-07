@@ -1,37 +1,36 @@
-import { prisma } from "@/lib/prisma"
-import { requireRole } from "@/lib/auth-guard"
+import { prisma } from "@/lib/prisma";
+import { requireRole } from "@/lib/auth-guard";
 
+//  CREATE MATERI
 export async function POST(req) {
   try {
-    await requireRole("admin")
+    await requireRole("admin");
 
-    const { nomorMateri, judul, deskripsi, tipe, tahap, urlKonten, unlockType  } = await req.json()
+    const { judul, deskripsi, genre, thumbnail } = await req.json();
 
-    if (!judul || !deskripsi) {
+    if (!judul || !deskripsi || !genre) {
       return Response.json(
-        { error: "Title dan content wajib diisi" },
+        { error: "judul, deskripsi, genre wajib" },
         { status: 400 }
-      )
+      );
     }
 
-    const lesson = await prisma.materi.create({
+    const materi = await prisma.materi.create({
       data: {
-        nomorMateri: Number(nomorMateri),
         judul,
         deskripsi,
-        tipe,
-        tahap: Number(tahap),
-        urlKonten,
-        unlockType
-      }
-    })
+        genre,
+        thumbnail,
+      },
+    });
 
     return Response.json({
       message: "Materi berhasil dibuat",
-      lesson
-    })
+      materi,
+    });
 
   } catch (err) {
+    console.log(err);
     if (err.message === "UNAUTHORIZED") {
       return Response.json({ error: "Unauthorized" }, { status: 401 })
     }
@@ -39,28 +38,39 @@ export async function POST(req) {
     if (err.message === "FORBIDDEN") {
       return Response.json({ error: "Forbidden" }, { status: 403 })
     }
-
-    console.error(err)
-    return Response.json({ error: "Internal error" }, { status: 500 })
+    return Response.json({ error: "Internal error" }, { status: 500 });
   }
 }
 
-// list semua materi (admin view)
+// GET LIST (CARD VIEW)
 export async function GET() {
   try {
-    await requireRole("admin")
+    const materis = await prisma.materi.findMany({
+      include: {
+        steps: true,
+        progresses: true,
+      },
+      orderBy: { createdAt: "asc" },
+    });
 
-    const lessons = await prisma.materi.findMany({
-      orderBy: { nomorMateri: "asc" }
-    })
+    const formatted = materis.map((m) => {
+      const totalStep = m.steps.length;
 
-    if(!lessons || lessons.length === 0) {
-      return Response.json({ error: "Tidak ada materi" }, { status: 404 })
-    }
+      return {
+        id: m.id,
+        judul: m.judul,
+        deskripsi: m.deskripsi,
+        genre: m.genre,
+        thumbnail: m.thumbnail,
+        totalStep,
+        tahap: 1, // Assuming all are level 1 for now
+        tipe: m.genre, // Using genre as tipe
+      };
+    });
 
-    return Response.json({ lessons })
+    return Response.json({ materis: formatted });
 
   } catch (err) {
-    return Response.json({ error: "Forbidden" }, { status: 403 })
+    return Response.json({ error: "Error fetch materi" }, { status: 500 });
   }
 }

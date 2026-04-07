@@ -38,7 +38,7 @@ export type QuizSumAggregateOutputType = {
 
 export type QuizMinAggregateOutputType = {
   id: string | null
-  materiId: string | null
+  materiStepId: string | null
   judul: string | null
   deskripsi: string | null
   durasi: number | null
@@ -47,7 +47,7 @@ export type QuizMinAggregateOutputType = {
 
 export type QuizMaxAggregateOutputType = {
   id: string | null
-  materiId: string | null
+  materiStepId: string | null
   judul: string | null
   deskripsi: string | null
   durasi: number | null
@@ -56,7 +56,7 @@ export type QuizMaxAggregateOutputType = {
 
 export type QuizCountAggregateOutputType = {
   id: number
-  materiId: number
+  materiStepId: number
   judul: number
   deskripsi: number
   durasi: number
@@ -77,7 +77,7 @@ export type QuizSumAggregateInputType = {
 
 export type QuizMinAggregateInputType = {
   id?: true
-  materiId?: true
+  materiStepId?: true
   judul?: true
   deskripsi?: true
   durasi?: true
@@ -86,7 +86,7 @@ export type QuizMinAggregateInputType = {
 
 export type QuizMaxAggregateInputType = {
   id?: true
-  materiId?: true
+  materiStepId?: true
   judul?: true
   deskripsi?: true
   durasi?: true
@@ -95,7 +95,7 @@ export type QuizMaxAggregateInputType = {
 
 export type QuizCountAggregateInputType = {
   id?: true
-  materiId?: true
+  materiStepId?: true
   judul?: true
   deskripsi?: true
   durasi?: true
@@ -191,7 +191,7 @@ export type QuizGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type QuizGroupByOutputType = {
   id: string
-  materiId: string
+  materiStepId: string
   judul: string
   deskripsi: string | null
   durasi: number | null
@@ -223,47 +223,47 @@ export type QuizWhereInput = {
   OR?: Prisma.QuizWhereInput[]
   NOT?: Prisma.QuizWhereInput | Prisma.QuizWhereInput[]
   id?: Prisma.StringFilter<"Quiz"> | string
-  materiId?: Prisma.StringFilter<"Quiz"> | string
+  materiStepId?: Prisma.StringFilter<"Quiz"> | string
   judul?: Prisma.StringFilter<"Quiz"> | string
   deskripsi?: Prisma.StringNullableFilter<"Quiz"> | string | null
   durasi?: Prisma.IntNullableFilter<"Quiz"> | number | null
   passingScore?: Prisma.IntNullableFilter<"Quiz"> | number | null
   hasil?: Prisma.HasilQuizUserListRelationFilter
-  materi?: Prisma.XOR<Prisma.MateriScalarRelationFilter, Prisma.MateriWhereInput>
+  materiStep?: Prisma.XOR<Prisma.MateriStepScalarRelationFilter, Prisma.MateriStepWhereInput>
   soal?: Prisma.SoalQuizListRelationFilter
 }
 
 export type QuizOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  materiId?: Prisma.SortOrder
+  materiStepId?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrderInput | Prisma.SortOrder
   durasi?: Prisma.SortOrderInput | Prisma.SortOrder
   passingScore?: Prisma.SortOrderInput | Prisma.SortOrder
   hasil?: Prisma.HasilQuizUserOrderByRelationAggregateInput
-  materi?: Prisma.MateriOrderByWithRelationInput
+  materiStep?: Prisma.MateriStepOrderByWithRelationInput
   soal?: Prisma.SoalQuizOrderByRelationAggregateInput
   _relevance?: Prisma.QuizOrderByRelevanceInput
 }
 
 export type QuizWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  materiStepId?: string
   AND?: Prisma.QuizWhereInput | Prisma.QuizWhereInput[]
   OR?: Prisma.QuizWhereInput[]
   NOT?: Prisma.QuizWhereInput | Prisma.QuizWhereInput[]
-  materiId?: Prisma.StringFilter<"Quiz"> | string
   judul?: Prisma.StringFilter<"Quiz"> | string
   deskripsi?: Prisma.StringNullableFilter<"Quiz"> | string | null
   durasi?: Prisma.IntNullableFilter<"Quiz"> | number | null
   passingScore?: Prisma.IntNullableFilter<"Quiz"> | number | null
   hasil?: Prisma.HasilQuizUserListRelationFilter
-  materi?: Prisma.XOR<Prisma.MateriScalarRelationFilter, Prisma.MateriWhereInput>
+  materiStep?: Prisma.XOR<Prisma.MateriStepScalarRelationFilter, Prisma.MateriStepWhereInput>
   soal?: Prisma.SoalQuizListRelationFilter
-}, "id">
+}, "id" | "materiStepId">
 
 export type QuizOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  materiId?: Prisma.SortOrder
+  materiStepId?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrderInput | Prisma.SortOrder
   durasi?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -280,7 +280,7 @@ export type QuizScalarWhereWithAggregatesInput = {
   OR?: Prisma.QuizScalarWhereWithAggregatesInput[]
   NOT?: Prisma.QuizScalarWhereWithAggregatesInput | Prisma.QuizScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
-  materiId?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
+  materiStepId?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
   judul?: Prisma.StringWithAggregatesFilter<"Quiz"> | string
   deskripsi?: Prisma.StringNullableWithAggregatesFilter<"Quiz"> | string | null
   durasi?: Prisma.IntNullableWithAggregatesFilter<"Quiz"> | number | null
@@ -294,13 +294,13 @@ export type QuizCreateInput = {
   durasi?: number | null
   passingScore?: number | null
   hasil?: Prisma.HasilQuizUserCreateNestedManyWithoutQuizInput
-  materi: Prisma.MateriCreateNestedOneWithoutQuizInput
+  materiStep: Prisma.MateriStepCreateNestedOneWithoutQuizInput
   soal?: Prisma.SoalQuizCreateNestedManyWithoutQuizInput
 }
 
 export type QuizUncheckedCreateInput = {
   id?: string
-  materiId: string
+  materiStepId: string
   judul: string
   deskripsi?: string | null
   durasi?: number | null
@@ -316,13 +316,13 @@ export type QuizUpdateInput = {
   durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hasil?: Prisma.HasilQuizUserUpdateManyWithoutQuizNestedInput
-  materi?: Prisma.MateriUpdateOneRequiredWithoutQuizNestedInput
+  materiStep?: Prisma.MateriStepUpdateOneRequiredWithoutQuizNestedInput
   soal?: Prisma.SoalQuizUpdateManyWithoutQuizNestedInput
 }
 
 export type QuizUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  materiId?: Prisma.StringFieldUpdateOperationsInput | string
+  materiStepId?: Prisma.StringFieldUpdateOperationsInput | string
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -333,7 +333,7 @@ export type QuizUncheckedUpdateInput = {
 
 export type QuizCreateManyInput = {
   id?: string
-  materiId: string
+  materiStepId: string
   judul: string
   deskripsi?: string | null
   durasi?: number | null
@@ -350,21 +350,16 @@ export type QuizUpdateManyMutationInput = {
 
 export type QuizUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  materiId?: Prisma.StringFieldUpdateOperationsInput | string
+  materiStepId?: Prisma.StringFieldUpdateOperationsInput | string
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
-export type QuizListRelationFilter = {
-  every?: Prisma.QuizWhereInput
-  some?: Prisma.QuizWhereInput
-  none?: Prisma.QuizWhereInput
-}
-
-export type QuizOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type QuizNullableScalarRelationFilter = {
+  is?: Prisma.QuizWhereInput | null
+  isNot?: Prisma.QuizWhereInput | null
 }
 
 export type QuizOrderByRelevanceInput = {
@@ -375,7 +370,7 @@ export type QuizOrderByRelevanceInput = {
 
 export type QuizCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  materiId?: Prisma.SortOrder
+  materiStepId?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrder
   durasi?: Prisma.SortOrder
@@ -389,7 +384,7 @@ export type QuizAvgOrderByAggregateInput = {
 
 export type QuizMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  materiId?: Prisma.SortOrder
+  materiStepId?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrder
   durasi?: Prisma.SortOrder
@@ -398,7 +393,7 @@ export type QuizMaxOrderByAggregateInput = {
 
 export type QuizMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  materiId?: Prisma.SortOrder
+  materiStepId?: Prisma.SortOrder
   judul?: Prisma.SortOrder
   deskripsi?: Prisma.SortOrder
   durasi?: Prisma.SortOrder
@@ -415,46 +410,36 @@ export type QuizScalarRelationFilter = {
   isNot?: Prisma.QuizWhereInput
 }
 
-export type QuizCreateNestedManyWithoutMateriInput = {
-  create?: Prisma.XOR<Prisma.QuizCreateWithoutMateriInput, Prisma.QuizUncheckedCreateWithoutMateriInput> | Prisma.QuizCreateWithoutMateriInput[] | Prisma.QuizUncheckedCreateWithoutMateriInput[]
-  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutMateriInput | Prisma.QuizCreateOrConnectWithoutMateriInput[]
-  createMany?: Prisma.QuizCreateManyMateriInputEnvelope
-  connect?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
+export type QuizCreateNestedOneWithoutMateriStepInput = {
+  create?: Prisma.XOR<Prisma.QuizCreateWithoutMateriStepInput, Prisma.QuizUncheckedCreateWithoutMateriStepInput>
+  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutMateriStepInput
+  connect?: Prisma.QuizWhereUniqueInput
 }
 
-export type QuizUncheckedCreateNestedManyWithoutMateriInput = {
-  create?: Prisma.XOR<Prisma.QuizCreateWithoutMateriInput, Prisma.QuizUncheckedCreateWithoutMateriInput> | Prisma.QuizCreateWithoutMateriInput[] | Prisma.QuizUncheckedCreateWithoutMateriInput[]
-  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutMateriInput | Prisma.QuizCreateOrConnectWithoutMateriInput[]
-  createMany?: Prisma.QuizCreateManyMateriInputEnvelope
-  connect?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
+export type QuizUncheckedCreateNestedOneWithoutMateriStepInput = {
+  create?: Prisma.XOR<Prisma.QuizCreateWithoutMateriStepInput, Prisma.QuizUncheckedCreateWithoutMateriStepInput>
+  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutMateriStepInput
+  connect?: Prisma.QuizWhereUniqueInput
 }
 
-export type QuizUpdateManyWithoutMateriNestedInput = {
-  create?: Prisma.XOR<Prisma.QuizCreateWithoutMateriInput, Prisma.QuizUncheckedCreateWithoutMateriInput> | Prisma.QuizCreateWithoutMateriInput[] | Prisma.QuizUncheckedCreateWithoutMateriInput[]
-  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutMateriInput | Prisma.QuizCreateOrConnectWithoutMateriInput[]
-  upsert?: Prisma.QuizUpsertWithWhereUniqueWithoutMateriInput | Prisma.QuizUpsertWithWhereUniqueWithoutMateriInput[]
-  createMany?: Prisma.QuizCreateManyMateriInputEnvelope
-  set?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
-  disconnect?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
-  delete?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
-  connect?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
-  update?: Prisma.QuizUpdateWithWhereUniqueWithoutMateriInput | Prisma.QuizUpdateWithWhereUniqueWithoutMateriInput[]
-  updateMany?: Prisma.QuizUpdateManyWithWhereWithoutMateriInput | Prisma.QuizUpdateManyWithWhereWithoutMateriInput[]
-  deleteMany?: Prisma.QuizScalarWhereInput | Prisma.QuizScalarWhereInput[]
+export type QuizUpdateOneWithoutMateriStepNestedInput = {
+  create?: Prisma.XOR<Prisma.QuizCreateWithoutMateriStepInput, Prisma.QuizUncheckedCreateWithoutMateriStepInput>
+  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutMateriStepInput
+  upsert?: Prisma.QuizUpsertWithoutMateriStepInput
+  disconnect?: Prisma.QuizWhereInput | boolean
+  delete?: Prisma.QuizWhereInput | boolean
+  connect?: Prisma.QuizWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QuizUpdateToOneWithWhereWithoutMateriStepInput, Prisma.QuizUpdateWithoutMateriStepInput>, Prisma.QuizUncheckedUpdateWithoutMateriStepInput>
 }
 
-export type QuizUncheckedUpdateManyWithoutMateriNestedInput = {
-  create?: Prisma.XOR<Prisma.QuizCreateWithoutMateriInput, Prisma.QuizUncheckedCreateWithoutMateriInput> | Prisma.QuizCreateWithoutMateriInput[] | Prisma.QuizUncheckedCreateWithoutMateriInput[]
-  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutMateriInput | Prisma.QuizCreateOrConnectWithoutMateriInput[]
-  upsert?: Prisma.QuizUpsertWithWhereUniqueWithoutMateriInput | Prisma.QuizUpsertWithWhereUniqueWithoutMateriInput[]
-  createMany?: Prisma.QuizCreateManyMateriInputEnvelope
-  set?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
-  disconnect?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
-  delete?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
-  connect?: Prisma.QuizWhereUniqueInput | Prisma.QuizWhereUniqueInput[]
-  update?: Prisma.QuizUpdateWithWhereUniqueWithoutMateriInput | Prisma.QuizUpdateWithWhereUniqueWithoutMateriInput[]
-  updateMany?: Prisma.QuizUpdateManyWithWhereWithoutMateriInput | Prisma.QuizUpdateManyWithWhereWithoutMateriInput[]
-  deleteMany?: Prisma.QuizScalarWhereInput | Prisma.QuizScalarWhereInput[]
+export type QuizUncheckedUpdateOneWithoutMateriStepNestedInput = {
+  create?: Prisma.XOR<Prisma.QuizCreateWithoutMateriStepInput, Prisma.QuizUncheckedCreateWithoutMateriStepInput>
+  connectOrCreate?: Prisma.QuizCreateOrConnectWithoutMateriStepInput
+  upsert?: Prisma.QuizUpsertWithoutMateriStepInput
+  disconnect?: Prisma.QuizWhereInput | boolean
+  delete?: Prisma.QuizWhereInput | boolean
+  connect?: Prisma.QuizWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QuizUpdateToOneWithWhereWithoutMateriStepInput, Prisma.QuizUpdateWithoutMateriStepInput>, Prisma.QuizUncheckedUpdateWithoutMateriStepInput>
 }
 
 export type NullableIntFieldUpdateOperationsInput = {
@@ -493,7 +478,7 @@ export type QuizUpdateOneRequiredWithoutHasilNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.QuizUpdateToOneWithWhereWithoutHasilInput, Prisma.QuizUpdateWithoutHasilInput>, Prisma.QuizUncheckedUpdateWithoutHasilInput>
 }
 
-export type QuizCreateWithoutMateriInput = {
+export type QuizCreateWithoutMateriStepInput = {
   id?: string
   judul: string
   deskripsi?: string | null
@@ -503,7 +488,7 @@ export type QuizCreateWithoutMateriInput = {
   soal?: Prisma.SoalQuizCreateNestedManyWithoutQuizInput
 }
 
-export type QuizUncheckedCreateWithoutMateriInput = {
+export type QuizUncheckedCreateWithoutMateriStepInput = {
   id?: string
   judul: string
   deskripsi?: string | null
@@ -513,42 +498,40 @@ export type QuizUncheckedCreateWithoutMateriInput = {
   soal?: Prisma.SoalQuizUncheckedCreateNestedManyWithoutQuizInput
 }
 
-export type QuizCreateOrConnectWithoutMateriInput = {
+export type QuizCreateOrConnectWithoutMateriStepInput = {
   where: Prisma.QuizWhereUniqueInput
-  create: Prisma.XOR<Prisma.QuizCreateWithoutMateriInput, Prisma.QuizUncheckedCreateWithoutMateriInput>
+  create: Prisma.XOR<Prisma.QuizCreateWithoutMateriStepInput, Prisma.QuizUncheckedCreateWithoutMateriStepInput>
 }
 
-export type QuizCreateManyMateriInputEnvelope = {
-  data: Prisma.QuizCreateManyMateriInput | Prisma.QuizCreateManyMateriInput[]
-  skipDuplicates?: boolean
+export type QuizUpsertWithoutMateriStepInput = {
+  update: Prisma.XOR<Prisma.QuizUpdateWithoutMateriStepInput, Prisma.QuizUncheckedUpdateWithoutMateriStepInput>
+  create: Prisma.XOR<Prisma.QuizCreateWithoutMateriStepInput, Prisma.QuizUncheckedCreateWithoutMateriStepInput>
+  where?: Prisma.QuizWhereInput
 }
 
-export type QuizUpsertWithWhereUniqueWithoutMateriInput = {
-  where: Prisma.QuizWhereUniqueInput
-  update: Prisma.XOR<Prisma.QuizUpdateWithoutMateriInput, Prisma.QuizUncheckedUpdateWithoutMateriInput>
-  create: Prisma.XOR<Prisma.QuizCreateWithoutMateriInput, Prisma.QuizUncheckedCreateWithoutMateriInput>
+export type QuizUpdateToOneWithWhereWithoutMateriStepInput = {
+  where?: Prisma.QuizWhereInput
+  data: Prisma.XOR<Prisma.QuizUpdateWithoutMateriStepInput, Prisma.QuizUncheckedUpdateWithoutMateriStepInput>
 }
 
-export type QuizUpdateWithWhereUniqueWithoutMateriInput = {
-  where: Prisma.QuizWhereUniqueInput
-  data: Prisma.XOR<Prisma.QuizUpdateWithoutMateriInput, Prisma.QuizUncheckedUpdateWithoutMateriInput>
+export type QuizUpdateWithoutMateriStepInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  judul?: Prisma.StringFieldUpdateOperationsInput | string
+  deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hasil?: Prisma.HasilQuizUserUpdateManyWithoutQuizNestedInput
+  soal?: Prisma.SoalQuizUpdateManyWithoutQuizNestedInput
 }
 
-export type QuizUpdateManyWithWhereWithoutMateriInput = {
-  where: Prisma.QuizScalarWhereInput
-  data: Prisma.XOR<Prisma.QuizUpdateManyMutationInput, Prisma.QuizUncheckedUpdateManyWithoutMateriInput>
-}
-
-export type QuizScalarWhereInput = {
-  AND?: Prisma.QuizScalarWhereInput | Prisma.QuizScalarWhereInput[]
-  OR?: Prisma.QuizScalarWhereInput[]
-  NOT?: Prisma.QuizScalarWhereInput | Prisma.QuizScalarWhereInput[]
-  id?: Prisma.StringFilter<"Quiz"> | string
-  materiId?: Prisma.StringFilter<"Quiz"> | string
-  judul?: Prisma.StringFilter<"Quiz"> | string
-  deskripsi?: Prisma.StringNullableFilter<"Quiz"> | string | null
-  durasi?: Prisma.IntNullableFilter<"Quiz"> | number | null
-  passingScore?: Prisma.IntNullableFilter<"Quiz"> | number | null
+export type QuizUncheckedUpdateWithoutMateriStepInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  judul?: Prisma.StringFieldUpdateOperationsInput | string
+  deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  hasil?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutQuizNestedInput
+  soal?: Prisma.SoalQuizUncheckedUpdateManyWithoutQuizNestedInput
 }
 
 export type QuizCreateWithoutSoalInput = {
@@ -558,12 +541,12 @@ export type QuizCreateWithoutSoalInput = {
   durasi?: number | null
   passingScore?: number | null
   hasil?: Prisma.HasilQuizUserCreateNestedManyWithoutQuizInput
-  materi: Prisma.MateriCreateNestedOneWithoutQuizInput
+  materiStep: Prisma.MateriStepCreateNestedOneWithoutQuizInput
 }
 
 export type QuizUncheckedCreateWithoutSoalInput = {
   id?: string
-  materiId: string
+  materiStepId: string
   judul: string
   deskripsi?: string | null
   durasi?: number | null
@@ -594,12 +577,12 @@ export type QuizUpdateWithoutSoalInput = {
   durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   hasil?: Prisma.HasilQuizUserUpdateManyWithoutQuizNestedInput
-  materi?: Prisma.MateriUpdateOneRequiredWithoutQuizNestedInput
+  materiStep?: Prisma.MateriStepUpdateOneRequiredWithoutQuizNestedInput
 }
 
 export type QuizUncheckedUpdateWithoutSoalInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  materiId?: Prisma.StringFieldUpdateOperationsInput | string
+  materiStepId?: Prisma.StringFieldUpdateOperationsInput | string
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
@@ -613,13 +596,13 @@ export type QuizCreateWithoutHasilInput = {
   deskripsi?: string | null
   durasi?: number | null
   passingScore?: number | null
-  materi: Prisma.MateriCreateNestedOneWithoutQuizInput
+  materiStep: Prisma.MateriStepCreateNestedOneWithoutQuizInput
   soal?: Prisma.SoalQuizCreateNestedManyWithoutQuizInput
 }
 
 export type QuizUncheckedCreateWithoutHasilInput = {
   id?: string
-  materiId: string
+  materiStepId: string
   judul: string
   deskripsi?: string | null
   durasi?: number | null
@@ -649,54 +632,18 @@ export type QuizUpdateWithoutHasilInput = {
   deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  materi?: Prisma.MateriUpdateOneRequiredWithoutQuizNestedInput
+  materiStep?: Prisma.MateriStepUpdateOneRequiredWithoutQuizNestedInput
   soal?: Prisma.SoalQuizUpdateManyWithoutQuizNestedInput
 }
 
 export type QuizUncheckedUpdateWithoutHasilInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  materiId?: Prisma.StringFieldUpdateOperationsInput | string
+  materiStepId?: Prisma.StringFieldUpdateOperationsInput | string
   judul?: Prisma.StringFieldUpdateOperationsInput | string
   deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   soal?: Prisma.SoalQuizUncheckedUpdateManyWithoutQuizNestedInput
-}
-
-export type QuizCreateManyMateriInput = {
-  id?: string
-  judul: string
-  deskripsi?: string | null
-  durasi?: number | null
-  passingScore?: number | null
-}
-
-export type QuizUpdateWithoutMateriInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  judul?: Prisma.StringFieldUpdateOperationsInput | string
-  deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  hasil?: Prisma.HasilQuizUserUpdateManyWithoutQuizNestedInput
-  soal?: Prisma.SoalQuizUpdateManyWithoutQuizNestedInput
-}
-
-export type QuizUncheckedUpdateWithoutMateriInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  judul?: Prisma.StringFieldUpdateOperationsInput | string
-  deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  hasil?: Prisma.HasilQuizUserUncheckedUpdateManyWithoutQuizNestedInput
-  soal?: Prisma.SoalQuizUncheckedUpdateManyWithoutQuizNestedInput
-}
-
-export type QuizUncheckedUpdateManyWithoutMateriInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  judul?: Prisma.StringFieldUpdateOperationsInput | string
-  deskripsi?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  durasi?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  passingScore?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
 }
 
 
@@ -741,13 +688,13 @@ export type QuizCountOutputTypeCountSoalArgs<ExtArgs extends runtime.Types.Exten
 
 export type QuizSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  materiId?: boolean
+  materiStepId?: boolean
   judul?: boolean
   deskripsi?: boolean
   durasi?: boolean
   passingScore?: boolean
   hasil?: boolean | Prisma.Quiz$hasilArgs<ExtArgs>
-  materi?: boolean | Prisma.MateriDefaultArgs<ExtArgs>
+  materiStep?: boolean | Prisma.MateriStepDefaultArgs<ExtArgs>
   soal?: boolean | Prisma.Quiz$soalArgs<ExtArgs>
   _count?: boolean | Prisma.QuizCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["quiz"]>
@@ -756,17 +703,17 @@ export type QuizSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 
 export type QuizSelectScalar = {
   id?: boolean
-  materiId?: boolean
+  materiStepId?: boolean
   judul?: boolean
   deskripsi?: boolean
   durasi?: boolean
   passingScore?: boolean
 }
 
-export type QuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "materiId" | "judul" | "deskripsi" | "durasi" | "passingScore", ExtArgs["result"]["quiz"]>
+export type QuizOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "materiStepId" | "judul" | "deskripsi" | "durasi" | "passingScore", ExtArgs["result"]["quiz"]>
 export type QuizInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   hasil?: boolean | Prisma.Quiz$hasilArgs<ExtArgs>
-  materi?: boolean | Prisma.MateriDefaultArgs<ExtArgs>
+  materiStep?: boolean | Prisma.MateriStepDefaultArgs<ExtArgs>
   soal?: boolean | Prisma.Quiz$soalArgs<ExtArgs>
   _count?: boolean | Prisma.QuizCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -775,12 +722,12 @@ export type $QuizPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "Quiz"
   objects: {
     hasil: Prisma.$HasilQuizUserPayload<ExtArgs>[]
-    materi: Prisma.$MateriPayload<ExtArgs>
+    materiStep: Prisma.$MateriStepPayload<ExtArgs>
     soal: Prisma.$SoalQuizPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    materiId: string
+    materiStepId: string
     judul: string
     deskripsi: string | null
     durasi: number | null
@@ -1126,7 +1073,7 @@ readonly fields: QuizFieldRefs;
 export interface Prisma__QuizClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   hasil<T extends Prisma.Quiz$hasilArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$hasilArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HasilQuizUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  materi<T extends Prisma.MateriDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MateriDefaultArgs<ExtArgs>>): Prisma.Prisma__MateriClient<runtime.Types.Result.GetResult<Prisma.$MateriPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  materiStep<T extends Prisma.MateriStepDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MateriStepDefaultArgs<ExtArgs>>): Prisma.Prisma__MateriStepClient<runtime.Types.Result.GetResult<Prisma.$MateriStepPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   soal<T extends Prisma.Quiz$soalArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quiz$soalArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SoalQuizPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1158,7 +1105,7 @@ export interface Prisma__QuizClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface QuizFieldRefs {
   readonly id: Prisma.FieldRef<"Quiz", 'String'>
-  readonly materiId: Prisma.FieldRef<"Quiz", 'String'>
+  readonly materiStepId: Prisma.FieldRef<"Quiz", 'String'>
   readonly judul: Prisma.FieldRef<"Quiz", 'String'>
   readonly deskripsi: Prisma.FieldRef<"Quiz", 'String'>
   readonly durasi: Prisma.FieldRef<"Quiz", 'Int'>

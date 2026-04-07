@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 import { subDays, format } from "date-fns";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -12,14 +15,21 @@ export default async function DashboardPage() {
     }
     const materi = await prisma.materi.findMany({
         take: 10,
-        orderBy: { nomorMateri: "asc" }
+        orderBy: { createdAt: "asc" }
     });
 
     const quiz = await prisma.quiz.findMany({
         take: 10,
         orderBy: { id: "asc" },
         include: {
-            materi: true
+            materiStep: {
+                include: {
+                    materi: true
+                }
+            },
+            _count: {
+                select: { soal: true }
+            }
         }
     });
 

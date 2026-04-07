@@ -29,27 +29,43 @@ model User {
 }
 
 model Materi {
-  id          String           @id @default(uuid())
-  nomorMateri Int
+  id          String   @id @default(uuid())
   judul       String
   deskripsi   String
-  tipe        String
-  urlKonten   String
-  unlockType  String
-  unlockRefId String?
-  tahap       Int
+  genre       String   // "jaringan", "hardware", dll
+  thumbnail   String?  // optional
+
+  steps       MateriStep[]
   progresses  ProgressMateri[]
-  quiz        Quiz[]
+
+  createdAt   DateTime @default(now())
+}
+
+model MateriStep {
+  id          String   @id @default(uuid())
+  materiId    String
+  urutan      Int      // 1,2,3,4
+
+  judul       String
+  tipe        String   // "text", "video", "image"
+  konten      String   // isi text / url
+
+  materi      Materi   @relation(fields: [materiId], references: [id])
+
+  quiz        Quiz?    // optional per step
+
+  createdAt   DateTime @default(now())
 }
 
 model ProgressMateri {
   id              String  @id @default(uuid())
   userId          String
   materiId        String
-  progresTerakhir Int
-  completed       Boolean @default(false)
+  stepSekarang    Int
+  selesai         Boolean @default(false)
   materi          Materi  @relation(fields: [materiId], references: [id])
   user            User    @relation(fields: [userId], references: [id])
+  updateAt        DateTime @default(now())
 
   @@index([materiId], map: "ProgressMateri_materiId_fkey")
   @@index([userId], map: "ProgressMateri_userId_fkey")
@@ -57,16 +73,14 @@ model ProgressMateri {
 
 model Quiz {
   id           String          @id @default(uuid())
-  materiId     String
+  materiStepId String          @unique
   judul        String
   deskripsi    String?
   durasi       Int?            @default(30)
   passingScore Int?            @default(70)
   hasil        HasilQuizUser[]
-  materi       Materi          @relation(fields: [materiId], references: [id])
+  materiStep   MateriStep          @relation(fields: [materiStepId], references: [id], onDelete: Cascade)
   soal         SoalQuiz[]
-
-  @@index([materiId], map: "Quiz_materiId_fkey")
 }
 
 model SoalQuiz {

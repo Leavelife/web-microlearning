@@ -28,6 +28,11 @@ export type User = Prisma.UserModel
  */
 export type Materi = Prisma.MateriModel
 /**
+ * Model MateriStep
+ * 
+ */
+export type MateriStep = Prisma.MateriStepModel
+/**
  * Model ProgressMateri
  * 
  */
