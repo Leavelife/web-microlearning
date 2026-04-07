@@ -1,4 +1,3 @@
-export const dynamic = "force-dynamic";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NotificationProvider } from "@/components/context/NotificationContext";
 import "./globals.css";

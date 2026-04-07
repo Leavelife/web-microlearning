@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums.ts"
 import type * as Prisma from "../internal/prismaNamespace.ts"
 
@@ -199,7 +199,7 @@ export type AchievementGroupByOutputType = {
   _max: AchievementMaxAggregateOutputType | null
 }
 
-export type GetAchievementGroupByPayload<T extends AchievementGroupByArgs> = Prisma.PrismaPromise<
+type GetAchievementGroupByPayload<T extends AchievementGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<AchievementGroupByOutputType, T['by']> &
       {
@@ -1099,11 +1099,6 @@ export type AchievementFindManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Skip the first `n` Achievements.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of Achievements.
-   */
   distinct?: Prisma.AchievementScalarFieldEnum | Prisma.AchievementScalarFieldEnum[]
 }
 

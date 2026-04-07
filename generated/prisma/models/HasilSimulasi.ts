@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums.ts"
 import type * as Prisma from "../internal/prismaNamespace.ts"
 
@@ -203,7 +203,7 @@ export type HasilSimulasiGroupByOutputType = {
   _max: HasilSimulasiMaxAggregateOutputType | null
 }
 
-export type GetHasilSimulasiGroupByPayload<T extends HasilSimulasiGroupByArgs> = Prisma.PrismaPromise<
+type GetHasilSimulasiGroupByPayload<T extends HasilSimulasiGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<HasilSimulasiGroupByOutputType, T['by']> &
       {
@@ -1136,11 +1136,6 @@ export type HasilSimulasiFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` HasilSimulasis.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of HasilSimulasis.
-   */
   distinct?: Prisma.HasilSimulasiScalarFieldEnum | Prisma.HasilSimulasiScalarFieldEnum[]
 }
 

@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums.ts"
 import type * as Prisma from "../internal/prismaNamespace.ts"
 
@@ -151,7 +151,7 @@ export type LevelUserGroupByOutputType = {
   _max: LevelUserMaxAggregateOutputType | null
 }
 
-export type GetLevelUserGroupByPayload<T extends LevelUserGroupByArgs> = Prisma.PrismaPromise<
+type GetLevelUserGroupByPayload<T extends LevelUserGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<LevelUserGroupByOutputType, T['by']> &
       {
@@ -1130,11 +1130,6 @@ export type LevelUserFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Skip the first `n` LevelUsers.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of LevelUsers.
-   */
   distinct?: Prisma.LevelUserScalarFieldEnum | Prisma.LevelUserScalarFieldEnum[]
 }
 

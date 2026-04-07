@@ -29,7 +29,7 @@ export default function Features() {
       
       {/* Latar Belakang Ungu Melengkung (Absolute) */}
       {/* rounded-b-[4rem] atau [5rem] digunakan untuk membuat lengkungan besar di bawah */}
-      <div className="absolute top-0 left-0 w-full h-[350px] bg-[#6F27FF] rounded-b-[4rem] z-0"></div>
+      <div className="absolute top-0 left-0 w-full h-[350px] bg-[#6F27FF] rounded-b-3xl z-0"></div>
 
       {/* Konten Utama */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16">

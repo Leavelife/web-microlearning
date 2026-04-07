@@ -8,7 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
-import type * as runtime from "@prisma/client/runtime/client"
+import type * as runtime from "@prisma/client/runtime/library"
 import type * as $Enums from "../enums.ts"
 import type * as Prisma from "../internal/prismaNamespace.ts"
 
@@ -206,7 +206,7 @@ export type SoalQuizGroupByOutputType = {
   _max: SoalQuizMaxAggregateOutputType | null
 }
 
-export type GetSoalQuizGroupByPayload<T extends SoalQuizGroupByArgs> = Prisma.PrismaPromise<
+type GetSoalQuizGroupByPayload<T extends SoalQuizGroupByArgs> = Prisma.PrismaPromise<
   Array<
     Prisma.PickEnumerable<SoalQuizGroupByOutputType, T['by']> &
       {
@@ -1163,11 +1163,6 @@ export type SoalQuizFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Skip the first `n` SoalQuizs.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of SoalQuizs.
-   */
   distinct?: Prisma.SoalQuizScalarFieldEnum | Prisma.SoalQuizScalarFieldEnum[]
 }
 
