@@ -111,15 +111,22 @@ model HasilQuizUser {
 }
 
 model HasilSimulasi {
-  id                String @id @default(uuid())
-  userId            String
-  idSimulasi        String
-  skor              Int
-  waktuPenyelesaian Int
-  status            String
-  user              User   @relation(fields: [userId], references: [id])
+  id                    String    @id @default(uuid())
+  userId                String
+  idSimulasi            String    // "kabel-lan", "pc-building", "subnetmask", "topology-star", etc
+  topologyType          String?   // "star", "ring", "mesh", "bus", "tree", "hybrid" (for topology simulations)
+  skor                  Int
+  waktuPenyelesaian     Int       // in seconds
+  status                String
+  correctConnections    Int?      // number of correct connections (for topology)
+  totalConnections      Int?      // total connections user made
+  isValid               Boolean   @default(false) // is topology valid
+  createdAt             DateTime  @default(now())
+  user                  User      @relation(fields: [userId], references: [id])
 
   @@index([userId], map: "HasilSimulasi_userId_fkey")
+  @@index([topologyType], map: "HasilSimulasi_topologyType_idx")
+  @@index([createdAt], map: "HasilSimulasi_createdAt_idx")
 }
 
 model Achievement {

@@ -39,6 +39,18 @@ const SIMULATIONS = [
     accentClass: "text-emerald-600 group-hover:text-emerald-700",
     titleHoverClass: "group-hover:text-emerald-800",
   },
+  {
+    href: "/simulasi/topologi",
+    title: "Simulasi Topologi Jaringan",
+    description:
+      "Pelajari berbagai topologi jaringan (Star, Ring, Mesh, Bus, Tree, Hybrid) dengan simulasi interaktif. Susun koneksi dengan benar dan validasi struktur topologi Anda.",
+    imageSrc: "/images/virtual-lab/topology.png",
+    imageAlt: "Ilustrasi simulasi topologi jaringan",
+    borderClass: "border-blue-300 hover:border-blue-500",
+    ringHover: "group-hover:ring-2 group-hover:ring-blue-200",
+    accentClass: "text-blue-600 group-hover:text-blue-700",
+    titleHoverClass: "group-hover:text-blue-800",
+  },
 ];
 
 export default function SimulasiPage() {
