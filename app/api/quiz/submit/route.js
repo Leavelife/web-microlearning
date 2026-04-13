@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth-guard";
+import { gamificationEngine } from "@/lib/gamification";
 
 /** Menyimpan hasil quiz (memerlukan login). */
 export async function POST(req) {
@@ -22,7 +23,16 @@ export async function POST(req) {
       },
     });
 
-    return Response.json({ ok: true });
+    const gamification = await gamificationEngine({
+      userId: user.id,
+      event: {
+        type: "QUIZ_SELESAI",
+        quizId,
+        score: n,
+      },
+    });
+
+    return Response.json({ ok: true, gamification });
   } catch (err) {
     if (err.message === "UNAUTHORIZED") {
       return Response.json({ error: "Unauthorized" }, { status: 401 });

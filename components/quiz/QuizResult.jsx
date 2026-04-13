@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 export default function QuizResult({ quiz, score }) {
   const [submitState, setSubmitState] = useState("idle"); // idle | ok | auth | error
+  const [gamification, setGamification] = useState(null);
 
   useEffect(() => {
     if (score == null || !quiz?.id) return;
@@ -23,10 +24,12 @@ export default function QuizResult({ quiz, score }) {
           }),
         });
 
+        const data = await res.json();
         if (cancelled) return;
 
         if (res.ok) {
           setSubmitState("ok");
+          setGamification(data.gamification || null);
         } else if (res.status === 401) {
           setSubmitState("auth");
         } else {
@@ -78,6 +81,30 @@ export default function QuizResult({ quiz, score }) {
           <p className="text-xs text-red-600 mb-4 px-2">
             Gagal menyimpan hasil ke server. Coba lagi nanti.
           </p>
+        )}
+        {submitState === "ok" && gamification && (
+          <div className="mb-4 rounded-2xl border border-emerald-200/20 bg-emerald-500/10 p-4 text-left text-sm">
+            <p className="mb-2 text-emerald-600">
+              EXP diterima: {gamification.expGained}
+            </p>
+            {gamification.levelUp && (
+              <p className="mb-2 text-emerald-600">
+                Level up! Kamu naik ke: {gamification.levelUp.nama}
+              </p>
+            )}
+            {gamification.unlockedAchievements?.length > 0 ? (
+              <div className="space-y-1 text-emerald-100">
+                <p className="font-semibold">Achievement baru:</p>
+                <ul className="list-disc list-inside">
+                  {gamification.unlockedAchievements.map((ach) => (
+                    <li key={ach.id}>{ach.nama}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <p className="text-emerald-600">Belum ada achievement baru.</p>
+            )}
+          </div>
         )}
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

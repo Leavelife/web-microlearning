@@ -4,6 +4,7 @@ import ProfileSection from "@/components/profile/ProfileSection"
 import LogoutButton from "@/components/profile/LogoutButton"
 import Navbar from "@/components/Navbar"
 import LessonGrid from "@/components/lesson/LessonGrid"
+import BadgeCard from "@/components/achievement/BadgeCard"
 import { getMateriListFormatted } from "@/lib/materi-list";
 
 async function getProfile() {
@@ -100,19 +101,26 @@ export default async function ProfilePage({ searchParams }) {
                    
                    <div>
                      <h3 className="text-lg font-semibold text-gray-800 mb-4">Top Achievement</h3>
-                     <div className="flex flex-wrap gap-3">
-                       {(user?.topAchievements || []).map((a, i) => (
-                         <div key={i} className="flex items-center gap-2 bg-yellow-50 text-yellow-800 border border-yellow-200 px-4 py-2 rounded-lg text-sm font-medium shadow-sm">
-                           <span>🏅</span>
-                           {a?.nama || "-"}
-                         </div>
-                       ))}
-                       {(!user?.topAchievements || user.topAchievements.length === 0) && (
-                         <p className="text-sm text-gray-500 italic bg-gray-50 px-4 py-2 rounded-lg border border-gray-100">
-                           Belum ada achievement yang diraih.
-                         </p>
-                       )}
-                     </div>
+                     {user?.topAchievements?.length > 0 ? (
+                       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                         {user.topAchievements.map((a) => (
+                           <BadgeCard
+                             key={a.id}
+                             nama={a.nama}
+                             deskripsi={a.deskripsi}
+                             image={a.urlGambar}
+                             exp={a.expReward}
+                             eventType={a.eventType}
+                             tanggalDidapat={a.tanggalDidapat}
+                             isUnlocked={true}
+                           />
+                         ))}
+                       </div>
+                     ) : (
+                       <p className="text-sm text-gray-500 italic bg-gray-50 px-4 py-2 rounded-lg border border-gray-100">
+                         Belum ada achievement yang diraih.
+                       </p>
+                     )}
                    </div>
                 </div>
 

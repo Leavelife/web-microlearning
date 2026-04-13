@@ -6,6 +6,10 @@ import TableStep from "@/components/admin/materi/TableStep";
 import TableQuiz from "@/components/admin/quiz/TableQuiz";
 import FormQuizModal from "@/components/admin/quiz/FormQuizModal";
 import DetailQuiz from "@/components/admin/quiz/DetailQuiz";
+import AchievementForm from "@/components/admin/achievement/AchievementForm";
+import AchievementTable from "@/components/admin/achievement/AchievementTable";
+import LevelForm from "@/components/admin/level/LevelForm";
+import LevelTable from "@/components/admin/level/LevelTable";
 
 function StatCard({ title, value }) {
   return (
@@ -16,15 +20,25 @@ function StatCard({ title, value }) {
   );
 }
 
-function Sidebar() {
-  const menu = ["Dashboard", "Materi", "Quiz", "Simulasi", "Gamifikasi"];
+function Sidebar({ currentView, onChangeView }) {
+  const menu = [
+    { label: "Dashboard", view: "dashboard" },
+    { label: "Level", view: "level" },
+    { label: "Achievement", view: "achievement" },
+  ];
   return (
     <div className="fixed left-0 top-0 z-40 w-64 h-screen bg-black/40 backdrop-blur p-4">
       <h1 className="text-xl font-bold mb-6">MICROLAB</h1>
       <ul className="space-y-3">
         {menu.map((item) => (
-          <li key={item} className="hover:text-blue-400 cursor-pointer">
-            {item}
+          <li key={item.label}>
+            <button
+              type="button"
+              onClick={() => onChangeView(item.view)}
+              className={`w-full text-left ${currentView === item.view ? "text-blue-400 font-semibold" : "hover:text-blue-400"}`}
+            >
+              {item.label}
+            </button>
           </li>
         ))}
       </ul>
@@ -220,26 +234,28 @@ function TableMateri({ initialData = [], onManageSteps }) {
   );
 }
 
-export default function DashboardClient({ stats, initialMateri, initialQuiz, chartData }) {
+export default function DashboardClient({ stats, initialMateri, initialQuiz, initialAchievements, initialLevels, chartData }) {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [viewMode, setViewMode] = useState('list'); // 'list' or 'detail'
   const [selectedQuizForDetail, setSelectedQuizForDetail] = useState(null);
-  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'materi', 'steps', 'quiz'
+  const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'steps', 'achievement'
   const [selectedMateriId, setSelectedMateriId] = useState(null);
   return (
-    <div className="flex text-white min-h-screen bg-gradient-to-br from-black via-gray-900 to-black">
-      <Sidebar />
+    <div className="flex text-white min-h-screen bg-linear-to-br from-black via-gray-900 to-black">
+      <Sidebar currentView={currentView} onChangeView={setCurrentView} />
 
       <div className="ml-64 flex-1 min-w-0">
         <Topbar />
 
         <div className="p-6 space-y-6">
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-4">
             <StatCard title="Total User" value={stats?.totalUsers ?? "-"} />
             <StatCard title="Total Materi" value={stats?.totalMateri ?? "-"} />
             <StatCard title="Total Quiz" value={stats?.totalQuiz ?? "-"} />
             <StatCard title="Total Simulasi" value={stats?.totalSimulasi ?? "-"} />
+            <StatCard title="Total Achievement" value={stats?.totalAchievements ?? "-"} />
+            <StatCard title="Total Level" value={stats?.totalLevels ?? "-"} />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -289,6 +305,20 @@ export default function DashboardClient({ stats, initialMateri, initialQuiz, cha
                 </div>
               )}
             </>
+          )}
+
+          {currentView === 'achievement' && (
+            <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+              <AchievementForm />
+              <AchievementTable data={initialAchievements || []} />
+            </div>
+          )}
+
+          {currentView === 'level' && (
+            <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+              <LevelForm />
+              <LevelTable data={initialLevels || []} />
+            </div>
           )}
 
           {currentView === 'steps' && (

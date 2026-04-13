@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import StepContent from "./StepContent";
+import { useGamification } from "@/components/gamification/GamificationProvider"
 
 export default function LearnMateriClient({
   materi,
   initialProgress,
   isLoggedIn,
 }) {
+  const [gamificationData, setGamificationData] = useState(null)
+  const { showGamification } = useGamification()
   const steps = materi.steps ?? [];
   const sorted = useMemo(
     () => [...steps].sort((a, b) => a.urutan - b.urutan),
@@ -63,7 +66,12 @@ export default function LearnMateriClient({
 
       const data = await res.json().catch(() => ({}));
 
+      if (data.gamification) {
+        showGamification(data.gamification)
+      }
+
       if (!res.ok) {
+
         if (data?.progress) {
           setFrontier(data.progress.stepSekarang);
           setSelesai(!!data.progress.selesai);
