@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth-guard";
+import { gamificationEngine } from "@/lib/gamification";
 
 /**
  * POST — selesaikan tahap saat ini (frontier) lalu maju ke urutan berikutnya
@@ -73,11 +74,19 @@ export async function POST(req, { params }) {
         where: { id: progress.id },
         data: { selesai: true, updateAt: new Date() },
       });
+        const result = await gamificationEngine({
+          userId: user.id,
+          event: {
+            type: "MATERI_SELESAI",
+            materiId: materiId,
+          },
+        })
       return Response.json({
         progress: {
           stepSekarang: updated.stepSekarang,
           selesai: updated.selesai,
         },
+        gamification: result,
       });
     }
 

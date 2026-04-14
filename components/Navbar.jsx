@@ -1,20 +1,25 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useGamification } from "@/components/gamification/GamificationProvider"
 import Link from "next/link"
+import {GiAchievement} from "react-icons/gi"
 
 export default function Navbar() {
   const [userExp, setUserExp] = useState(0)
+  const [level, setLevel] = useState(null)
   const [isLoggedIn, setIsLoggedIn] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const { animatedExp } = useGamification()
+  const displayExp = animatedExp || userExp
 
   const maxExp = 1000
 
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch("/api/auth/me")
+        const response = await fetch("/api/profile")
 
         if (!response.ok) {
           setIsLoggedIn(false)
@@ -24,8 +29,9 @@ export default function Navbar() {
 
         const data = await response.json()
         setIsLoggedIn(true)
-        setIsAdmin(data.user?.role === "admin")
-        setUserExp(data.user?.exp || 0)
+        setIsAdmin(data.role === "admin")
+        setUserExp(data.totalExp)
+        setLevel(data.level)
       } catch (error) {
         setIsLoggedIn(false)
         setIsAdmin(false)
@@ -34,6 +40,10 @@ export default function Navbar() {
 
     checkAuth()
   }, [])
+
+  const progress = level
+    ? ((displayExp - level.minExp) / (level.maxExp - level.minExp)) * 100
+    : 0
 
   return (
     <>
@@ -58,14 +68,20 @@ export default function Navbar() {
           
           {/* ===== EXP BAR (ONLY MD+) ===== */}
           <div className="hidden md:flex items-center gap-2">
-            <span className="text-white font-semibold text-sm">{userExp} Exp</span>
+            <span className="text-white font-semibold text-sm">{displayExp} / {level?.maxExp || maxExp} Exp</span>
             <div className="w-24 lg:w-32 h-2 bg-purple-900 rounded-full overflow-hidden">
               <div
                 className="h-full bg-yellow-400 transition-all duration-500"
-                style={{ width: `${(userExp / maxExp) * 100}%` }}
+                style={{ width: `${Math.max(progress, 3)}%` }}
               />
             </div>
           </div>
+
+          <Link href="/achievement">
+            <div className="w-10 h-10 flex items-center justify-center hover:scale-110 transition">
+              <GiAchievement className="text-white text-3xl" />
+            </div>
+          </Link>
 
           {/* ===== AUTH (ONLY LG) ===== */}
           <div className="hidden lg:block">

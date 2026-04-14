@@ -1,5 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { NotificationProvider } from "@/components/context/NotificationContext";
+import { GamificationProvider } from "@/components/gamification/GamificationProvider"
+import GamificationRenderer from "@/components/gamification/GamificationRenderer"
+import GamificationToast from "@/components/gamification/GamificationToast"
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,7 +28,11 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         <NotificationProvider >
-          {children}
+          <GamificationProvider>
+            {children}
+            <GamificationRenderer />
+            <GamificationToast />
+          </GamificationProvider>
         </NotificationProvider>
       </body>
     </html>

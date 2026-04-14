@@ -16,12 +16,15 @@ model User {
   role           String
   wilayah        String?
   image          String?
+
   editCount      Int               @default(0)
+  
   totalExp       Int               @default(0)
+  levelId        String?
+  level          Level?            @relation(fields: [levelId], references: [id])
 
   quizResults    HasilQuizUser[]
   simulasi       HasilSimulasi[]
-  levels         LevelUser[]
   progresses     ProgressMateri[]
   achievements   UserAchievement[]
 
@@ -133,9 +136,13 @@ model Achievement {
   id               String            @id @default(uuid())
   nama             String
   deskripsi        String
-  syaratExp        Int
-  kondisi          String
+
+  eventType        String
+  eventKey         String?
+  
+  expReward        Int
   urlGambar        String
+
   userAchievements UserAchievement[]
 }
 
@@ -144,29 +151,18 @@ model UserAchievement {
   userId         String
   achievementId  String
   tanggalDidapat DateTime    @default(now())
+
   achievement    Achievement @relation(fields: [achievementId], references: [id])
   user           User        @relation(fields: [userId], references: [id])
 
-  @@index([achievementId], map: "UserAchievement_achievementId_fkey")
-  @@index([userId], map: "UserAchievement_userId_fkey")
+  @@unique([userId, achievementId], name: "userId_achievementId")
 }
 
 model Level {
   id        String      @id @default(uuid())
   nama      String
   minExp    Int
+  maxExp    Int
   urlGambar String
-  users     LevelUser[]
-}
-
-model LevelUser {
-  id             String   @id @default(uuid())
-  userId         String
-  levelId        String
-  tanggalDidapat DateTime @default(now())
-  level          Level    @relation(fields: [levelId], references: [id])
-  user           User     @relation(fields: [userId], references: [id])
-
-  @@index([levelId], map: "LevelUser_levelId_fkey")
-  @@index([userId], map: "LevelUser_userId_fkey")
+  users     User[]
 }

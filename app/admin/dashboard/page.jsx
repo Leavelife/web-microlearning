@@ -30,11 +30,15 @@ export default async function DashboardPage() {
         }
     });
 
-    const [totalUsers, totalMateri, totalQuiz, totalSimulasi] = await Promise.all([
+    const [totalUsers, totalMateri, totalQuiz, totalSimulasi, totalAchievements, achievements, totalLevels, levels] = await Promise.all([
         prisma.user.count(),
         prisma.materi.count(),
         prisma.quiz.count(),
-        prisma.hasilSimulasi.count()
+        prisma.hasilSimulasi.count(),
+        prisma.achievement.count(),
+        prisma.achievement.findMany({ orderBy: { id: "desc" } }),
+        prisma.level.count(),
+        prisma.level.findMany({ orderBy: { minExp: "asc" } })
     ]);
 
     const last7Days = Array.from({ length: 7 }).map((_, i) => {
@@ -85,10 +89,14 @@ export default async function DashboardPage() {
         totalUsers,
         totalMateri,
         totalQuiz,
-        totalSimulasi
+        totalSimulasi,
+        totalAchievements,
+        totalLevels
       }}
       initialMateri={materi}
       initialQuiz={quiz}
+      initialAchievements={achievements}
+      initialLevels={levels}
       chartData={{
         activityTrend,
         quizTrend

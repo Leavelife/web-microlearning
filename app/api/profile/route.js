@@ -29,15 +29,7 @@ export async function GET() {
                         tanggalDidapat: "desc"
                     }
                 },
-                levels: {
-                    include: {
-                        level: true
-                    },
-                    orderBy: {
-                        tanggalDidapat: "desc"
-                    },
-                    take: 1 // ambil level terakhir
-                }
+                level: true
             }
         })
 
@@ -45,7 +37,7 @@ export async function GET() {
         const totalExp = data.totalExp
 
         // ambil level sekarang
-        const currentLevel = data.levels[0]?.level || null
+        const currentLevel = data.level || null
 
         // ranking (jika ada wilayah)
         let ranking = null
@@ -64,13 +56,17 @@ export async function GET() {
         return Response.json({
             username: data.username,
             email: data.email,
+            role: data.role,
             wilayah: data.wilayah,
             image: data.image,
             editCount: data.editCount,
             totalExp,
             level: currentLevel,
             badge: currentLevel?.urlGambar || null,
-            topAchievements: data.achievements.map(a => a.achievement),
+            topAchievements: data.achievements.map(a => ({
+                ...a.achievement,
+                tanggalDidapat: a.tanggalDidapat
+            })),
             ranking
         })
     } catch (err) {
