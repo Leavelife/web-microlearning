@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import SimulationCompletionModal from "@/components/simulasi/SimulationCompletionModal";
 
 function clampCidr(value) {
   const n = Number(value);
@@ -31,6 +32,7 @@ export default function SubnetmaskSimulasi() {
   const [cidr, setCidr] = useState(24);
   const [bits, setBits] = useState(() => Array(32).fill(0));
   const [confirmed, setConfirmed] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // Agar random benar-benar terjadi tiap akses (client-side) dan tetap aman dari hydration mismatch.
   useEffect(() => {
@@ -66,11 +68,13 @@ export default function SubnetmaskSimulasi() {
 
   const onConfirm = () => {
     setConfirmed(true);
+    setShowModal(true);
   };
 
   const onResetAnswer = () => {
     setBits(Array(32).fill(0));
     setConfirmed(false);
+    setShowModal(false);
   };
 
   const onShuffleMask = () => {
@@ -263,6 +267,17 @@ export default function SubnetmaskSimulasi() {
           </div>
         </div>
       </div>
+
+      {/* Completion Modal */}
+      <SimulationCompletionModal
+        isOpen={showModal}
+        score={wrongCount === 0 ? 100 : Math.max(0, Math.round((correctCount / 32) * 100))}
+        correctCount={correctCount}
+        totalCount={32}
+        expGained={0}
+        simulationName="Simulasi Subnet Mask"
+        onReset={onResetAnswer}
+      />
     </div>
   );
 }

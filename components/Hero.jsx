@@ -32,6 +32,7 @@ export default function Hero() {
       <div className="flex justify-center">
         <Image
           src="/images/home/hero.svg" 
+          loading="eager"
           alt="learning illustration"
           width={10}
           height={10}

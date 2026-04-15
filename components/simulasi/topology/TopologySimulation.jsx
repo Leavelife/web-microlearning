@@ -6,6 +6,7 @@ import { getTopologyConfig } from '@/lib/topology-config';
 import TopologyModeSelector from './TopologyModeSelector';
 import TopologyCanvas from './TopologyCanvas';
 import TopologyResult from './TopologyResult';
+import SimulationCompletionModal from '@/components/simulasi/SimulationCompletionModal';
 
 export default function TopologySimulation() {
   const [selectedTopology, setSelectedTopology] = useState(null);
@@ -192,14 +193,25 @@ export default function TopologySimulation() {
   // Show result if finished
   if (isFinished && score) {
     return (
-      <TopologyResult
-        topology={selectedTopology}
-        score={score}
-        nodes={nodes}
-        edges={edges}
-        correctEdges={correctEdges}
-        onReset={handleReset}
-      />
+      <div>
+        <TopologyResult
+          topology={selectedTopology}
+          score={score}
+          nodes={nodes}
+          edges={edges}
+          correctEdges={correctEdges}
+          onReset={handleReset}
+        />
+        <SimulationCompletionModal
+          isOpen={true}
+          score={score.score ?? 0}
+          correctCount={score.correctCount ?? 0}
+          totalCount={score.totalCorrect ?? correctEdges.length}
+          expGained={0}
+          simulationName={`Simulasi Topologi ${getTopologyConfig(selectedTopology)?.name || selectedTopology}`}
+          onReset={handleReset}
+        />
+      </div>
     );
   }
 

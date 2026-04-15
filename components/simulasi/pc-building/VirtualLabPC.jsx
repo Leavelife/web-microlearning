@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import SimulationCompletionModal from "@/components/simulasi/SimulationCompletionModal";
 
 const SLOT_CONFIG = [
   // Posisi pc part di motherboard.
@@ -225,6 +226,17 @@ export default function VirtualLabPC() {
   const [mistakes, setMistakes] = useState(0);
   const [moves, setMoves] = useState(0);
   const [message, setMessage] = useState(null);
+  
+  // Session states
+  const [startTime, setStartTime] = useState(0);
+  const [finished, setFinished] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [submitResult, setSubmitResult] = useState(null);
+
+  useEffect(() => {
+    setStartTime(Date.now());
+  }, []);
 
   const placedComponentsCount = useMemo(
     () => Object.values(slots).filter(Boolean).length,
@@ -264,6 +276,7 @@ export default function VirtualLabPC() {
     const slotConfig = SLOT_CONFIG.find((s) => s.id === slotId);
     if (!slotConfig) return;
     if (slots[slotId]) return; // sudah terisi
+    if (finished) return; // sudah selesai submit
 
     const componentId = event.dataTransfer.getData("text/plain");
     if (!componentId) return;
@@ -294,6 +307,7 @@ export default function VirtualLabPC() {
   const handleRemoveFromSlot = (slotId) => {
     const placed = slots[slotId];
     if (!placed) return;
+    if (finished) return; // sudah selesai submit
 
     setSlots((prev) => ({
       ...prev,
@@ -317,6 +331,71 @@ export default function VirtualLabPC() {
     setMistakes(0);
     setMoves(0);
     setMessage(null);
+    setFinished(false);
+    setStartTime(Date.now());
+    setSubmitResult(null);
+    setSubmitError(null);
+  };
+
+  const onFinish = async () => {
+    setFinished(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+    
+    // Validate that we have a valid startTime
+    if (startTime === 0) {
+      setSubmitError('Terjadi kesalahan: waktu mulai tidak tersimpan. Silakan coba lagi.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+    // Validate data before sending
+    if (typeof correctCount !== 'number' || correctCount < 0 || correctCount > 5) {
+      setSubmitError('Data komponen tidak valid. Silakan coba lagi.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/simulasi/pc-building', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          correctCount,
+          timeSpent,
+        }),
+      });
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        throw new Error('Response format tidak valid dari server');
+      }
+
+      if (!res.ok) {
+        throw new Error(data?.error || `Terjadi kesalahan (HTTP ${res.status})`);
+      }
+
+      if (!data?.result) {
+        throw new Error('Response tidak mengandung result data');
+      }
+
+      setSubmitResult(data.result);
+      
+      // Show warning if there was a gamification error
+      if (data.warning) {
+        console.warn('Server warning:', data.warning);
+      }
+    } catch (err) {
+      setSubmitError(err?.message || 'Terjadi kesalahan saat menyimpan skor');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -375,99 +454,150 @@ export default function VirtualLabPC() {
         </div>
 
         {/* Panel status + tray komponen */}
-        <div className="lg:w-1/3 border border-gray-200 rounded-xl p-4 bg-slate-50 flex flex-col h-full max-h-[640px]">
-          <div className="shrink-0">
-            <h3 className="text-lg font-semibold mb-2">Status Sesi</h3>
-            <p>
-              Skor: <strong>{score}</strong>
-            </p>
-            <p>
-              Moves: <strong>{moves}</strong>
-            </p>
-            <p>
-              Komponen terpasang: <strong>{placedComponentsCount}</strong> / {SLOT_CONFIG.length}
-            </p>
-            <p>
-              Komponen benar: <strong>{correctCount}</strong> / {SLOT_CONFIG.length}
-            </p>
-            <p>
-              Mistakes: <strong>{mistakes}</strong>
-            </p>
+        {!submitResult && (
+          <div className="lg:w-1/3 border border-gray-200 rounded-xl p-4 bg-slate-50 flex flex-col h-full max-h-[640px]">
+            <div className="shrink-0">
+              <h3 className="text-lg font-semibold mb-2">Status Sesi</h3>
+              
+              {!finished ? (
+                <>
+                  <p>
+                    Skor: <strong>{score}</strong>
+                  </p>
+                  <p>
+                    Moves: <strong>{moves}</strong>
+                  </p>
+                  <p>
+                    Komponen terpasang: <strong>{placedComponentsCount}</strong> / {SLOT_CONFIG.length}
+                  </p>
+                  <p>
+                    Komponen benar: <strong>{correctCount}</strong> / {SLOT_CONFIG.length}
+                  </p>
+                  <p>
+                    Mistakes: <strong>{mistakes}</strong>
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p>Skor Anda: <strong className="text-blue-600 text-lg">{submitResult?.score ?? '-'}</strong> <span className="text-sm text-gray-500">/ 100</span></p>
+                  <p>Komponen Benar: <strong>{correctCount}</strong> / 5</p>
+                  <p>Jml Kesalahan (Mistakes): <strong>{mistakes}</strong></p>
+                  <p>Jml Pergerakan (Moves): <strong>{moves}</strong></p>
+                </>
+              )}
 
-            {isComplete ? (
-              <div className="mt-3 p-3 rounded bg-emerald-50 text-emerald-700 text-sm">
-                Semua slot sudah terisi. Periksa kembali apakah semua komponen sudah cocok dengan
-                slotnya.
-              </div>
-            ) : (
-              <div className="mt-3 p-3 rounded bg-blue-50 text-blue-700 text-sm">
-                Lengkapi pemasangan semua komponen utama di motherboard.
-              </div>
-            )}
+              {isSubmitting && (
+                <div className="mt-3 p-3 rounded bg-blue-50 text-blue-700 text-sm">
+                  Mengevaluasi hasil dan menyimpan...
+                </div>
+              )}
+              
+              {submitError && (
+                <div className="mt-3 p-3 rounded bg-red-50 text-red-700 text-sm">
+                  Error: {submitError}
+                </div>
+              )}
 
-            {message && (
-              <div
-                className={`mt-3 p-3 rounded text-sm ${
-                  message.variant === "success"
-                    ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                    : message.variant === "error"
-                    ? "bg-rose-50 text-rose-700 border border-rose-200"
-                    : "bg-slate-50 text-slate-700 border border-slate-200"
-                }`}
-              >
-                {message.text}
-              </div>
-            )}
-          </div>
-
-          <div className="mt-4 border-t border-gray-200 pt-3 flex-1 min-h-0 flex flex-col">
-            <h4 className="text-sm font-semibold text-gray-800 mb-2">
-              Pilihan Komponen (Drag & Drop)
-            </h4>
-            {availableComponents.length === 0 ? (
-              <p className="text-xs text-gray-500">
-                Semua komponen sudah dipasang. Jika ingin mencoba lagi, gunakan tombol Reset Sesi.
-              </p>
-            ) : (
-              <div className="grid grid-cols-2 gap-3 overflow-y-auto pr-1">
-                {availableComponents.map((component) => (
-                  <div
-                    key={component.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, component.id)}
-                    className="cursor-grab active:cursor-grabbing rounded-xl bg-white shadow-sm border border-purple-200 p-2.5 hover:border-purple-400 hover:shadow-md transition flex flex-col items-center text-center"
-                  >
-                    {/* Gambar part */}
-                    <div className="w-16 h-16 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center mb-1.5 overflow-hidden relative">
-                      {component.imageSrc ? (
-                        <Image
-                          src={component.imageSrc}
-                          alt={component.name}
-                          fill
-                          className="object-contain"
-                        />
-                      ) : (
-                        <TypeIcon type={component.type} className="w-8 h-8 text-purple-700" />
-                      )}
-                    </div>
-                    {/* Nama part */}
-                    <p className="text-[11px] font-semibold text-gray-800 leading-tight line-clamp-2">
-                      {component.name}
-                    </p>
+              {!finished ? (
+                isComplete ? (
+                  <div className="mt-3 p-3 rounded bg-blue-50 text-blue-700 text-sm font-medium">
+                    Semua slot terisi. Tekan Submit untuk mengevaluasi hasil.
                   </div>
-                ))}
-              </div>
-            )}
+                ) : (
+                  <div className="mt-3 p-3 rounded bg-yellow-50 text-yellow-700 text-sm font-medium">
+                    Lengkapi pemasangan semua komponen utama di motherboard.
+                  </div>
+                )
+              ) : null}
 
-            <button
-              onClick={handleReset}
-              className="mt-3 w-full px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition shrink-0"
-            >
-              Reset Sesi
-            </button>
+              {message && (
+                <div
+                  className={`mt-3 p-3 rounded text-sm ${
+                    message.variant === "success"
+                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                      : message.variant === "error"
+                      ? "bg-rose-50 text-rose-700 border border-rose-200"
+                      : "bg-slate-50 text-slate-700 border border-slate-200"
+                  }`}
+                >
+                  {message.text}
+                </div>
+              )}
+            </div>
+
+            <div className="mt-4 border-t border-gray-200 pt-3 flex-1 min-h-0 flex flex-col">
+              <h4 className="text-sm font-semibold text-gray-800 mb-2">
+                Pilihan Komponen (Drag & Drop)
+              </h4>
+              {availableComponents.length === 0 ? (
+                <p className="text-xs text-gray-500">
+                  Semua komponen sudah dipasang. Jika ingin mencoba lagi, gunakan tombol Ulangi Simulasi.
+                </p>
+              ) : (
+                <div className="grid grid-cols-2 gap-3 overflow-y-auto pr-1">
+                  {availableComponents.map((component) => (
+                    <div
+                      key={component.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, component.id)}
+                      className="cursor-grab active:cursor-grabbing rounded-xl bg-white shadow-sm border border-purple-200 p-2.5 hover:border-purple-400 hover:shadow-md transition flex flex-col items-center text-center"
+                    >
+                      {/* Gambar part */}
+                      <div className="w-16 h-16 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center mb-1.5 overflow-hidden relative">
+                        {component.imageSrc ? (
+                          <Image
+                            src={component.imageSrc}
+                            alt={component.name}
+                            fill
+                            className="object-contain"
+                          />
+                        ) : (
+                          <TypeIcon type={component.type} className="w-8 h-8 text-purple-700" />
+                        )}
+                      </div>
+                      {/* Nama part */}
+                      <p className="text-[11px] font-semibold text-gray-800 leading-tight line-clamp-2">
+                        {component.name}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="mt-3 flex flex-col sm:flex-row gap-2">
+                {!finished ? (
+                  <button
+                    onClick={onFinish}
+                    disabled={placedComponentsCount === 0}
+                    className="flex-1 px-4 py-2 bg-purple-600 text-white font-medium rounded hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Submit Hasil
+                  </button>
+                ) : null}
+                
+                <button
+                  onClick={handleReset}
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded hover:bg-gray-300 transition disabled:opacity-50"
+                >
+                  Ulangi Simulasi
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
+
+      {/* Completion Modal */}
+      <SimulationCompletionModal
+        isOpen={!!submitResult && !isSubmitting}
+        score={submitResult?.score ?? 0}
+        correctCount={correctCount}
+        totalCount={5}
+        expGained={submitResult?.expGained ?? 0}
+        simulationName="Simulasi PC Building"
+        onReset={handleReset}
+      />
     </div>
   );
 }
