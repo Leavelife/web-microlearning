@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { useGamification } from "@/components/gamification/GamificationProvider"
 import Link from "next/link"
 import {GiAchievement} from "react-icons/gi"
+import { SiOpslevel } from "react-icons/si";
+
 
 export default function Navbar() {
   const [userExp, setUserExp] = useState(0)
@@ -80,6 +82,11 @@ export default function Navbar() {
           <Link href="/achievement">
             <div className="w-10 h-10 flex items-center justify-center hover:scale-110 transition">
               <GiAchievement className="text-white text-3xl" />
+            </div>
+          </Link>
+          <Link href="/level">
+            <div className="w-10 h-10 flex items-center justify-center hover:scale-110 transition">
+              <SiOpslevel className="text-white text-2xl" />
             </div>
           </Link>
 

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("")
@@ -83,18 +84,19 @@ export default function RegisterPage() {
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
+      <div className="w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden flex">
+        <form onSubmit={handleSubmit} className="w-full md:w-1/2 p-6 md:p-10">
+        <h2 className="text-xl md:text-2xl font-bold mb-6">REGISTER <br /> KE MICROLAB</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         {success && <p className="text-green-500 text-center mb-4">{success}</p>}
-        <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="username" className="block text-sm font-semibold text-gray-700">
               Username
             </label>
             <input
               type="text"
               id="username"
+              placeholder="Masukkan Username"
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value)
@@ -102,16 +104,17 @@ export default function RegisterPage() {
               }}
               minLength="3"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full border-b border-gray-400 focus:border-purple-600 outline-none py-2 bg-transparent"
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
               Email
             </label>
             <input
               type="email"
               id="email"
+              placeholder="Masukkan Email"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value)
@@ -119,17 +122,18 @@ export default function RegisterPage() {
               }}
               pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full border-b border-gray-400 focus:border-purple-600 outline-none py-2 bg-transparent"
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
               Password
             </label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 id="password"
+                placeholder="Masukkan Password"
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value)
@@ -137,7 +141,7 @@ export default function RegisterPage() {
                 }}
                 minLength="6"
                 required
-                className="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full border-b border-gray-400 focus:border-purple-600 outline-none py-2 bg-transparent"
               />
               <button
                 type="button"
@@ -158,7 +162,7 @@ export default function RegisterPage() {
             </div>
           </div>
           <div className="mb-6">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700">
               Konfirmasi Password
             </label>
             <div className="relative">
@@ -172,7 +176,8 @@ export default function RegisterPage() {
                 }}
                 minLength="6"
                 required
-                className="mt-1 block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full border-b border-gray-400 focus:border-purple-600 outline-none py-2 bg-transparent"
+                placeholder="Konfirmasi Password"
               />
               <button
                 type="button"
@@ -195,18 +200,28 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-2 rounded-md shadow-md hover:opacity-90 transition"
           >
             {loading ? "Mendaftarkan..." : "Register"}
           </button>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Sudah punya akun?{" "}
+              <a href="/login" className="text-indigo-600 hover:text-indigo-500">
+                Login di sini
+              </a>
+            </p>
+          </div>
         </form>
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Sudah punya akun?{" "}
-            <a href="/login" className="text-indigo-600 hover:text-indigo-500">
-              Login di sini
-            </a>
-          </p>
+        <div className="hidden md:flex w-1/2 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-500 items-center justify-center">
+          <Image
+            src="/register.svg"
+            alt="Register Illustration"
+            className="w-full max-w-lg h-auto"
+            width={400}
+            height={400}
+            loading="eager"
+          />
         </div>
       </div>
     </div>
