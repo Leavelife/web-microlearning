@@ -5,6 +5,7 @@ import { useGamification } from "@/components/gamification/GamificationProvider"
 import Link from "next/link"
 import {GiAchievement} from "react-icons/gi"
 import { SiOpslevel } from "react-icons/si";
+import Image from "next/image"
 
 
 export default function Navbar() {
@@ -49,11 +50,11 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 flex items-center justify-between px-4 md:px-8 py-4 bg-[#6F27FF] shadow-lg">
+      <nav className="fixed top-0 w-full z-50 flex items-center justify-between px-4 md:px-8 bg-[#6F27FF] shadow-lg">
         
         {/* Logo */}
         <Link href="/" className="text-xl md:text-2xl font-bold text-white">
-          MICROLAB
+          <Image src="/microlab.svg" alt="Logo" width={150} height={150} className="inline-block mr-2" />
         </Link>
 
         {/* ===== MENU (ONLY LG) ===== */}
@@ -73,7 +74,7 @@ export default function Navbar() {
             <span className="text-white font-semibold text-sm">{displayExp} / {level?.maxExp || maxExp} Exp</span>
             <div className="w-24 lg:w-32 h-2 bg-purple-900 rounded-full overflow-hidden">
               <div
-                className="h-full bg-yellow-400 transition-all duration-500"
+                className="h-full bg-linear-to-r from-green-600 to-green-400 transition-all duration-500"
                 style={{ width: `${Math.max(progress, 3)}%` }}
               />
             </div>
