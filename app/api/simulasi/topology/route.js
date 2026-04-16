@@ -1,7 +1,26 @@
 import { prisma } from '@/lib/prisma';
 import { calculateScore } from '@/lib/topology-validator';
 import { NODE_LAYOUTS } from '@/lib/topology-types';
+import { TOPOLOGY_CONFIG } from '@/lib/topology-config';
 import { requireAuth } from '@/lib/auth-guard';
+import { gamificationEngine } from '@/lib/gamification';
+
+// Map topology type to difficulty level
+function getTopologyDifficulty(topologyType) {
+  const config = TOPOLOGY_CONFIG[topologyType];
+  if (!config) return 'medium'; // default
+  return config.difficulty; // 'easy', 'medium', 'hard'
+}
+
+// Map difficulty to event type
+function getDifficultyEventType(difficulty) {
+  const difficultyMap = {
+    'easy': 'SIMULASI_TOPOLOGY_MUDAH',
+    'medium': 'SIMULASI_TOPOLOGY_SEDANG',
+    'hard': 'SIMULASI_TOPOLOGY_SULIT',
+  };
+  return difficultyMap[difficulty] || 'SIMULASI_TOPOLOGY_SEDANG';
+}
 
 export async function POST(req) {
   try {
@@ -40,6 +59,19 @@ export async function POST(req) {
       return Response.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Check BEFORE saving: has user completed this topology before?
+    let isFirstCompletion = false;
+    if (scoreResult.isValid) {
+      const previousCompletion = await prisma.hasilSimulasi.findFirst({
+        where: {
+          userId: authUser.id,
+          idSimulasi: `topology-${topologyType}`,
+          isValid: true, // Only count valid/completed attempts
+        },
+      });
+      isFirstCompletion = !previousCompletion;
+    }
+
     // Save to database
     const result = await prisma.hasilSimulasi.create({
       data: {
@@ -55,6 +87,31 @@ export async function POST(req) {
       },
     });
 
+    // Award XP if topology is valid AND first completion
+    let expGained = 0;
+    let levelUp = null;
+    let unlockedAchievements = [];
+    
+    if (scoreResult.isValid && isFirstCompletion) {
+      try {
+        const difficulty = getTopologyDifficulty(topologyType);
+        const eventType = getDifficultyEventType(difficulty);
+        
+        const gamificationResult = await gamificationEngine({
+          userId: authUser.id,
+          event: {
+            type: eventType,
+          }
+        });
+        
+        expGained = gamificationResult.expGained;
+        levelUp = gamificationResult.levelUp;
+        unlockedAchievements = gamificationResult.unlockedAchievements;
+      } catch (gamificationErr) {
+        console.error('Gamification error in topology submission:', gamificationErr);
+      }
+    }
+
     return Response.json({
       success: true,
       result: {
@@ -66,6 +123,9 @@ export async function POST(req) {
         correctCount: scoreResult.correctCount,
         totalCorrect: scoreResult.totalCorrect,
         details: scoreResult.details,
+        expGained,
+        levelUp,
+        unlockedAchievements,
       },
     });
   } catch (error) {

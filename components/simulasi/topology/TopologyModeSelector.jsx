@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { getTopologiesByDifficulty, DIFFICULTY_LEVELS } from '@/lib/topology-config';
 
-export default function TopologyModeSelector({ onSelectTopology }) {
+export default function TopologyModeSelector({ onSelectTopology, completedTopologies = [] }) {
   const topologiesByDifficulty = getTopologiesByDifficulty();
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
 
@@ -78,8 +78,11 @@ export default function TopologyModeSelector({ onSelectTopology }) {
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2 flex items-center gap-2">
                         {topology.name}
+                        {completedTopologies.includes(topology.type) && (
+                          <span className="text-green-600 text-lg">✓</span>
+                        )}
                       </h3>
 
                       {/* Description */}

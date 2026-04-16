@@ -28,13 +28,16 @@ export default function SimulationCompletionModal({
       return;
     }
 
+    // Reset and start animation when modal opens
+    hasAnimatedRef.current = false;
+    setAnimatedExp(0);
+
     // Only animate once per modal opening
     if (hasAnimatedRef.current) {
       return;
     }
 
     hasAnimatedRef.current = true;
-    setAnimatedExp(0);
 
     // Animasi XP bar naik dari 0 ke expGained dalam 1 detik
     const startTime = Date.now();
@@ -50,7 +53,9 @@ export default function SimulationCompletionModal({
       if (progress < 1) {
         animationFrameRef.current = requestAnimationFrame(animate);
       } else {
+        // Ensure final value is set correctly
         setAnimatedExp(expGained);
+        animationFrameRef.current = null;
       }
     };
 
@@ -59,6 +64,7 @@ export default function SimulationCompletionModal({
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
     };
   }, [isOpen, expGained]);

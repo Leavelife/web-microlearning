@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import SimulationCompletionModal from "@/components/simulasi/SimulationCompletionModal";
 
 function clampCidr(value) {
@@ -29,10 +30,18 @@ function randomCidr() {
 }
 
 export default function SubnetmaskSimulasi() {
+  const router = useRouter();
   const [cidr, setCidr] = useState(24);
   const [bits, setBits] = useState(() => Array(32).fill(0));
   const [confirmed, setConfirmed] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  
+  // XP tracking
+  const [completedCidrs, setCompletedCidrs] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [submitResult, setSubmitResult] = useState(null);
+  const [startTime, setStartTime] = useState(null);
 
   // Agar random benar-benar terjadi tiap akses (client-side) dan tetap aman dari hydration mismatch.
   useEffect(() => {
@@ -40,6 +49,7 @@ export default function SubnetmaskSimulasi() {
     setCidr(c);
     setBits(Array(32).fill(0));
     setConfirmed(false);
+    setStartTime(Date.now());
   }, []);
 
   const expectedBits = useMemo(() => cidrToBits(cidr), [cidr]);
@@ -56,6 +66,9 @@ export default function SubnetmaskSimulasi() {
   }, [bits, expectedBits, confirmed]);
 
   const correctCount = useMemo(() => (confirmed ? 32 - wrongCount : 0), [confirmed, wrongCount]);
+  const score = useMemo(() => (confirmed ? (wrongCount === 0 ? 100 : Math.max(0, Math.round((correctCount / 32) * 100))) : 0), [confirmed, correctCount, wrongCount]);
+
+  const isCidrAlreadyCompleted = useMemo(() => completedCidrs.some(c => c === cidr), [completedCidrs, cidr]);
 
   const onToggleBit = (index) => {
     if (confirmed) return;
@@ -66,15 +79,79 @@ export default function SubnetmaskSimulasi() {
     });
   };
 
-  const onConfirm = () => {
+  const onConfirm = async () => {
+    // Calculate actual score BEFORE submitting (not from useMemo which uses old state)
+    let wrongInAnswer = 0;
+    for (let i = 0; i < 32; i += 1) {
+      if ((bits[i] ? 1 : 0) !== expectedBits[i]) {
+        wrongInAnswer += 1;
+      }
+    }
+    const correctInAnswer = 32 - wrongInAnswer;
+    const actualScore = wrongInAnswer === 0 ? 100 : Math.max(0, Math.round((correctInAnswer / 32) * 100));
+
     setConfirmed(true);
-    setShowModal(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const timeSpent = startTime ? Math.floor((Date.now() - startTime) / 1000) : 0;
+
+    try {
+      const res = await fetch('/api/simulasi/subnetmask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cidr,
+          correctCount: correctInAnswer,
+          totalCount: 32,
+          score: actualScore,
+          timeSpent,
+        }),
+      });
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        throw new Error('Response format tidak valid dari server');
+      }
+
+      if (!res.ok) {
+        throw new Error(data?.error || `Terjadi kesalahan (HTTP ${res.status})`);
+      }
+
+      if (!data?.result) {
+        throw new Error('Response tidak mengandung result data');
+      }
+
+      setSubmitResult(data.result);
+      
+      // Add to completed CIDRs - use actualScore instead of useMemo score
+      if (actualScore === 100 && !isCidrAlreadyCompleted) {
+        setCompletedCidrs(prev => [...prev, cidr]);
+      }
+
+      setShowModal(true);
+
+      if (data.warning) {
+        console.warn('Server warning:', data.warning);
+      }
+    } catch (err) {
+      setSubmitError(err?.message || 'Terjadi kesalahan saat menyimpan skor');
+      setConfirmed(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const onResetAnswer = () => {
     setBits(Array(32).fill(0));
     setConfirmed(false);
     setShowModal(false);
+    setSubmitResult(null);
+    setSubmitError(null);
   };
 
   const onShuffleMask = () => {
@@ -82,6 +159,10 @@ export default function SubnetmaskSimulasi() {
     setCidr(c);
     setBits(Array(32).fill(0));
     setConfirmed(false);
+    setShowModal(false);
+    setSubmitResult(null);
+    setSubmitError(null);
+    setStartTime(Date.now());
   };
 
   const onPickCidr = (value) => {
@@ -89,6 +170,10 @@ export default function SubnetmaskSimulasi() {
     setCidr(c);
     setBits(Array(32).fill(0));
     setConfirmed(false);
+    setShowModal(false);
+    setSubmitResult(null);
+    setSubmitError(null);
+    setStartTime(Date.now());
   };
 
   return (
@@ -104,19 +189,28 @@ export default function SubnetmaskSimulasi() {
             <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div>
                 <p className="text-sm text-gray-600">CIDR saat ini</p>
-                <p className="text-2xl font-bold text-gray-900">/{cidr}{confirmed ? ` (${expectedDecimal})` : ''}</p>
+                <div className="flex items-center gap-2 mt-1">
+                  <p className="text-2xl font-bold text-gray-900">/{cidr}</p>
+                  {isCidrAlreadyCompleted && <span className="text-green-600 text-xl">✓</span>}
+                  {confirmed ? ` (${expectedDecimal})` : ''}
+                </div>
+                <p className="text-xs text-gray-600 mt-2">
+                  CIDR Selesai: <strong>{completedCidrs.length}</strong> / 4
+                </p>
               </div>
 
               <div className="flex flex-wrap gap-2">
                 <button
                   onClick={onShuffleMask}
-                  className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition disabled:opacity-50"
                 >
                   Acak CIDR
                 </button>
                 <button
                   onClick={onResetAnswer}
-                  className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition disabled:opacity-50"
                 >
                   Reset Jawaban
                 </button>
@@ -196,12 +290,12 @@ export default function SubnetmaskSimulasi() {
             <div className="mt-4 flex flex-wrap gap-2">
               <button
                 onClick={onConfirm}
-                disabled={confirmed}
+                disabled={confirmed || isSubmitting}
                 className={`px-5 py-2 rounded-lg text-white transition ${
-                  confirmed ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
+                  confirmed || isSubmitting ? "bg-gray-400 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700"
                 }`}
               >
-                Konfirmasi Jawaban
+                {isSubmitting ? 'Menyimpan...' : 'Konfirmasi Jawaban'}
               </button>
               {!confirmed ? (
                 <p className="text-sm text-gray-500 self-center">
@@ -213,6 +307,18 @@ export default function SubnetmaskSimulasi() {
                 </p>
               )}
             </div>
+
+            {submitError && (
+              <div className="mt-3 p-3 rounded bg-red-50 text-red-700 text-sm">
+                Error: {submitError}
+              </div>
+            )}
+
+            {isSubmitting && (
+              <div className="mt-3 p-3 rounded bg-blue-50 text-blue-700 text-sm">
+                Mengevaluasi hasil dan menyimpan...
+              </div>
+            )}
           </div>
         </div>
 
@@ -269,15 +375,106 @@ export default function SubnetmaskSimulasi() {
       </div>
 
       {/* Completion Modal */}
-      <SimulationCompletionModal
-        isOpen={showModal}
-        score={wrongCount === 0 ? 100 : Math.max(0, Math.round((correctCount / 32) * 100))}
-        correctCount={correctCount}
-        totalCount={32}
-        expGained={0}
-        simulationName="Simulasi Subnet Mask"
-        onReset={onResetAnswer}
-      />
+      {showModal && submitResult && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all animate-in fade-in scale-95">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-purple-600 to-purple-700 px-6 py-8 text-white text-center">
+              <h2 className="text-2xl font-bold mb-2">Simulasi Selesai!</h2>
+              <p className="text-purple-100">Simulasi Subnet Mask - CIDR /{cidr}</p>
+            </div>
+
+            {/* Content */}
+            <div className="px-6 py-8 space-y-6">
+              {/* Score Info */}
+              <div className="space-y-3">
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <p className="text-sm text-gray-600 mb-1">Skor Akhir</p>
+                  <p className="text-3xl font-bold text-blue-600">{submitResult.score}/100</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gray-50 p-3 rounded-lg border border-gray-200">
+                    <p className="text-xs text-gray-600 mb-1">Benar</p>
+                    <p className="text-lg font-semibold text-gray-800">
+                      {submitResult.correctCount}/32
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* XP Reward */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-sm font-medium text-gray-700">Penambahan XP</p>
+                  <p className="text-lg font-bold text-yellow-600">+{submitResult.expGained} XP</p>
+                </div>
+                
+                {/* XP Bar Animation */}
+                <div className="bg-gray-200 rounded-full h-4 overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-yellow-400 to-yellow-600 transition-all duration-100 ease-out flex items-center justify-end pr-2"
+                    style={{
+                      width: `${submitResult.expGained > 0 ? (submitResult.expGained / 250) * 100 : 0}%`,
+                    }}
+                  >
+                    {submitResult.expGained > 0 && (
+                      <div className="text-xs font-bold text-white drop-shadow-sm">
+                        {submitResult.expGained}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {submitResult.expGained > 0 && (
+                  <>
+                    <p className="text-xs text-green-600 font-semibold">
+                      ✓ CIDR diselesaikan! ({submitResult.xpEarnedCount}/4)
+                    </p>
+                    {submitResult.xpEarnedCount >= 4 && (
+                      <p className="text-xs text-amber-600 font-semibold">
+                        Batas XP tercapai - CIDR selanjutnya tanpa XP
+                      </p>
+                    )}
+                  </>
+                )}
+
+                {submitResult.expGained === 0 && submitResult.score === 100 && (
+                  <p className="text-xs text-gray-600 font-semibold">
+                    ✓ CIDR diselesaikan tapi tanpa XP (batas sudah tercapai)
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Footer Buttons */}
+            <div className="bg-gray-50 px-6 py-4 flex flex-col gap-2">
+              {completedCidrs.length >= 1 && (
+                <button
+                  onClick={() => router.push('/simulasi/topologi')}
+                  className="w-full px-4 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-sm"
+                >
+                  Buka Simulasi Topology →
+                </button>
+              )}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={onResetAnswer}
+                  className="flex-1 px-4 py-2.5 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition shadow-sm"
+                >
+                  Coba CIDR Baru
+                </button>
+                <button
+                  onClick={() => router.push('/simulasi')}
+                  className="flex-1 px-4 py-2.5 bg-gray-300 text-gray-800 font-medium rounded-lg hover:bg-gray-400 transition shadow-sm"
+                >
+                  Exit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

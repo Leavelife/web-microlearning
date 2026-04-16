@@ -21,6 +21,24 @@ export default function TopologySimulation() {
   const [isLoading, setIsLoading] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [startTime, setStartTime] = useState(null);
+  const [completedTopologies, setCompletedTopologies] = useState([]);
+
+  // Fetch completed topologies on mount
+  useEffect(() => {
+    const fetchCompletedTopologies = async () => {
+      try {
+        const response = await fetch('/api/simulasi/topology/completed');
+        if (response.ok) {
+          const data = await response.json();
+          setCompletedTopologies(data.completed || []);
+        }
+      } catch (error) {
+        console.error('Error fetching completed topologies:', error);
+      }
+    };
+
+    fetchCompletedTopologies();
+  }, []);
 
   // Timer for tracking time spent
   useEffect(() => {
@@ -171,7 +189,7 @@ export default function TopologySimulation() {
   }, [selectedTopology, nodes, edges, timeElapsed]);
 
   // Reset for new topology
-  const handleReset = useCallback(() => {
+  const handleReset = useCallback(async () => {
     setSelectedTopology(null);
     setNodes([]);
     setEdges([]);
@@ -181,6 +199,17 @@ export default function TopologySimulation() {
     setIsFinished(false);
     setTimeElapsed(0);
     setFeedback(null);
+    
+    // Refresh completed topologies list
+    try {
+      const response = await fetch('/api/simulasi/topology/completed');
+      if (response.ok) {
+        const data = await response.json();
+        setCompletedTopologies(data.completed || []);
+      }
+    } catch (error) {
+      console.error('Error fetching completed topologies:', error);
+    }
   }, []);
 
   // Format time
@@ -193,31 +222,21 @@ export default function TopologySimulation() {
   // Show result if finished
   if (isFinished && score) {
     return (
-      <div>
-        <TopologyResult
-          topology={selectedTopology}
-          score={score}
-          nodes={nodes}
-          edges={edges}
-          correctEdges={correctEdges}
-          onReset={handleReset}
-        />
-        <SimulationCompletionModal
-          isOpen={true}
-          score={score.score ?? 0}
-          correctCount={score.correctCount ?? 0}
-          totalCount={score.totalCorrect ?? correctEdges.length}
-          expGained={0}
-          simulationName={`Simulasi Topologi ${getTopologyConfig(selectedTopology)?.name || selectedTopology}`}
-          onReset={handleReset}
-        />
-      </div>
+      <SimulationCompletionModal
+        isOpen={true}
+        score={score.score ?? 0}
+        correctCount={score.correctCount ?? 0}
+        totalCount={score.totalCorrect ?? correctEdges.length}
+        expGained={score?.expGained || 0}
+        simulationName={`Simulasi Topologi ${getTopologyConfig(selectedTopology)?.name || selectedTopology}`}
+        onReset={handleReset}
+      />
     );
   }
 
   // Show selector if no topology selected
   if (!selectedTopology) {
-    return <TopologyModeSelector onSelectTopology={setSelectedTopology} />;
+    return <TopologyModeSelector onSelectTopology={setSelectedTopology} completedTopologies={completedTopologies} />;
   }
 
   // Get topology config
