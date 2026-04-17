@@ -36,8 +36,8 @@ export default function SubnetmaskSimulasi() {
   const [confirmed, setConfirmed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   
-  // XP tracking
-  const [completedCidrs, setCompletedCidrs] = useState([]);
+  // XP tracking - simplified to just track count
+  const [completedCount, setCompletedCount] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResult, setSubmitResult] = useState(null);
@@ -50,6 +50,23 @@ export default function SubnetmaskSimulasi() {
     setBits(Array(32).fill(0));
     setConfirmed(false);
     setStartTime(Date.now());
+
+    // Load user's completed CIDR count from server
+    const loadCompletedCount = async () => {
+      try {
+        const res = await fetch('/api/simulasi/subnetmask');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && typeof data.completedCount === 'number') {
+            setCompletedCount(data.completedCount);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load completed CIDR count:', err);
+      }
+    };
+
+    loadCompletedCount();
   }, []);
 
   const expectedBits = useMemo(() => cidrToBits(cidr), [cidr]);
@@ -67,8 +84,6 @@ export default function SubnetmaskSimulasi() {
 
   const correctCount = useMemo(() => (confirmed ? 32 - wrongCount : 0), [confirmed, wrongCount]);
   const score = useMemo(() => (confirmed ? (wrongCount === 0 ? 100 : Math.max(0, Math.round((correctCount / 32) * 100))) : 0), [confirmed, correctCount, wrongCount]);
-
-  const isCidrAlreadyCompleted = useMemo(() => completedCidrs.some(c => c === cidr), [completedCidrs, cidr]);
 
   const onToggleBit = (index) => {
     if (confirmed) return;
@@ -128,9 +143,9 @@ export default function SubnetmaskSimulasi() {
 
       setSubmitResult(data.result);
       
-      // Add to completed CIDRs - use actualScore instead of useMemo score
-      if (actualScore === 100 && !isCidrAlreadyCompleted) {
-        setCompletedCidrs(prev => [...prev, cidr]);
+      // Update completed count from server response
+      if (data.result?.xpEarnedCount !== undefined) {
+        setCompletedCount(data.result.xpEarnedCount);
       }
 
       setShowModal(true);
@@ -191,11 +206,11 @@ export default function SubnetmaskSimulasi() {
                 <p className="text-sm text-gray-600">CIDR saat ini</p>
                 <div className="flex items-center gap-2 mt-1">
                   <p className="text-2xl font-bold text-gray-900">/{cidr}</p>
-                  {isCidrAlreadyCompleted && <span className="text-green-600 text-xl">✓</span>}
+                  {completedCount >= 1 && <span className="text-green-600 text-xl">✓</span>}
                   {confirmed ? ` (${expectedDecimal})` : ''}
                 </div>
                 <p className="text-xs text-gray-600 mt-2">
-                  CIDR Selesai: <strong>{completedCidrs.length}</strong> / 4
+                  CIDR Selesai: <strong>{completedCount}</strong> / 4
                 </p>
               </div>
 
@@ -225,7 +240,7 @@ export default function SubnetmaskSimulasi() {
                 id="cidr-select"
                 value={cidr}
                 onChange={(e) => onPickCidr(e.target.value)}
-                className="w-full md:w-48 px-3 py-2 rounded-lg border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-purple-200"
+                className={`w-full md:w-48 px-3 py-2 rounded-lg border-2 bg-white focus:outline-none focus:ring-2 focus:ring-purple-200 transition ${completedCount > 0 ? 'border-green-500 text-green-700 font-semibold' : 'border-slate-300 text-gray-900'}`}
               >
                 {Array.from({ length: 33 }, (_, i) => (
                   <option key={i} value={i}>
@@ -449,7 +464,7 @@ export default function SubnetmaskSimulasi() {
 
             {/* Footer Buttons */}
             <div className="bg-gray-50 px-6 py-4 flex flex-col gap-2">
-              {completedCidrs.length >= 1 && (
+              {completedCount >= 1 && (
                 <button
                   onClick={() => router.push('/simulasi/topologi')}
                   className="w-full px-4 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition shadow-sm"

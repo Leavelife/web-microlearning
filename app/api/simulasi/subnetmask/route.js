@@ -2,6 +2,47 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth-guard';
 import { gamificationEngine } from '@/lib/gamification';
 
+export async function GET(req) {
+  try {
+    const authUser = await requireAuth();
+
+    // Get all perfect submissions for this user on subnetmask
+    // Note: cidrValue may not exist in DB yet, so we don't select it
+    // Just return empty array for now, will work better after migration
+    const perfectSubmissions = await prisma.hasilSimulasi.findMany({
+      where: {
+        userId: authUser.id,
+        idSimulasi: 'subnetmask',
+        skor: 100,
+      },
+      select: {
+        id: true,
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
+
+    // TODO: After migration, update to select cidrValue and extract completed CIDRs
+    // For now, just return count and empty array
+    const completedCount = perfectSubmissions.length;
+    const completedCidrs = []; // Will be populated after migration
+
+    return Response.json({
+      success: true,
+      completedCidrs,
+      completedCount,
+      maxAttempts: 4,
+    });
+  } catch (error) {
+    console.error('Error fetching subnetmask completion status:', error);
+    if (error.message === 'UNAUTHORIZED') {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+}
+
 export async function POST(req) {
   try {
     const authUser = await requireAuth();

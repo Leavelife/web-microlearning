@@ -87,6 +87,9 @@ export default async function SimulasiPage() {
   });
 
   const completedSet = new Set(completedSimulations.map((sim) => sim.idSimulasi));
+  
+  // Check if ANY topology is completed (topology-star, topology-ring, etc.)
+  const hasCompletedAnyTopology = completedSimulations.some((sim) => sim.idSimulasi.startsWith('topology-'));
 
   return (
     <main className="min-h-screen bg-slate-100 text-gray-800">
@@ -99,20 +102,27 @@ export default async function SimulasiPage() {
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
           {SIMULATIONS.map((item, index) => {
             let isUnlocked = false;
-            let isCompleted = completedSet.has(item.idSimulasi);
+            // For topology, check if ANY topology type is completed; for others, check exact idSimulasi
+            let isCompleted = item.idSimulasi === 'topologi' 
+              ? hasCompletedAnyTopology 
+              : completedSet.has(item.idSimulasi);
 
             if (index === 0) {
               isUnlocked = true;
             } else {
               const previousItem = SIMULATIONS[index - 1];
-              isUnlocked = completedSet.has(previousItem.idSimulasi);
+              // For topology unlock check, also use hasCompletedAnyTopology
+              const previousCompleted = previousItem.idSimulasi === 'topologi' 
+                ? hasCompletedAnyTopology 
+                : completedSet.has(previousItem.idSimulasi);
+              isUnlocked = previousCompleted;
             }
 
             if (!isUnlocked) {
               return (
                 <div
                   key={item.href}
-                  className="group block rounded-2xl border-2 bg-gray-50 shadow-sm overflow-hidden border-gray-200 opacity-60 cursor-not-allowed"
+                  className={`group block rounded-2xl border-2 bg-gray-50 shadow-sm overflow-hidden border-gray-200 opacity-60 cursor-not-allowed animate-popUp ${`animate-popUp-${index}`}`}
                 >
                   <div className="relative h-48 w-full bg-slate-100 border-b border-gray-200 grayscale opacity-70">
                     <Image
@@ -147,8 +157,15 @@ export default async function SimulasiPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`group block rounded-2xl border-2 bg-white shadow-md overflow-hidden transition ${item.borderClass} ${item.ringHover} hover:shadow-lg relative`}
+                className={`group block rounded-2xl border-2 bg-white shadow-md overflow-hidden transition-all duration-300 animate-popUp ${`animate-popUp-${index}`} ${item.borderClass} ${item.ringHover} hover:shadow-xl hover:scale-105 hover:-translate-y-1 relative`}
               >
+                {/* Hover glow effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl" 
+                  style={{
+                    boxShadow: `inset 0 0 30px ${item.borderClass?.includes('purple') ? 'rgba(168, 85, 247, 0.1)' : item.borderClass?.includes('emerald') ? 'rgba(52, 211, 153, 0.1)' : item.borderClass?.includes('indigo') ? 'rgba(129, 140, 248, 0.1)' : 'rgba(59, 130, 246, 0.1)'}`
+                  }}
+                />
+                
                 {isCompleted && (
                   <div className="absolute top-4 right-4 z-10">
                     <span className="bg-green-100 text-green-700 border border-green-200 text-xs font-bold px-2 py-1 rounded shadow-sm">
@@ -156,26 +173,26 @@ export default async function SimulasiPage() {
                     </span>
                   </div>
                 )}
-                <div className="relative h-48 w-full bg-gradient-to-b from-slate-50 to-slate-100 border-b border-slate-200">
+                <div className="relative h-48 w-full bg-gradient-to-b from-slate-50 to-slate-100 border-b border-slate-200 flex items-center justify-center p-4 group-hover:from-slate-100 group-hover:to-slate-50 transition-colors duration-300">
                   <Image
                     src={item.imageSrc}
                     alt={item.imageAlt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-contain p-6"
+                    width={300}
+                    height={200}
+                    className="object-contain max-h-full group-hover:scale-110 transition-transform duration-300"
                     priority={item.href === "/simulasi/kabel-lan"}
                   />
                 </div>
                 <div className="p-6">
                   <h2
-                    className={`text-xl font-semibold text-gray-900 transition-colors ${item.titleHoverClass}`}
+                    className={`text-xl font-semibold text-gray-900 transition-colors duration-300 ${item.titleHoverClass}`}
                   >
                     {item.title}
                   </h2>
                   <p className="mt-3 text-sm text-gray-600 leading-relaxed">
                     {item.description}
                   </p>
-                  <p className={`mt-4 text-sm font-medium ${item.accentClass}`}>
+                  <p className={`mt-4 text-sm font-medium transition-all duration-300 ${item.accentClass}`}>
                     {isCompleted ? "Mainkan ulang →" : "Buka simulasi →"}
                   </p>
                 </div>

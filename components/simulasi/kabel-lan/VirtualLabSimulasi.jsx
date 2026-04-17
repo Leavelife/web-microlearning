@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import VirtualLabRJ45 from "@/components/simulasi/kabel-lan/VirtualLabRJ45";
-import VirtualLabCables from "@/components/simulasi/kabel-lan/VirtualLabCables";
 import SimulationCompletionModal from "@/components/simulasi/SimulationCompletionModal";
 
 const TARGET_ORDER = [
@@ -257,8 +257,8 @@ export default function VirtualLabSimulasi() {
         </div>
 
         {!submitResult && (
-          <div className="lg:w-1/3 border border-gray-200 rounded-xl p-4 flex flex-col justify-between">
-            <div>
+          <div className="lg:w-1/3 border border-gray-200 rounded-xl p-4 flex flex-col h-full">
+            <div className="shrink-0">
               <h3 className="text-lg font-semibold mb-3">Status Sesi</h3>
               
               {!finished ? (
@@ -301,7 +301,51 @@ export default function VirtualLabSimulasi() {
               )}
             </div>
 
-            <div className="mt-6 flex flex-col sm:flex-row gap-2">
+            {/* Kabel Tersedia */}
+            <div className="mt-4 grow flex flex-col min-h-0">
+              <h4 className="text-sm font-semibold mb-2 shrink-0">Kabel tersedia</h4>
+              <div className="flex-1 overflow-y-auto pr-2 flex flex-col justify-center">
+                {availableCables.length === 0 ? (
+                  <div className="text-sm text-gray-500 text-center py-4">Semua kabel sudah digunakan.</div>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {availableCables.map((cable) => (
+                      <div
+                        key={cable.id}
+                        draggable
+                        onDragStart={(e) => onCableDragStart(e, cable.id)}
+                        className="flex items-center gap-2 cursor-grab active:cursor-grabbing rounded-lg border border-purple-200 bg-white p-2 shadow-sm transition hover:border-purple-400 hover:shadow-md shrink-0"
+                      >
+                        <div
+                          className="relative h-12 w-12 rounded-md border border-slate-200 bg-slate-50 overflow-hidden flex-shrink-0"
+                          style={
+                            cable.colorHex
+                              ? { backgroundColor: `${cable.colorHex}40` }
+                              : undefined
+                          }
+                        >
+                          <Image
+                            src={cable.imageSrc}
+                            alt={cable.label}
+                            fill
+                            sizes="48px"
+                            className="object-contain p-1"
+                          />
+                        </div>
+                        <p
+                          className="text-xs font-semibold line-clamp-2 flex-1"
+                          style={{ color: cable.colorText || "#111827" }}
+                        >
+                          {cable.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-col sm:flex-row gap-2 shrink-0">
               {!finished ? (
                 <button
                   onClick={onFinish}
@@ -323,8 +367,6 @@ export default function VirtualLabSimulasi() {
           </div>
         )}
       </div>
-
-      <VirtualLabCables cables={availableCables} onCableDragStart={onCableDragStart} />
 
       {/* Completion Modal */}
       <SimulationCompletionModal
