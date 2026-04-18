@@ -14,7 +14,7 @@ export default function Hero({ userProfile }) {
 
   return (
     <>
-    <section className="grid md:grid-cols-2 gap-6 md:gap-10 px-24 md:px-18 py-8 md:py-16 mt-10 items-center" >
+    <section className="grid md:grid-cols-2 gap-6 md:gap-10 px-8 md:px-28 lg:px-42 py-8 md:py-16 mt-10 items-center" >
       
       {/* LEFT */}
       <div>
