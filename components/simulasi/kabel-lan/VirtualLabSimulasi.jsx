@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import VirtualLabRJ45 from "@/components/simulasi/kabel-lan/VirtualLabRJ45";
-import VirtualLabCables from "@/components/simulasi/kabel-lan/VirtualLabCables";
+import SimulationCompletionModal from "@/components/simulasi/SimulationCompletionModal";
 
 const TARGET_ORDER = [
   "white-orange",
@@ -92,17 +93,24 @@ function shuffle(array) {
 }
 
 export default function VirtualLabSimulasi() {
-  // Urutan awal harus deterministik (sama SSR & klien) agar tidak hydration mismatch.
-  // Acak kabel hanya setelah mount di klien.
   const [availableCables, setAvailableCables] = useState(() => [...CABLE_LIBRARY]);
+  const [slots, setSlots] = useState(Array(8).fill(null));
+  
+  // Game states
+  const [moves, setMoves] = useState(0);
+  const [mistakes, setMistakes] = useState(0);
+  
+  // Session states
+  const [startTime, setStartTime] = useState(0);
+  const [finished, setFinished] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [submitResult, setSubmitResult] = useState(null);
+
   useEffect(() => {
     setAvailableCables(shuffle([...CABLE_LIBRARY]));
+    setStartTime(Date.now());
   }, []);
-  const [slots, setSlots] = useState(Array(8).fill(null));
-  const [score, setScore] = useState(0);
-  const [mistakes, setMistakes] = useState(0);
-  const [moves, setMoves] = useState(0);
-  const [finished, setFinished] = useState(false);
 
   const correctCount = useMemo(
     () => slots.filter((item, index) => item && item.value === TARGET_ORDER[index]).length,
@@ -136,7 +144,6 @@ export default function VirtualLabSimulasi() {
 
     setAvailableCables((prev) => prev.filter((c) => c.id !== cableId));
     setMoves((prev) => prev + 1);
-    setScore((prev) => prev + (isCorrect ? 20 : 5));
     if (!isCorrect) setMistakes((prev) => prev + 1);
   };
 
@@ -146,16 +153,15 @@ export default function VirtualLabSimulasi() {
 
     const intended = TARGET_ORDER[slotIndex];
     const wasCorrect = slotValue.value === intended;
-    const pointsAddedOnDrop = wasCorrect ? 20 : 5;
 
     setSlots((prev) => {
       const next = [...prev];
       next[slotIndex] = null;
       return next;
     });
+    
     setAvailableCables((prev) => [...prev, slotValue]);
     setMoves((prev) => prev + 1);
-    setScore((prev) => Math.max(0, prev - pointsAddedOnDrop));
     if (!wasCorrect) {
       setMistakes((prev) => Math.max(0, prev - 1));
     }
@@ -164,15 +170,76 @@ export default function VirtualLabSimulasi() {
   const onReset = () => {
     setAvailableCables(shuffle(CABLE_LIBRARY));
     setSlots(Array(8).fill(null));
-    setScore(0);
-    setMistakes(0);
     setMoves(0);
+    setMistakes(0);
     setFinished(false);
+    setStartTime(Date.now());
+    setSubmitResult(null);
+    setSubmitError(null);
   };
 
-  const onFinish = () => {
+  const onFinish = async () => {
     setFinished(true);
+    setIsSubmitting(true);
+    setSubmitError(null);
+    
+    // Validate that we have a valid startTime
+    if (startTime === 0) {
+      setSubmitError('Terjadi kesalahan: waktu mulai tidak tersimpan. Silakan coba lagi.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+
+    // Validate data before sending
+    if (typeof correctCount !== 'number' || correctCount < 0 || correctCount > 8) {
+      setSubmitError('Data kabel tidak valid. Silakan coba lagi.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/simulasi/kabel-lan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          correctCount,
+          timeSpent,
+        }),
+      });
+
+      let data;
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        throw new Error('Response format tidak valid dari server');
+      }
+
+      if (!res.ok) {
+        throw new Error(data?.error || `Terjadi kesalahan (HTTP ${res.status})`);
+      }
+
+      if (!data?.result) {
+        throw new Error('Response tidak mengandung result data');
+      }
+
+      setSubmitResult(data.result);
+      
+      // Show warning if there was a gamification error
+      if (data.warning) {
+        console.warn('Server warning:', data.warning);
+      }
+    } catch (err) {
+      setSubmitError(err?.message || 'Terjadi kesalahan saat menyimpan skor');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const filledSlots = slots.filter(Boolean).length;
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-md">
@@ -189,46 +256,128 @@ export default function VirtualLabSimulasi() {
           </div>
         </div>
 
-        <div className="lg:w-1/3 border border-gray-200 rounded-xl p-4">
-          <h3 className="text-lg font-semibold mb-3">Status Sesi</h3>
-          <p>Skor: <strong>{score}</strong></p>
-          <p>Moves: <strong>{moves}</strong></p>
-          <p>Correct: <strong>{correctCount}</strong> / 8</p>
-          <p>Mistakes: <strong>{mistakes}</strong></p>
-          <p>Slot terisi: <strong>{slots.filter(Boolean).length}</strong> / 8</p>
+        {!submitResult && (
+          <div className="lg:w-1/3 border border-gray-200 rounded-xl p-4 flex flex-col h-full">
+            <div className="shrink-0">
+              <h3 className="text-lg font-semibold mb-3">Status Sesi</h3>
+              
+              {!finished ? (
+                <div className="text-gray-600 bg-gray-50 p-4 rounded-lg border border-gray-100 h-32 flex flex-col justify-center items-center text-center">
+                   <p className="font-medium text-sm">Statistik disembunyikan</p>
+                   <p className="text-xs mt-1">Susun kabel Anda sebaik mungkin. Statistik benar/salah akan muncul setelah Anda menekan &quot;Submit&quot;.</p>
+                   <p className="mt-4 font-semibold text-gray-800">Slot terisi: {filledSlots} / 8</p>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <p>Skor Anda: <strong className="text-blue-600 text-lg">{submitResult?.score ?? '-'}</strong> <span className="text-sm text-gray-500">/ 100</span></p>
+                  <p>Kabel Benar: <strong>{correctCount}</strong> / 8</p>
+                  <p>Jml Kesalahan (Mistakes): <strong>{mistakes}</strong></p>
+                  <p>Jml Pergerakan (Moves): <strong>{moves}</strong></p>
+                </div>
+              )}
 
-          {finished ? (
-            <div className="mt-3 p-3 rounded bg-green-50 text-green-700">
-              Sesi selesai. Hasil Anda: {correctCount} benar dari 8.
-            </div>
-          ) : isComplete ? (
-            <div className="mt-3 p-3 rounded bg-blue-50 text-blue-700">
-              Semua slot terisi. Tekan Finish untuk menutup sesi.
-            </div>
-          ) : (
-            <div className="mt-3 p-3 rounded bg-yellow-50 text-yellow-700">
-              Masih ada slot kosong. Anda boleh melanjutkan atau menekan Finish kapan saja.
-            </div>
-          )}
+              {isSubmitting && (
+                <div className="mt-3 p-3 rounded bg-blue-50 text-blue-700 text-sm">
+                  Mengevaluasi hasil dan menyimpan...
+                </div>
+              )}
+              
+              {submitError && (
+                <div className="mt-3 p-3 rounded bg-red-50 text-red-700 text-sm">
+                  Error: {submitError}
+                </div>
+              )}
 
-          <div className="mt-4 flex gap-2">
-            <button
-              onClick={onFinish}
-              className="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition"
-            >
-              Finish Sesi
-            </button>
-            <button
-              onClick={onReset}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition"
-            >
-              Reset
-            </button>
+              {!finished && (
+                isComplete ? (
+                  <div className="mt-3 p-3 rounded bg-blue-50 text-blue-700 text-sm font-medium">
+                    Semua slot terisi. Tekan Submit untuk mengevaluasi hasil.
+                  </div>
+                ) : (
+                  <div className="mt-3 p-3 rounded bg-yellow-50 text-yellow-700 text-sm font-medium">
+                    Tarik kabel ke dalam slot.
+                  </div>
+                )
+              )}
+            </div>
+
+            {/* Kabel Tersedia */}
+            <div className="mt-4 grow flex flex-col min-h-0">
+              <h4 className="text-sm font-semibold mb-2 shrink-0">Kabel tersedia</h4>
+              <div className="flex-1 overflow-y-auto pr-2 flex flex-col justify-center">
+                {availableCables.length === 0 ? (
+                  <div className="text-sm text-gray-500 text-center py-4">Semua kabel sudah digunakan.</div>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {availableCables.map((cable) => (
+                      <div
+                        key={cable.id}
+                        draggable
+                        onDragStart={(e) => onCableDragStart(e, cable.id)}
+                        className="flex items-center gap-2 cursor-grab active:cursor-grabbing rounded-lg border border-purple-200 bg-white p-2 shadow-sm transition hover:border-purple-400 hover:shadow-md shrink-0"
+                      >
+                        <div
+                          className="relative h-12 w-12 rounded-md border border-slate-200 bg-slate-50 overflow-hidden flex-shrink-0"
+                          style={
+                            cable.colorHex
+                              ? { backgroundColor: `${cable.colorHex}40` }
+                              : undefined
+                          }
+                        >
+                          <Image
+                            src={cable.imageSrc}
+                            alt={cable.label}
+                            fill
+                            sizes="48px"
+                            className="object-contain p-1"
+                          />
+                        </div>
+                        <p
+                          className="text-xs font-semibold line-clamp-2 flex-1"
+                          style={{ color: cable.colorText || "#111827" }}
+                        >
+                          {cable.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-col sm:flex-row gap-2 shrink-0">
+              {!finished ? (
+                <button
+                  onClick={onFinish}
+                  disabled={filledSlots === 0}
+                  className="flex-1 px-4 py-2 bg-purple-600 text-white font-medium rounded hover:bg-purple-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Submit Hasil
+                </button>
+              ) : null}
+              
+              <button
+                onClick={onReset}
+                disabled={isSubmitting}
+                className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded hover:bg-gray-300 transition disabled:opacity-50"
+              >
+                Ulangi Simulasi
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      <VirtualLabCables cables={availableCables} onCableDragStart={onCableDragStart} />
+      {/* Completion Modal */}
+      <SimulationCompletionModal
+        isOpen={!!submitResult && !isSubmitting}
+        score={submitResult?.score ?? 0}
+        correctCount={correctCount}
+        totalCount={8}
+        expGained={submitResult?.expGained ?? 0}
+        simulationName="Simulasi Kabel LAN"
+        onReset={onReset}
+      />
     </div>
   );
 }
