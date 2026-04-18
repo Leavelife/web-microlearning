@@ -1,6 +1,7 @@
 import { cookies } from "next/headers"
 import Link from "next/link"
 import ProfileSection from "@/components/profile/ProfileSection"
+import LeaderboardPanel from "@/components/profile/LeaderboardPanel"
 import LogoutButton from "@/components/profile/LogoutButton"
 import Navbar from "@/components/Navbar"
 import LessonGrid from "@/components/lesson/LessonGrid"
@@ -61,6 +62,18 @@ export default async function ProfilePage({ searchParams }) {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                   Progress Materi
                 </Link>
+
+                <Link
+                  href="?tab=leaderboard"
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-left ${
+                    tab === 'leaderboard'
+                      ? 'bg-blue-50 text-blue-700 font-semibold'
+                      : 'text-gray-600 hover:bg-gray-50 font-medium'
+                  }`}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7m-9 13V9m-4 4H5a2 2 0 00-2 2v3a2 2 0 002 2h2m14-7h-2a2 2 0 00-2 2v3a2 2 0 002 2h2a2 2 0 002-2v-3a2 2 0 00-2-2z"></path></svg>
+                  Leaderboard
+                </Link>
                 
                 <hr className="my-4 border-gray-100" />
                 
@@ -76,6 +89,10 @@ export default async function ProfilePage({ searchParams }) {
             {/* RENDER KONTEN PROFIL */}
             {tab === 'profile' && (
               <ProfileSection user={user} />
+            )}
+
+            {tab === 'leaderboard' && (
+              <LeaderboardPanel userWilayah={user.wilayah} />
             )}
 
             {/* RENDER KONTEN PROGRESS */}

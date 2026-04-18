@@ -9,14 +9,14 @@ export default function GamificationRenderer() {
   // trigger animasi hanya saat EXP muncul
   useEffect(() => {
     if (current?.type === "EXP") {
-      animateExp(current.newTotalExp)
+      animateExp(current.targetExp)
     }
-  }, [current])
+  }, [current?.type, current?.targetExp, animateExp])
 
   if (!current) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <div className="bg-[#0f172a] text-white rounded-2xl p-6 w-full max-w-md shadow-xl animate-fadeIn text-center">
         
         {/* EXP */}

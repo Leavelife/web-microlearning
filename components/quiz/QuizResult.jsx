@@ -1,16 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { useGamification } from "@/components/gamification/GamificationProvider";
 
 export default function QuizResult({ quiz, score }) {
-  const [submitState, setSubmitState] = useState("idle"); // idle | ok | auth | error
+  const { showGamification } = useGamification();
+  const [submitState, setSubmitState] = useState("idle");
   const [gamification, setGamification] = useState(null);
+  const hasSubmitted = useRef(false);
 
   useEffect(() => {
     if (score == null || !quiz?.id) return;
+    if (hasSubmitted.current) return;
 
     let cancelled = false;
+    hasSubmitted.current = true;
 
     (async () => {
       try {
@@ -29,7 +34,11 @@ export default function QuizResult({ quiz, score }) {
 
         if (res.ok) {
           setSubmitState("ok");
-          setGamification(data.gamification || null);
+          const gamificationData = data.gamification || null;
+          setGamification(gamificationData);
+          if (gamificationData) {
+            showGamification(gamificationData);
+          }
         } else if (res.status === 401) {
           setSubmitState("auth");
         } else {
@@ -43,13 +52,15 @@ export default function QuizResult({ quiz, score }) {
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quiz?.id, score]);
+
 
   const passing = quiz?.passingScore ?? 70;
   const lulus = score >= passing;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white p-6">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-gray-50 to-white p-6">
       <div className="text-center max-w-md w-full">
         <h1 className="text-3xl font-bold mb-4 text-gray-900">
           Hasil Quiz

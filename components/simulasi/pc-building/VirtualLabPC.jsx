@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import SimulationCompletionModal from "@/components/simulasi/SimulationCompletionModal";
+import { useGamification } from "@/components/gamification/GamificationProvider";
 
 const SLOT_CONFIG = [
   // Posisi pc part di motherboard.
@@ -386,6 +387,15 @@ export default function VirtualLabPC() {
       }
 
       setSubmitResult(data.result);
+
+      if (data.result) {
+        showGamification({
+          expGained: data.result.expGained ?? 0,
+          levelUp: data.result.levelUp ?? null,
+          unlockedAchievements: data.result.unlockedAchievements ?? [],
+          newTotalExp: data.result.newTotalExp,
+        });
+      }
       
       // Show warning if there was a gamification error
       if (data.warning) {

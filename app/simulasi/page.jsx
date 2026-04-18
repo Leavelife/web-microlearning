@@ -13,7 +13,7 @@ const SIMULATIONS = [
     title: "Simulasi Pemasangan Kabel LAN",
     description:
       "Latih urutan kabel straight T568B dengan menarik kabel ke pin konektor RJ-45. Skor dan kesalahan dicatat seperti praktik di lab.",
-    imageSrc: "/images/virtual-lab/connector.png",
+    imageSrc: "/images/virtual-lab/thumbnail.jpg",
     imageAlt: "Ilustrasi konektor RJ-45 untuk simulasi kabel LAN",
     borderClass: "border-purple-300 hover:border-purple-500",
     ringHover: "group-hover:ring-2 group-hover:ring-purple-200",
@@ -26,7 +26,7 @@ const SIMULATIONS = [
     title: "PC Building Virtual Lab",
     description:
       "Simulasi pemasangan komponen utama PC pada motherboard: CPU, RAM, GPU, penyimpanan, dan PSU dengan drag and drop.",
-    imageSrc: "/images/virtual-lab/pc.png",
+    imageSrc: "/images/virtual-lab/thumbnail2.png",
     imageAlt: "Ilustrasi motherboard untuk simulasi rakit PC",
     borderClass: "border-emerald-300 hover:border-emerald-500",
     ringHover: "group-hover:ring-2 group-hover:ring-emerald-200",
@@ -87,18 +87,49 @@ export default async function SimulasiPage() {
   });
 
   const completedSet = new Set(completedSimulations.map((sim) => sim.idSimulasi));
-  
-  // Check if ANY topology is completed (topology-star, topology-ring, etc.)
-  const hasCompletedAnyTopology = completedSimulations.some((sim) => sim.idSimulasi.startsWith('topology-'));
+  const hasCompletedAnyTopology = completedSet.has("topologi");
+  const completedCount = completedSet.size;
+  const completionRate = Math.round((completedCount / SIMULATIONS.length) * 100);
 
   return (
-    <main className="min-h-screen bg-slate-100 text-gray-800">
+    <main className="min-h-screen bg-slate-100 text-slate-950">
       <Navbar />
-      <section className="max-w-5xl mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-4">Virtual Lab Simulasi</h1>
-        <p className="mb-8 text-gray-600 max-w-2xl">
-          Pilih salah satu virtual lab di bawah untuk memulai praktik. Selesaikan setiap simulasi untuk membuka simulasi berikutnya!
-        </p>
+      <section className="max-w-6xl mx-auto p-6 pt-15">
+        <div className="mb-10 rounded-4xl border border-slate-200 bg-white shadow-[0_30px_80px_-40px_rgba(15,23,42,0.08)] overflow-hidden">
+          <div className="grid gap-6 p-8 md:grid-cols-[1.9fr_1fr] items-center">
+            <div>
+              <p className="text-xs uppercase tracking-[0.35em] text-violet-600/90 mb-3">Virtual Lab Gamified</p>
+              <h1 className="text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
+                Tingkatkan skill jaringan dengan simulasi interaktif berorientasi badge
+              </h1>
+              <p className="mt-4 max-w-2xl text-sm text-slate-600 leading-7">
+                Pilih tantangan yang sesuai dan kumpulkan pencapaian untuk membuka modul berikutnya.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
+                <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Simulasi selesai</p>
+                <p className="mt-3 text-4xl font-semibold text-slate-950">{completedCount}/{SIMULATIONS.length}</p>
+                <p className="mt-2 text-sm text-slate-600">Selesaikan semua modul untuk meraih badge penuh.</p>
+              </div>
+              <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Progress latihan</p>
+                    <p className="mt-2 text-3xl font-semibold text-slate-950">{completionRate}%</p>
+                  </div>
+                  <div className="inline-flex rounded-full bg-violet-500/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-violet-700">
+                    Gamified</div>
+                </div>
+                <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-200">
+                  <div className="h-full rounded-full bg-linear-to-r from-cyan-500 via-violet-500 to-fuchsia-500" style={{ width: `${completionRate}%` }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
           {SIMULATIONS.map((item, index) => {
             let isUnlocked = false;
@@ -122,32 +153,32 @@ export default async function SimulasiPage() {
               return (
                 <div
                   key={item.href}
-                  className={`group block rounded-2xl border-2 bg-gray-50 shadow-sm overflow-hidden border-gray-200 opacity-60 cursor-not-allowed animate-popUp ${`animate-popUp-${index}`}`}
+                  className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm"
                 >
-                  <div className="relative h-48 w-full bg-slate-100 border-b border-gray-200 grayscale opacity-70">
+                  <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-slate-300 via-slate-200 to-slate-300" />
+                  <div className="relative h-52 w-full bg-slate-50 border-b border-slate-200">
                     <Image
                       src={item.imageSrc}
                       alt={item.imageAlt}
                       fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-contain p-6"
+                      className="object-contain p-6 w-full h-full grayscale opacity-70"
                     />
                   </div>
-                  <div className="p-6 relative">
-                    <div className="absolute inset-0 bg-white/40 flex items-center justify-center z-10 backdrop-blur-[1px]">
-                      <span className="bg-gray-800 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-md flex items-center gap-1">
-                         Terkunci
-                      </span>
+                  <div className="p-6 pt-8">
+                    <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-xs uppercase tracking-[0.25em] text-slate-500">
+                      <span className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+                      Terkunci
                     </div>
-                    <h2 className="text-xl font-semibold text-gray-500">
+                    <h2 className="text-2xl font-semibold text-slate-950 mb-3">
                       {item.title}
                     </h2>
-                    <p className="mt-3 text-sm text-gray-400 leading-relaxed">
+                    <p className="text-sm leading-7 text-slate-600">
                       {item.description}
                     </p>
-                    <p className="mt-4 text-sm font-medium text-gray-400">
-                      Selesaikan tahap sebelumnya terlebih dahulu
-                    </p>
+                    <div className="mt-6 rounded-3xl bg-slate-50 p-4 border border-slate-200">
+                      <p className="text-xs uppercase tracking-[0.22em] text-slate-500">Persyaratan</p>
+                      <p className="mt-2 text-sm text-slate-600">Selesaikan simulasi sebelumnya untuk membuka level ini.</p>
+                    </div>
                   </div>
                 </div>
               );
@@ -157,23 +188,17 @@ export default async function SimulasiPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`group block rounded-2xl border-2 bg-white shadow-md overflow-hidden transition-all duration-300 animate-popUp ${`animate-popUp-${index}`} ${item.borderClass} ${item.ringHover} hover:shadow-xl hover:scale-105 hover:-translate-y-1 relative`}
+                className={`group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-2xl ${item.ringHover}`}
               >
-                {/* Hover glow effect */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl" 
-                  style={{
-                    boxShadow: `inset 0 0 30px ${item.borderClass?.includes('purple') ? 'rgba(168, 85, 247, 0.1)' : item.borderClass?.includes('emerald') ? 'rgba(52, 211, 153, 0.1)' : item.borderClass?.includes('indigo') ? 'rgba(129, 140, 248, 0.1)' : 'rgba(59, 130, 246, 0.1)'}`
-                  }}
-                />
-                
+                <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-cyan-400 via-violet-400 to-fuchsia-400" />
                 {isCompleted && (
                   <div className="absolute top-4 right-4 z-10">
-                    <span className="bg-green-100 text-green-700 border border-green-200 text-xs font-bold px-2 py-1 rounded shadow-sm">
-                      SELESAI
+                    <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700 ring-1 ring-emerald-200 shadow-sm">
+                      <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> SELESAI
                     </span>
                   </div>
                 )}
-                <div className="relative h-48 w-full bg-gradient-to-b from-slate-50 to-slate-100 border-b border-slate-200 flex items-center justify-center p-4 group-hover:from-slate-100 group-hover:to-slate-50 transition-colors duration-300">
+                <div className="relative h-52 w-full bg-slate-50 border-b border-slate-200">
                   <Image
                     src={item.imageSrc}
                     alt={item.imageAlt}
@@ -184,17 +209,25 @@ export default async function SimulasiPage() {
                   />
                 </div>
                 <div className="p-6">
-                  <h2
-                    className={`text-xl font-semibold text-gray-900 transition-colors duration-300 ${item.titleHoverClass}`}
-                  >
-                    {item.title}
-                  </h2>
-                  <p className="mt-3 text-sm text-gray-600 leading-relaxed">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <h2 className={`text-2xl font-semibold tracking-tight text-slate-950 transition-colors ${item.titleHoverClass}`}>
+                      {item.title}
+                    </h2>
+                    <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] ${isCompleted ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-700'}`}>
+                      {isCompleted ? 'Mastered' : 'Ready' }
+                    </span>
+                  </div>
+                  <p className="mt-4 text-sm leading-7 text-slate-600">
                     {item.description}
                   </p>
-                  <p className={`mt-4 text-sm font-medium transition-all duration-300 ${item.accentClass}`}>
-                    {isCompleted ? "Mainkan ulang →" : "Buka simulasi →"}
-                  </p>
+                  <div className="mt-6 flex items-center justify-between gap-3">
+                    <p className={`text-sm font-semibold ${item.accentClass}`}>
+                      {isCompleted ? "Mainkan ulang →" : "Buka simulasi →"}
+                    </p>
+                    <span className="inline-flex rounded-full bg-slate-100 px-3 py-2 text-xs uppercase tracking-[0.18em] text-slate-700">
+                      {isCompleted ? 'Bonus XP' : 'Level Baru'}
+                    </span>
+                  </div>
                 </div>
               </Link>
             );

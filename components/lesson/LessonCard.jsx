@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getColorById } from "@/lib/color";
+import Image from "next/image";
 
 function getCtaLabel(percent) {
   const n =
@@ -12,46 +12,60 @@ function getCtaLabel(percent) {
 }
 
 export default function LessonCard({ lesson, progressPercent }) {
-  const bgColor = getColorById(lesson.id);
   const showProgress =
     typeof progressPercent === "number" && progressPercent > 0;
   const ctaLabel = getCtaLabel(progressPercent);
-
+  const thumbnail =
+    lesson.thumbnail && lesson.thumbnail.trim() !== "-" && lesson.thumbnail.trim() !== ""
+      ? lesson.thumbnail
+      : "/default-thumbnail.png";
   return (
-    <div className={`rounded-2xl p-5 text-white ${bgColor} shadow-2xl`}>
-      <div className="mb-3 text-sm opacity-80">
-        Tahap {lesson.tahap} • {lesson.tipe}
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg">
+      <div className="relative h-48 w-full overflow-hidden bg-slate-900">
+        <Image
+          src={thumbnail}
+          alt={lesson.judul}  
+          className="h-full w-full object-cover transition duration-500 ease-out hover:scale-105"
+          width={400}
+          height={192}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute left-4 bottom-4 right-4">
+          <span className="inline-flex rounded-full bg-black/50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm">
+            Tahap {lesson.tahap} • {lesson.tipe}
+          </span>
+        </div>
       </div>
 
-      <h2 className="text-xl font-semibold mb-2">
-        {lesson.judul}
-      </h2>
+      <div className="p-5 text-slate-900">
+        <h2 className="text-xl font-semibold mb-2">{lesson.judul}</h2>
 
-      <p className="text-sm opacity-90 mb-4">
-        {lesson.deskripsi}
-      </p>
+        <p className="text-sm text-slate-600 mb-5 line-clamp-3">
+          {lesson.deskripsi}
+        </p>
 
-      {showProgress && (
-        <div className="mb-4">
-          <div className="flex justify-between text-xs opacity-90 mb-1">
-            <span>Progres</span>
-            <span className="font-semibold">{progressPercent}%</span>
+        {showProgress && (
+          <div className="mb-5">
+            <div className="flex justify-between text-xs opacity-90 mb-1">
+              <span>Progres</span>
+              <span className="font-semibold">{progressPercent}%</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-white/20">
+              <div
+                className="h-full rounded-full bg-linear-to-r from-violet-500 to-fuchsia-500 transition-all duration-300"
+                style={{ width: `${Math.min(100, progressPercent)}%` }}
+              />
+            </div>
           </div>
-          <div className="h-2 rounded-full bg-black/20 overflow-hidden">
-            <div
-              className="h-full rounded-full bg-white/90 transition-all duration-300"
-              style={{ width: `${Math.min(100, progressPercent)}%` }}
-            />
-          </div>
-        </div>
-      )}
+        )}
 
-      <Link
-        href={`/learn/${lesson.id}`}
-        className="inline-block bg-black text-white px-4 py-2 rounded-full text-sm font-medium hover:opacity-90"
-      >
-        {ctaLabel}
-      </Link>
+        <Link
+          href={`/learn/${lesson.id}`}
+          className="inline-block rounded-full bg-black/80 px-4 py-2 text-sm font-medium text-white transition hover:bg-black"
+        >
+          {ctaLabel}
+        </Link>
+      </div>
     </div>
   );
 }

@@ -21,22 +21,23 @@ export function GamificationProvider({ children }) {
 
     const items = []
 
+    // Prioritaskan popup level-up agar tidak tenggelam oleh popup EXP.
+    if (payload.levelUp) {
+      items.push({
+        type: "LEVEL",
+        value: payload.levelUp,
+      })
+      setToast({ type: "LEVEL", value: payload.levelUp })
+    }
+
     if (payload.expGained > 0) {
       items.push({
         type: "EXP",
         value: payload.expGained,
         targetExp: payload.newTotalExp,
       })
-      setToast({ type: "EXP", value: payload.expGained })
-    }
-
-    if (payload.levelUp) {
-      items.push({
-        type: "LEVEL",
-        value: payload.levelUp,
-      })
-      if (!payload.expGained) {
-        setToast({ type: "LEVEL", value: payload.levelUp })
+      if (!payload.levelUp) {
+        setToast({ type: "EXP", value: payload.expGained })
       }
     }
 

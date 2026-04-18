@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import VirtualLabRJ45 from "@/components/simulasi/kabel-lan/VirtualLabRJ45";
 import SimulationCompletionModal from "@/components/simulasi/SimulationCompletionModal";
+import { useGamification } from "@/components/gamification/GamificationProvider";
 
 const TARGET_ORDER = [
   "white-orange",
@@ -106,6 +107,7 @@ export default function VirtualLabSimulasi() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResult, setSubmitResult] = useState(null);
+  const { showGamification } = useGamification();
 
   useEffect(() => {
     setAvailableCables(shuffle([...CABLE_LIBRARY]));
@@ -227,6 +229,15 @@ export default function VirtualLabSimulasi() {
       }
 
       setSubmitResult(data.result);
+
+      if (data.result) {
+        showGamification({
+          expGained: data.result.expGained ?? 0,
+          levelUp: data.result.levelUp ?? null,
+          unlockedAchievements: data.result.unlockedAchievements ?? [],
+          newTotalExp: data.result.newTotalExp,
+        });
+      }
       
       // Show warning if there was a gamification error
       if (data.warning) {

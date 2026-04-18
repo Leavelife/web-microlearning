@@ -7,8 +7,10 @@ import TopologyModeSelector from './TopologyModeSelector';
 import TopologyCanvas from './TopologyCanvas';
 import TopologyResult from './TopologyResult';
 import SimulationCompletionModal from '@/components/simulasi/SimulationCompletionModal';
+import { useGamification } from '@/components/gamification/GamificationProvider';
 
 export default function TopologySimulation() {
+  const { showGamification } = useGamification();
   const [selectedTopology, setSelectedTopology] = useState(null);
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
@@ -167,14 +169,22 @@ export default function TopologySimulation() {
       const data = await response.json();
 
       if (data.success) {
+        const resultData = data.result || {};
         setScore({
-          ...data.result,
+          ...resultData,
           timeSpent: timeElapsed,
         });
         setIsFinished(true);
         setFeedback({
-          type: data.result.isValid ? 'success' : 'error',
-          message: data.result.feedback,
+          type: resultData.isValid ? 'success' : 'error',
+          message: resultData.feedback,
+        });
+
+        showGamification({
+          expGained: resultData.expGained ?? 0,
+          levelUp: resultData.levelUp ?? null,
+          unlockedAchievements: resultData.unlockedAchievements ?? [],
+          newTotalExp: resultData.newTotalExp,
         });
       }
     } catch (error) {

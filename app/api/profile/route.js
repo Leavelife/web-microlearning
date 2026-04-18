@@ -39,11 +39,18 @@ export async function GET() {
         // ambil level sekarang
         const currentLevel = data.level || null
 
-        // ranking (jika ada wilayah)
-        let ranking = null
+        const globalRanking = await prisma.user.count({
+            where: {
+                totalExp: {
+                    gt: totalExp
+                }
+            }
+        }) + 1
+
+        let regionRanking = null
 
         if (data.wilayah) {
-            ranking = await prisma.user.count({
+            regionRanking = await prisma.user.count({
                 where: {
                     wilayah: data.wilayah,
                     totalExp: {
@@ -67,7 +74,8 @@ export async function GET() {
                 ...a.achievement,
                 tanggalDidapat: a.tanggalDidapat
             })),
-            ranking
+            ranking: globalRanking,
+            rankingWilayah: regionRanking
         })
     } catch (err) {
         return Response.json(
@@ -87,11 +95,32 @@ export async function PATCH(req) {
         })
 
         // limit edit
-        if (existing.editCount >= 2) {
+        if (existing.editCount >= 3) {
             return Response.json(
-                { message: "Batas edit sudah habis (max 2x)" },
+                { message: "Batas edit sudah habis (max 3x)" },
                 { status: 403 }
             )
+        }
+
+        let nextImage = existing.image
+        if (body.image !== undefined) {
+            if (body.image === null || body.image === "") {
+                nextImage = null
+            } else if (typeof body.image === "string" && body.image.startsWith("data:image/")) {
+                // Simpan data URL, batasi panjang string agar tidak berlebihan.
+                if (body.image.length > 3 * 1024 * 1024) {
+                    return Response.json(
+                        { message: "Ukuran gambar terlalu besar" },
+                        { status: 400 }
+                    )
+                }
+                nextImage = body.image
+            } else {
+                return Response.json(
+                    { message: "Format gambar tidak valid" },
+                    { status: 400 }
+                )
+            }
         }
 
         const updated = await prisma.user.update({
@@ -99,6 +128,7 @@ export async function PATCH(req) {
             data: {
                 username: body.username ?? existing.username,
                 wilayah: body.wilayah ?? existing.wilayah,
+                image: nextImage,
                 editCount: {
                 increment: 1
                 }

@@ -21,10 +21,7 @@ export default function LevelForm() {
 
     if (!urlGambar) {
       newErrors.urlGambar = "URL gambar wajib diisi"
-    } else if (!urlGambar.startsWith("http")) {
-      newErrors.urlGambar = "URL tidak valid"
     }
-
     return newErrors
   }
 
