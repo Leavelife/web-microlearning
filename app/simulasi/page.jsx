@@ -13,8 +13,12 @@ const SIMULATIONS = [
     title: "Simulasi Pemasangan Kabel LAN",
     description:
       "Latih urutan kabel straight T568B dengan menarik kabel ke pin konektor RJ-45. Skor dan kesalahan dicatat seperti praktik di lab.",
-    imageSrc: "/images/virtual-lab/thumbnail.jpg",
+    imageSrc: "/images/virtual-lab/thumbnail.png",
     imageAlt: "Ilustrasi konektor RJ-45 untuk simulasi kabel LAN",
+    thumbnailBgColor: "#5628da",
+    thumbnailFrameClass: "relative w-full aspect-[3/2]",
+    thumbnailImageClass: "object-cover",
+    thumbnailSizes: "(max-width: 768px) calc(100vw - 4rem), (max-width: 1280px) calc(50vw - 4rem), 560px",
     borderClass: "border-purple-300 hover:border-purple-500",
     ringHover: "group-hover:ring-2 group-hover:ring-purple-200",
     accentClass: "text-purple-600 group-hover:text-purple-700",
@@ -28,6 +32,10 @@ const SIMULATIONS = [
       "Simulasi pemasangan komponen utama PC pada motherboard: CPU, RAM, GPU, penyimpanan, dan PSU dengan drag and drop.",
     imageSrc: "/images/virtual-lab/thumbnail2.png",
     imageAlt: "Ilustrasi motherboard untuk simulasi rakit PC",
+    thumbnailBgColor: "#5628da",
+    thumbnailFrameClass: "relative w-full aspect-[3/2]",
+    thumbnailImageClass: "object-cover",
+    thumbnailSizes: "(max-width: 768px) calc(100vw - 4rem), (max-width: 1280px) calc(50vw - 4rem), 560px",
     borderClass: "border-emerald-300 hover:border-emerald-500",
     ringHover: "group-hover:ring-2 group-hover:ring-emerald-200",
     accentClass: "text-emerald-600 group-hover:text-emerald-700",
@@ -39,7 +47,11 @@ const SIMULATIONS = [
     title: "Simulasi Translasi Subnet Mask",
     description:
       "Latihan mengubah CIDR menjadi subnet mask biner 32-bit. Jawab dengan klik 0/1, lalu konfirmasi untuk melihat mana yang benar dan salah.",
-    imageSrc: "/images/virtual-lab/subnetmask.png",
+    imageSrc: "/images/virtual-lab/thumbnail3.png",
+    thumbnailBgColor: "#5628da",
+    thumbnailFrameClass: "relative w-full aspect-[3/2]",
+    thumbnailImageClass: "object-cover",
+    thumbnailSizes: "(max-width: 768px) calc(100vw - 4rem), (max-width: 1280px) calc(50vw - 4rem), 560px",
     imageAlt: "Ilustrasi simulasi translasi subnet mask",
     borderClass: "border-indigo-300 hover:border-indigo-500",
     ringHover: "group-hover:ring-2 group-hover:ring-indigo-200",
@@ -52,7 +64,11 @@ const SIMULATIONS = [
     title: "Simulasi Topologi Jaringan",
     description:
       "Pelajari berbagai topologi jaringan (Star, Ring, Mesh, Bus, Tree, Hybrid) dengan simulasi interaktif. Susun koneksi dengan benar dan validasi struktur topologi Anda.",
-    imageSrc: "/images/virtual-lab/topology.png",
+    imageSrc: "/images/virtual-lab/thumbnail4.png",
+    thumbnailBgColor: "#5628da",
+    thumbnailFrameClass: "relative w-full aspect-[3/2]",
+    thumbnailImageClass: "object-cover",
+    thumbnailSizes: "(max-width: 768px) calc(100vw - 4rem), (max-width: 1280px) calc(50vw - 4rem), 560px",
     imageAlt: "Ilustrasi simulasi topologi jaringan",
     borderClass: "border-blue-300 hover:border-blue-500",
     ringHover: "group-hover:ring-2 group-hover:ring-blue-200",
@@ -133,6 +149,12 @@ export default async function SimulasiPage() {
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
           {SIMULATIONS.map((item, index) => {
             let isUnlocked = false;
+            const thumbnailFrameClass = item.thumbnailFrameClass ?? "relative aspect-square w-full max-w-52";
+            const thumbnailImageClass = item.thumbnailImageClass ?? "object-contain";
+            const thumbnailSizes = item.thumbnailSizes ?? "208px";
+            const thumbnailBackgroundStyle = item.thumbnailBgColor
+              ? { backgroundColor: item.thumbnailBgColor }
+              : undefined;
             // For topology, check if ANY topology type is completed; for others, check exact idSimulasi
             let isCompleted = item.idSimulasi === 'topologi' 
               ? hasCompletedAnyTopology 
@@ -156,13 +178,16 @@ export default async function SimulasiPage() {
                   className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm"
                 >
                   <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-slate-300 via-slate-200 to-slate-300" />
-                  <div className="relative h-52 w-full bg-slate-50 border-b border-slate-200">
-                    <Image
-                      src={item.imageSrc}
-                      alt={item.imageAlt}
-                      fill
-                      className="object-contain p-6 w-full h-full grayscale opacity-70"
-                    />
+                  <div className="flex w-full items-center justify-center overflow-hidden border-b border-slate-200 bg-slate-50 p-4" style={thumbnailBackgroundStyle}>
+                    <div className={thumbnailFrameClass} style={thumbnailBackgroundStyle}>
+                      <Image
+                        src={item.imageSrc}
+                        alt={item.imageAlt}
+                        fill
+                        sizes={thumbnailSizes}
+                        className={`${thumbnailImageClass} object-center grayscale opacity-70`}
+                      />
+                    </div>
                   </div>
                   <div className="p-6 pt-8">
                     <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 text-xs uppercase tracking-[0.25em] text-slate-500">
@@ -198,15 +223,17 @@ export default async function SimulasiPage() {
                     </span>
                   </div>
                 )}
-                <div className="relative h-52 w-full bg-slate-50 border-b border-slate-200">
-                  <Image
-                    src={item.imageSrc}
-                    alt={item.imageAlt}
-                    width={300}
-                    height={200}
-                    className="object-contain max-h-full group-hover:scale-110 transition-transform duration-300"
-                    priority={item.href === "/simulasi/kabel-lan"}
-                  />
+                <div className="flex w-full items-center justify-center overflow-hidden border-b border-slate-200 bg-slate-50 p-4" style={thumbnailBackgroundStyle}>
+                  <div className={thumbnailFrameClass} style={thumbnailBackgroundStyle}>
+                    <Image
+                      src={item.imageSrc}
+                      alt={item.imageAlt}
+                      fill
+                      sizes={thumbnailSizes}
+                      className={`${thumbnailImageClass} object-center transition-transform duration-300 group-hover:scale-105`}
+                      priority={item.href === "/simulasi/kabel-lan"}
+                    />
+                  </div>
                 </div>
                 <div className="p-6">
                   <div className="flex flex-wrap items-center justify-between gap-3">
