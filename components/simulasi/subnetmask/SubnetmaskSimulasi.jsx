@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import SimulationCompletionModal from "@/components/simulasi/SimulationCompletionModal";
+import { useGamification } from "@/components/gamification/GamificationProvider";
 
 function clampCidr(value) {
   const n = Number(value);
@@ -41,6 +42,7 @@ export default function SubnetmaskSimulasi() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResult, setSubmitResult] = useState(null);
+  const { showGamification } = useGamification();
   const [startTime, setStartTime] = useState(null);
 
   // Agar random benar-benar terjadi tiap akses (client-side) dan tetap aman dari hydration mismatch.
@@ -142,6 +144,16 @@ export default function SubnetmaskSimulasi() {
       }
 
       setSubmitResult(data.result);
+
+      // Show gamification popup if available
+      if (data.result) {
+        showGamification({
+          expGained: data.result.expGained ?? 0,
+          levelUp: data.result.levelUp ?? null,
+          unlockedAchievements: data.result.unlockedAchievements ?? [],
+          newTotalExp: data.result.newTotalExp,
+        });
+      }
       
       // Update completed count from server response
       if (data.result?.xpEarnedCount !== undefined) {

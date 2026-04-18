@@ -36,7 +36,7 @@ export default function QuizCard({ quiz }) {
 
         <Link
           href={`/quiz/${quiz.id}`}
-          className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-black/80 px-5 py-3 text-sm font-semibold text-violet-100 shadow-lg shadow-white/20 transition duration-300 hover:-translate-y-px hover:bg-white/95"
+          className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-black/80 px-5 py-3 text-sm font-semibold text-violet-100 shadow-lg shadow-white/20 transition duration-300 hover:-translate-y-px hover:bg-black/75"
         >
           Mulai Quiz
         </Link>
