@@ -87,6 +87,7 @@ export default async function SimulasiPage() {
   });
 
   const completedSet = new Set(completedSimulations.map((sim) => sim.idSimulasi));
+  const hasCompletedAnyTopology = completedSet.has("topologi");
   const completedCount = completedSet.size;
   const completionRate = Math.round((completedCount / SIMULATIONS.length) * 100);
 
