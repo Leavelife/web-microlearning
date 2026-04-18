@@ -13,7 +13,7 @@ const SIMULATIONS = [
     title: "Simulasi Pemasangan Kabel LAN",
     description:
       "Latih urutan kabel straight T568B dengan menarik kabel ke pin konektor RJ-45. Skor dan kesalahan dicatat seperti praktik di lab.",
-    imageSrc: "/images/virtual-lab/connector.png",
+    imageSrc: "/images/virtual-lab/thumbnail.jpg",
     imageAlt: "Ilustrasi konektor RJ-45 untuk simulasi kabel LAN",
     borderClass: "border-purple-300 hover:border-purple-500",
     ringHover: "group-hover:ring-2 group-hover:ring-purple-200",
@@ -26,7 +26,7 @@ const SIMULATIONS = [
     title: "PC Building Virtual Lab",
     description:
       "Simulasi pemasangan komponen utama PC pada motherboard: CPU, RAM, GPU, penyimpanan, dan PSU dengan drag and drop.",
-    imageSrc: "/images/virtual-lab/pc.png",
+    imageSrc: "/images/virtual-lab/thumbnail2.png",
     imageAlt: "Ilustrasi motherboard untuk simulasi rakit PC",
     borderClass: "border-emerald-300 hover:border-emerald-500",
     ringHover: "group-hover:ring-2 group-hover:ring-emerald-200",
@@ -161,8 +161,7 @@ export default async function SimulasiPage() {
                       src={item.imageSrc}
                       alt={item.imageAlt}
                       fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-contain p-6"
+                      className="object-contain p-6 w-full h-full grayscale opacity-70"
                     />
                   </div>
                   <div className="p-6 pt-8">
