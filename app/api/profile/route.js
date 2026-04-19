@@ -1,11 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
 import jwt from "jsonwebtoken"
-import { mkdir, writeFile, unlink } from "fs/promises"
-import path from "path"
+import { uploadProfileImage, deleteProfileImage } from "@/lib/cloudinary-upload"
 
-const UPLOAD_SEGMENT = "uploads"
-const PROFILE_DIR = "profile"
 const MAX_BYTES = 2 * 1024 * 1024
 
 async function getUser() {
@@ -16,24 +13,6 @@ async function getUser() {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     return decoded
-}
-
-function safePublicFilePath(relativeUrl) {
-    if (!relativeUrl || typeof relativeUrl !== "string") return null
-    if (!relativeUrl.startsWith(`/${UPLOAD_SEGMENT}/${PROFILE_DIR}/`)) return null
-    const rel = relativeUrl.replace(/^\/+/, "")
-    const full = path.join(process.cwd(), "public", rel)
-    const pubRoot = path.join(process.cwd(), "public", UPLOAD_SEGMENT, PROFILE_DIR)
-    if (!full.startsWith(pubRoot)) return null
-    return full
-}
-
-function extFromMime(mime) {
-    if (mime === "image/jpeg" || mime === "image/jpg") return "jpg"
-    if (mime === "image/png") return "png"
-    if (mime === "image/webp") return "webp"
-    if (mime === "image/gif") return "gif"
-    return null
 }
 
 export async function GET() {
@@ -157,32 +136,27 @@ export async function PATCH(req) {
                         { status: 400 }
                     )
                 }
-                const ext = extFromMime(file.type)
-                if (!ext) {
+
+                try {
+                    const buffer = Buffer.from(await file.arrayBuffer())
+                    const filename = `profile-${user.id}-${Date.now()}`
+                    
+                    // Upload to Cloudinary
+                    const result = await uploadProfileImage(buffer, filename)
+                    nextImage = result.secure_url
+
+                    // Delete old image from Cloudinary if exists
+                    if (existing.image && existing.image.includes("cloudinary")) {
+                        const publicId = `web-microlearning/profiles/profile-${user.id}`
+                        await deleteProfileImage(publicId)
+                    }
+                } catch (error) {
+                    console.error("Cloudinary upload error:", error)
                     return Response.json(
-                        { message: "Format gambar tidak didukung (gunakan JPG, PNG, WebP, atau GIF)", error: "Format tidak didukung" },
-                        { status: 400 }
+                        { message: "Gagal mengunggah gambar ke Cloudinary", error: error.message },
+                        { status: 500 }
                     )
                 }
-
-                const dir = path.join(process.cwd(), "public", UPLOAD_SEGMENT, PROFILE_DIR)
-                await mkdir(dir, { recursive: true })
-
-                const filename = `${user.id}-${Date.now()}.${ext}`
-                const buffer = Buffer.from(await file.arrayBuffer())
-                const diskPath = path.join(dir, filename)
-                await writeFile(diskPath, buffer)
-
-                const oldPath = safePublicFilePath(existing.image)
-                if (oldPath) {
-                    try {
-                        await unlink(oldPath)
-                    } catch {
-                        /* file lama mungkin sudah tidak ada */
-                    }
-                }
-
-                nextImage = `/${UPLOAD_SEGMENT}/${PROFILE_DIR}/${filename}`
             }
         } else {
             const body = await req.json()
@@ -203,7 +177,6 @@ export async function PATCH(req) {
                         )
                     }
                     if (
-                        body.image.startsWith(`/${UPLOAD_SEGMENT}/`) ||
                         body.image.startsWith("/") ||
                         body.image.startsWith("http://") ||
                         body.image.startsWith("https://")

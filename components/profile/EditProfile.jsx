@@ -184,7 +184,7 @@ export default function EditProfile({ user }) {
                                     <p className="mt-2 text-xs text-red-500">{imageError}</p>
                                 )}
                                 <p className="mt-1 text-xs text-slate-500">
-                                    Foto disimpan di server; hanya path publik yang disimpan di database (maks. 2MB).
+                                    Foto disimpan di Cloudinary; hanya URL yang disimpan di database (maks. 2MB).
                                 </p>
                             </div>
 
