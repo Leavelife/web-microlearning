@@ -152,6 +152,7 @@ export default async function SimulasiPage() {
             const thumbnailFrameClass = item.thumbnailFrameClass ?? "relative aspect-square w-full max-w-52";
             const thumbnailImageClass = item.thumbnailImageClass ?? "object-contain";
             const thumbnailSizes = item.thumbnailSizes ?? "208px";
+            const lockedThumbnailWrapperClass = item.thumbnailBgColor ? "grayscale" : "";
             const thumbnailBackgroundStyle = item.thumbnailBgColor
               ? { backgroundColor: item.thumbnailBgColor }
               : undefined;
@@ -178,7 +179,7 @@ export default async function SimulasiPage() {
                   className="group relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm"
                 >
                   <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-slate-300 via-slate-200 to-slate-300" />
-                  <div className="flex w-full items-center justify-center overflow-hidden border-b border-slate-200 bg-slate-50 p-4" style={thumbnailBackgroundStyle}>
+                  <div className={`flex w-full items-center justify-center overflow-hidden border-b border-slate-200 bg-slate-50 p-4 ${lockedThumbnailWrapperClass}`} style={thumbnailBackgroundStyle}>
                     <div className={thumbnailFrameClass} style={thumbnailBackgroundStyle}>
                       <Image
                         src={item.imageSrc}
