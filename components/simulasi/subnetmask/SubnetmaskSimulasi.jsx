@@ -39,6 +39,7 @@ export default function SubnetmaskSimulasi() {
   
   // XP tracking - simplified to just track count
   const [completedCount, setCompletedCount] = useState(0);
+  const [completedCidrs, setCompletedCidrs] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResult, setSubmitResult] = useState(null);
@@ -62,6 +63,12 @@ export default function SubnetmaskSimulasi() {
           if (data.success && typeof data.completedCount === 'number') {
             setCompletedCount(data.completedCount);
           }
+          if (data.success && Array.isArray(data.completedCidrs)) {
+            const normalizedCidrs = data.completedCidrs
+              .map((value) => Number.parseInt(value, 10))
+              .filter((value) => Number.isInteger(value) && value >= 0 && value <= 32);
+            setCompletedCidrs(Array.from(new Set(normalizedCidrs)).sort((a, b) => a - b));
+          }
         }
       } catch (err) {
         console.error('Failed to load completed CIDR count:', err);
@@ -72,6 +79,8 @@ export default function SubnetmaskSimulasi() {
   }, []);
 
   const expectedBits = useMemo(() => cidrToBits(cidr), [cidr]);
+  const completedCidrSet = useMemo(() => new Set(completedCidrs), [completedCidrs]);
+  const isCurrentCidrCompleted = completedCidrSet.has(cidr);
   const expectedDecimal = useMemo(() => bitsToDottedDecimal(expectedBits), [expectedBits]);
   const userDecimal = useMemo(() => bitsToDottedDecimal(bits), [bits]);
 
@@ -160,6 +169,13 @@ export default function SubnetmaskSimulasi() {
         setCompletedCount(data.result.xpEarnedCount);
       }
 
+      if (data.result?.isPerfect) {
+        setCompletedCidrs((prev) => {
+          if (prev.includes(cidr)) return prev;
+          return [...prev, cidr].sort((a, b) => a - b);
+        });
+      }
+
       setShowModal(true);
 
       if (data.warning) {
@@ -218,7 +234,7 @@ export default function SubnetmaskSimulasi() {
                 <p className="text-sm text-gray-600">CIDR saat ini</p>
                 <div className="flex items-center gap-2 mt-1">
                   <p className="text-2xl font-bold text-gray-900">/{cidr}</p>
-                  {completedCount >= 1 && <span className="text-green-600 text-xl">✓</span>}
+                  {isCurrentCidrCompleted && <span className="text-green-600 text-xl">✓</span>}
                   {confirmed ? ` (${expectedDecimal})` : ''}
                 </div>
                 <p className="text-xs text-gray-600 mt-2">
@@ -252,11 +268,11 @@ export default function SubnetmaskSimulasi() {
                 id="cidr-select"
                 value={cidr}
                 onChange={(e) => onPickCidr(e.target.value)}
-                className={`w-full md:w-48 px-3 py-2 rounded-lg border-2 bg-white focus:outline-none focus:ring-2 focus:ring-purple-200 transition ${completedCount > 0 ? 'border-green-500 text-green-700 font-semibold' : 'border-slate-300 text-gray-900'}`}
+                className={`w-full md:w-48 px-3 py-2 rounded-lg border-2 bg-white focus:outline-none focus:ring-2 focus:ring-purple-200 transition ${isCurrentCidrCompleted ? 'border-green-500 text-green-700 font-semibold' : 'border-slate-300 text-gray-900'}`}
               >
                 {Array.from({ length: 33 }, (_, i) => (
                   <option key={i} value={i}>
-                    /{i}
+                    /{i}{completedCidrSet.has(i) ? ' ✓' : ''}
                   </option>
                 ))}
               </select>

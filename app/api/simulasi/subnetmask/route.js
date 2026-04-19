@@ -2,13 +2,32 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth-guard';
 import { gamificationEngine } from '@/lib/gamification';
 
+function parseStoredCidr(value) {
+  if (typeof value !== 'string' || value.trim() === '') return null;
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isInteger(parsed) || parsed < 0 || parsed > 32) return null;
+  return parsed;
+}
+
+function extractCompletedCidrs(submissions) {
+  const cidrSet = new Set();
+
+  for (const submission of submissions) {
+    const parsedCidr = parseStoredCidr(submission.topologyType);
+    if (parsedCidr !== null) {
+      cidrSet.add(parsedCidr);
+    }
+  }
+
+  return Array.from(cidrSet).sort((a, b) => a - b);
+}
+
 export async function GET(req) {
   try {
     const authUser = await requireAuth();
 
-    // Get all perfect submissions for this user on subnetmask
-    // Note: cidrValue may not exist in DB yet, so we don't select it
-    // Just return empty array for now, will work better after migration
+    // Read perfect submissions for this user on subnetmask.
+    // CIDR value is stored in topologyType for subnetmask attempts.
     const perfectSubmissions = await prisma.hasilSimulasi.findMany({
       where: {
         userId: authUser.id,
@@ -17,16 +36,15 @@ export async function GET(req) {
       },
       select: {
         id: true,
+        topologyType: true,
       },
       orderBy: {
         createdAt: 'asc',
       },
     });
 
-    // TODO: After migration, update to select cidrValue and extract completed CIDRs
-    // For now, just return count and empty array
+    const completedCidrs = extractCompletedCidrs(perfectSubmissions);
     const completedCount = perfectSubmissions.length;
-    const completedCidrs = []; // Will be populated after migration
 
     return Response.json({
       success: true,
@@ -66,6 +84,13 @@ export async function POST(req) {
       );
     }
 
+    if (!Number.isInteger(cidr) || cidr < 0 || cidr > 32) {
+      return Response.json(
+        { error: 'CIDR must be integer between 0 and 32' },
+        { status: 400 }
+      );
+    }
+
     // Calculate if this is a perfect/correct attempt (score = 100)
     const isPerfect = score === 100;
 
@@ -84,6 +109,7 @@ export async function POST(req) {
 
     // Determine gamification event and XP
     let expGained = 0;
+    let newTotalExp = null;
     let levelUp = null;
     let unlockedAchievements = [];
     let gamificationError = null;
@@ -97,6 +123,7 @@ export async function POST(req) {
           }
         });
         expGained = gamificationResult.expGained;
+        newTotalExp = gamificationResult.newTotalExp;
         levelUp = gamificationResult.levelUp;
         unlockedAchievements = gamificationResult.unlockedAchievements;
       } catch (gamificationErr) {
@@ -113,6 +140,7 @@ export async function POST(req) {
       data: {
         userId: authUser.id,
         idSimulasi: 'subnetmask',
+        topologyType: String(cidr),
         skor: score,
         waktuPenyelesaian: timeSpent || 0,
         status: isPerfect ? 'selesai' : 'parsial',
@@ -132,6 +160,7 @@ export async function POST(req) {
         timeSpent,
         isPerfect,
         expGained,
+        newTotalExp,
         levelUp,
         unlockedAchievements,
         xpEarnedCount: xpEarnedCount + (canEarnXp ? 1 : 0), // Updated count
