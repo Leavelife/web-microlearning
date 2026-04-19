@@ -5,15 +5,30 @@ export async function PUT(req, { params }) {
   try {
     await requireRole("admin");
 
-    const { id, stepId } = params;
-    const { judul, tipe, konten } = await req.json();
+    const { id, stepId } = await params;
+    const { judul, contents } = await req.json();
+
+    if (!judul || !Array.isArray(contents) || contents.length === 0) {
+      return Response.json({ error: "judul dan contents wajib" }, { status: 400 });
+    }
 
     const step = await prisma.materiStep.update({
       where: { id: stepId },
       data: {
         judul,
-        tipe,
-        konten,
+        contents: {
+          deleteMany: {},
+          create: contents.map((content, index) => ({
+            tipe: content.tipe,
+            konten: content.konten,
+            urutan: content.urutan ?? index + 1,
+          })),
+        },
+      },
+      include: {
+        contents: {
+          orderBy: { urutan: "asc" },
+        },
       },
     });
 

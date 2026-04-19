@@ -5,6 +5,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'storyset.com',
+        hostname: "res.cloudinary.com",
       },
     ],
   },

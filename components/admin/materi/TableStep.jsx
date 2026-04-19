@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import FormStepModal from "./FormStepModal";
 
 export default function TableStep({ materiId, onClose }) {
@@ -9,11 +9,7 @@ export default function TableStep({ materiId, onClose }) {
   const [selectedStep, setSelectedStep] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchSteps();
-  }, [materiId]);
-
-  const fetchSteps = async () => {
+  const fetchSteps = useCallback(async () => {
     try {
       setLoading(true);
       const res = await fetch(`/api/admin/materi/${materiId}/step`);
@@ -25,7 +21,11 @@ export default function TableStep({ materiId, onClose }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [materiId]);
+
+  useEffect(() => {
+    fetchSteps();
+  }, [fetchSteps]);
 
   const handleAdd = () => {
     setSelectedStep(null);
@@ -91,7 +91,8 @@ export default function TableStep({ materiId, onClose }) {
             <th>No</th>
             <th>Urutan</th>
             <th>Judul</th>
-            <th>Tipe</th>
+            <th>Total Konten</th>
+            <th>Jenis Konten</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -111,7 +112,8 @@ export default function TableStep({ materiId, onClose }) {
                 <td>{i + 1}</td>
                 <td>{item.urutan}</td>
                 <td>{item.judul}</td>
-                <td>{item.tipe}</td>
+                <td>{item.contents?.length ?? 0}</td>
+                <td>{item.contents?.map((content) => content.tipe).join(", ") || "-"}</td>
                 <td className="space-x-2">
                   <button
                     onClick={() => handleEdit(item)}

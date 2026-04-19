@@ -51,14 +51,29 @@ model MateriStep {
   urutan      Int      // 1,2,3,4
 
   judul       String
-  tipe        String   // "text", "video", "image"
-  konten      String   // isi text / url
 
   materi      Materi   @relation(fields: [materiId], references: [id])
 
   quiz        Quiz?    // optional per step
 
+  contents    StepContent[]
+
   createdAt   DateTime @default(now())
+}
+
+model StepContent {
+  id        String   @id @default(uuid())
+  stepId    String
+  tipe      String   // "text", "image", "video"
+  konten    String   @db.Text // teks panjang; default MySQL VARCHAR(191) memotong/menolak isi materi
+
+  urutan    Int
+
+  step      MateriStep @relation(fields: [stepId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([stepId])
 }
 
 model ProgressMateri {

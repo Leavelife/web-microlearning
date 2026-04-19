@@ -44,13 +44,48 @@ export default function LessonGrid({ lessons }) {
   return (
     <>
       <div className="max-w-xl mx-auto mb-8">
-        <input
-          type="text"
-          placeholder="Search materi..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full px-4 py-3 rounded-full border focus:outline-none focus:ring-2 focus:ring-black"
-        />
+        <div className="relative group">
+          
+          {/* Icon */}
+          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+            <svg
+              className="w-5 h-5 text-slate-400 group-focus-within:text-violet-500 transition"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+          </div>
+
+          {/* Input */}
+          <input
+            type="text"
+            placeholder="Cari materi..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="
+              w-full pl-12 pr-4 py-3
+              rounded-2xl
+              bg-white/80 backdrop-blur
+              border border-slate-200
+              text-sm text-slate-700
+              shadow-sm
+              transition-all duration-200
+
+              placeholder:text-slate-400
+
+              focus:outline-none
+              focus:ring-2 focus:ring-violet-500/30
+              focus:border-violet-400
+              focus:bg-white
+
+              hover:border-slate-300
+            "
+          />
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

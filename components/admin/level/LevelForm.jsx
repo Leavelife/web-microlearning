@@ -1,10 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { createLevel } from "@/actions/level"
 
 export default function LevelForm() {
   const [errors, setErrors] = useState({})
+  const [previewSrc, setPreviewSrc] = useState("")
+  const [imageError, setImageError] = useState("")
+  const fileInputRef = useRef(null)
 
   function validate(formData) {
     const newErrors = {}
@@ -12,17 +15,41 @@ export default function LevelForm() {
     const nama = formData.get("nama")?.trim()
     const minExp = Number(formData.get("minExp"))
     const maxExp = Number(formData.get("maxExp"))
-    const urlGambar = formData.get("urlGambar")?.trim()
+    const gambar = formData.get("gambar")
 
     if (!nama) newErrors.nama = "Nama wajib diisi"
 
     if (minExp < 0) newErrors.minExp = "Min EXP tidak valid"
     if (maxExp <= minExp) newErrors.maxExp = "Max harus lebih besar dari Min"
 
-    if (!urlGambar) {
-      newErrors.urlGambar = "URL gambar wajib diisi"
+    if (!gambar || gambar.size === 0) {
+      newErrors.gambar = "Gambar wajib diunggah"
     }
     return newErrors
+  }
+
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0]
+    setImageError("")
+    if (!file) {
+      setPreviewSrc("")
+      return
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setImageError("File harus berupa gambar")
+      setPreviewSrc("")
+      return
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      setImageError("Ukuran gambar maksimal 2MB")
+      setPreviewSrc("")
+      return
+    }
+
+    const url = URL.createObjectURL(file)
+    setPreviewSrc(url)
   }
 
   async function handleSubmit(e) {
@@ -39,6 +66,10 @@ export default function LevelForm() {
     setErrors({})
     await createLevel(formData)
     e.target.reset()
+    setPreviewSrc("")
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
   }
 
   return (
@@ -94,16 +125,38 @@ export default function LevelForm() {
 
         <div>
           <label htmlFor="urlGambar" className="block text-sm font-medium text-gray-300 mb-2">
-            URL Gambar
+            Gambar Level
           </label>
           <input
-            id="urlGambar"
-            name="urlGambar"
-            placeholder="URL Gambar"
+            ref={fileInputRef}
+            id="gambar"
+            name="gambar"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            onChange={handleImageChange}
             className="w-full rounded-xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-500/20"
           />
-          {errors.urlGambar && <p className="text-red-400 mt-2 text-sm">{errors.urlGambar}</p>}
+          {errors.gambar && <p className="text-red-400 mt-2 text-sm">{errors.gambar}</p>}
+          {imageError && <p className="text-red-400 mt-2 text-sm">{imageError}</p>}
+          <p className="text-xs text-gray-400 mt-1">
+            Gambar disimpan di Cloudinary; maks. 2MB.
+          </p>
         </div>
+
+        {/* IMAGE PREVIEW */}
+        {previewSrc && (
+          <div className="mt-4">
+            <p className="text-sm text-gray-400 mb-2">Preview:</p>
+            <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-600">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={previewSrc}
+                alt="Preview"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        )}
 
         <button className="w-full rounded-xl bg-blue-500 px-4 py-3 text-white font-semibold hover:bg-blue-600 transition-colors">
           Simpan Level

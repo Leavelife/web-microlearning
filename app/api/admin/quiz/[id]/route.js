@@ -40,9 +40,11 @@ export async function DELETE(req, { params }) {
 
     const { id } = await params
 
-    await prisma.quiz.delete({
-      where: { id }
-    })
+    await prisma.$transaction([
+      prisma.hasilQuizUser.deleteMany({ where: { quizId: id } }),
+      prisma.soalQuiz.deleteMany({ where: { quizId: id } }),
+      prisma.quiz.delete({ where: { id } }),
+    ])
 
     return Response.json({
       message: "Quiz berhasil dihapus"

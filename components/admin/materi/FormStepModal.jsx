@@ -1,6 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
 
+const emptyForm = {
+  judul: "",
+  contents: [
+    { tipe: "text", konten: "", urutan: 1 },
+  ],
+};
+
 export default function FormStepModal({
   isOpen,
   onClose,
@@ -8,11 +15,6 @@ export default function FormStepModal({
   onSuccess,
   materiId,
 }) {
-  const emptyForm = {
-    judul: "",
-    tipe: "text",
-    konten: "",
-  };
 
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
@@ -21,13 +23,55 @@ export default function FormStepModal({
     if (initialData) {
       setForm({
         judul: initialData.judul || "",
-        tipe: initialData.tipe || "text",
-        konten: initialData.konten || "",
+        contents:
+          initialData.contents?.length > 0
+            ? initialData.contents.map((content, index) => ({
+                tipe: content.tipe || "text",
+                konten: content.konten || "",
+                urutan: content.urutan ?? index + 1,
+              }))
+            : [{ tipe: "text", konten: "", urutan: 1 }],
       });
     } else {
       setForm(emptyForm);
     }
   }, [initialData]);
+
+  const updateContent = (index, field, value) => {
+    setForm((prev) => ({
+      ...prev,
+      contents: prev.contents.map((content, i) =>
+        i === index ? { ...content, [field]: value } : content
+      ),
+    }));
+  };
+
+  const addContent = () => {
+    setForm((prev) => ({
+      ...prev,
+      contents: [
+        ...prev.contents,
+        {
+          tipe: "text",
+          konten: "",
+          urutan: prev.contents.length + 1,
+        },
+      ],
+    }));
+  };
+
+  const removeContent = (index) => {
+    setForm((prev) => {
+      const nextContents = prev.contents.filter((_, i) => i !== index);
+      return {
+        ...prev,
+        contents: nextContents.map((content, idx) => ({
+          ...content,
+          urutan: idx + 1,
+        })),
+      };
+    });
+  };
 
   const handleSubmit = async () => {
     try {
@@ -82,30 +126,57 @@ export default function FormStepModal({
           />
         </div>
 
-        {/* Tipe */}
-        <div>
-          <label htmlFor="tipe" className="block text-sm font-medium p-2 text-white">Tipe</label>
-          <select
-            value={form.tipe}
-            onChange={(e) => setForm({ ...form, tipe: e.target.value })}
-            className="w-full p-2 bg-white/10 rounded"
-            >
-            <option className="text-white bg-gray-900" value="text">Text</option>
-            <option className="text-white bg-gray-900" value="video">Video</option>
-            <option className="text-white bg-gray-900" value="image">Image</option>
-          </select>
+        <div className="space-y-4">
+          {form.contents.map((content, index) => (
+            <div key={index} className="bg-white/5 p-4 rounded-xl">
+              <div className="flex items-center justify-between mb-3">
+                <p className="font-medium">Konten {index + 1}</p>
+                {form.contents.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeContent(index)}
+                    className="text-red-400 hover:text-red-500"
+                  >
+                    Hapus
+                  </button>
+                )}
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-[140px_1fr]">
+                <div>
+                  <label className="block text-sm font-medium p-2 text-white">Tipe</label>
+                  <select
+                    value={content.tipe}
+                    onChange={(e) => updateContent(index, "tipe", e.target.value)}
+                    className="w-full p-2 bg-gray-900 text-white rounded"
+                  >
+                    <option value="text">Text</option>
+                    <option value="video">Video</option>
+                    <option value="image">Image</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium p-2 text-white">Isi Konten</label>
+                  <textarea
+                    value={content.konten}
+                    onChange={(e) => updateContent(index, "konten", e.target.value)}
+                    placeholder="Masukkan isi konten atau URL"
+                    className="w-full p-2 bg-white/10 rounded h-24"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Konten */}
-        <div>
-          <label htmlFor="konten" className="block text-sm font-medium p-2 text-white">Isi Konten</label>
-          <textarea
-            placeholder="Konten"
-            value={form.konten}
-            onChange={(e) => setForm({ ...form, konten: e.target.value })}
-            className="w-full p-2 bg-white/10 rounded h-32"
-          />
-        </div>
+        <button
+          type="button"
+          onClick={addContent}
+          className="px-4 py-2 bg-green-500 rounded hover:bg-green-600"
+        >
+          Tambah Konten
+        </button>
 
         <div className="flex justify-end space-x-2">
           <button onClick={onClose} className="px-3 py-1 bg-gray-500 rounded">

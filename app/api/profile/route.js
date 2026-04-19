@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import { cookies } from "next/headers"
 import jwt from "jsonwebtoken"
+import { uploadProfileImage, deleteProfileImage } from "@/lib/cloudinary-upload"
+
+const MAX_BYTES = 2 * 1024 * 1024
 
 async function getUser() {
     const cookieStore = await cookies()
@@ -88,49 +91,115 @@ export async function GET() {
 export async function PATCH(req) {
     try {
         const user = await getUser()
-        const body = await req.json()
+        const contentType = req.headers.get("content-type") || ""
 
         const existing = await prisma.user.findUnique({
             where: { id: user.id }
         })
 
-        // limit edit
         if (existing.editCount >= 3) {
             return Response.json(
-                { message: "Batas edit sudah habis (max 3x)" },
+                { message: "Batas edit sudah habis (max 3x)", error: "Batas edit sudah habis (max 3x)" },
                 { status: 403 }
             )
         }
 
+        let nextUsername = existing.username
+        let nextWilayah = existing.wilayah
         let nextImage = existing.image
-        if (body.image !== undefined) {
-            if (body.image === null || body.image === "") {
-                nextImage = null
-            } else if (typeof body.image === "string" && body.image.startsWith("data:image/")) {
-                // Simpan data URL, batasi panjang string agar tidak berlebihan.
-                if (body.image.length > 3 * 1024 * 1024) {
+
+        if (contentType.includes("multipart/form-data")) {
+            const formData = await req.formData()
+            const u = formData.get("username")
+            const w = formData.get("wilayah")
+            if (u !== null && u !== undefined) nextUsername = String(u).trim() || existing.username
+            if (w !== null && w !== undefined) nextWilayah = String(w).trim() || null
+
+            const file = formData.get("avatar")
+            const isFile =
+                file &&
+                typeof file === "object" &&
+                "arrayBuffer" in file &&
+                typeof file.size === "number" &&
+                file.size > 0
+
+            if (isFile) {
+                if (!file.type || !file.type.startsWith("image/")) {
                     return Response.json(
-                        { message: "Ukuran gambar terlalu besar" },
+                        { message: "File harus berupa gambar", error: "File harus berupa gambar" },
                         { status: 400 }
                     )
                 }
-                nextImage = body.image
-            } else {
-                return Response.json(
-                    { message: "Format gambar tidak valid" },
-                    { status: 400 }
-                )
+                if (file.size > MAX_BYTES) {
+                    return Response.json(
+                        { message: "Ukuran gambar maksimal 2MB", error: "Ukuran gambar maksimal 2MB" },
+                        { status: 400 }
+                    )
+                }
+
+                try {
+                    const buffer = Buffer.from(await file.arrayBuffer())
+                    const filename = `profile-${user.id}-${Date.now()}`
+                    
+                    // Upload to Cloudinary
+                    const result = await uploadProfileImage(buffer, filename)
+                    nextImage = result.secure_url
+
+                    // Delete old image from Cloudinary if exists
+                    if (existing.image && existing.image.includes("cloudinary")) {
+                        const publicId = `web-microlearning/profiles/profile-${user.id}`
+                        await deleteProfileImage(publicId)
+                    }
+                } catch (error) {
+                    console.error("Cloudinary upload error:", error)
+                    return Response.json(
+                        { message: "Gagal mengunggah gambar ke Cloudinary", error: error.message },
+                        { status: 500 }
+                    )
+                }
+            }
+        } else {
+            const body = await req.json()
+            if (body.username !== undefined) nextUsername = String(body.username).trim() || existing.username
+            if (body.wilayah !== undefined) nextWilayah = body.wilayah === "" || body.wilayah === null ? null : String(body.wilayah)
+
+            if (body.image !== undefined) {
+                if (body.image === null || body.image === "") {
+                    nextImage = null
+                } else if (typeof body.image === "string") {
+                    if (body.image.startsWith("data:")) {
+                        return Response.json(
+                            {
+                                message: "Unggah foto lewat form edit profil; data base64 tidak lagi didukung.",
+                                error: "Gunakan unggah file untuk foto profil",
+                            },
+                            { status: 400 }
+                        )
+                    }
+                    if (
+                        body.image.startsWith("/") ||
+                        body.image.startsWith("http://") ||
+                        body.image.startsWith("https://")
+                    ) {
+                        nextImage = body.image
+                    } else {
+                        return Response.json(
+                            { message: "Format path gambar tidak valid", error: "Format path gambar tidak valid" },
+                            { status: 400 }
+                        )
+                    }
+                }
             }
         }
 
         const updated = await prisma.user.update({
             where: { id: user.id },
             data: {
-                username: body.username ?? existing.username,
-                wilayah: body.wilayah ?? existing.wilayah,
+                username: nextUsername,
+                wilayah: nextWilayah,
                 image: nextImage,
                 editCount: {
-                increment: 1
+                    increment: 1
                 }
             }
         })
@@ -140,8 +209,9 @@ export async function PATCH(req) {
             user: updated
         })
     } catch (err) {
+        console.error(err)
         return Response.json(
-            { message: err.message },
+            { message: err.message || "Terjadi kesalahan", error: err.message || "Terjadi kesalahan" },
             { status: 500 }
         )
     }

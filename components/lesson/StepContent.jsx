@@ -26,70 +26,90 @@ export default function StepContent({ step, materiJudul }) {
     );
   }
 
-  const { tipe, konten, judul, quiz } = step;
-  const youtubeEmbedUrl =
-    tipe === "video" && konten && isYoutubeUrl(konten)
-      ? toYoutubeEmbed(konten)
-      : null;
+  const { judul, contents = [], quiz } = step;
 
   return (
     <div className="space-y-6 mt-15">
       <div>
         <p className="text-sm text-gray-400 mb-1">{materiJudul}</p>
         <h2 className="text-2xl font-bold text-gray-900">{judul}</h2>
-        <span className="inline-block mt-2 text-xs font-medium uppercase tracking-wide text-purple-700 bg-purple-50 px-2 py-0.5 rounded">
-          {tipe}
-        </span>
       </div>
 
-      {tipe === "text" && (
-        <div className="prose prose-gray max-w-none">
-          <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-            {konten}
-          </div>
+      {contents.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-gray-500">
+          Materi step ini belum memiliki konten.
         </div>
-      )}
+      ) : (
+        contents.map((content, index) => {
+          const { tipe, konten, urutan } = content;
+          const youtubeEmbedUrl =
+            tipe === "video" && konten && isYoutubeUrl(konten)
+              ? toYoutubeEmbed(konten)
+              : null;
 
-      {tipe === "image" && konten && (
-        <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={konten}
-            alt={judul}
-            className="w-full max-h-[480px] object-contain mx-auto"
-          />
-        </div>
-      )}
+          return (
+            <section key={content.id || index} className="space-y-4">
+              <div className="flex items-center gap-3 text-xs uppercase tracking-wider text-purple-700">
+                <span className="rounded-full bg-purple-50 px-3 py-1 font-semibold">
+                  {urutan}
+                </span>
+                <span className="rounded-full bg-gray-100 px-3 py-1">
+                  {tipe}
+                </span>
+              </div>
 
-      {tipe === "video" && konten && (
-        <div className="rounded-xl overflow-hidden border border-gray-200 bg-black aspect-video">
-          {youtubeEmbedUrl ? (
-            <iframe
-              title={judul}
-              src={youtubeEmbedUrl}
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : isYoutubeUrl(konten) ? (
-            <div className="flex h-full min-h-[200px] items-center justify-center p-6 text-center text-sm text-white/90">
-              URL YouTube tidak valid atau tidak bisa di-embed. Periksa link di
-              admin.
-            </div>
-          ) : (
-            <video
-              src={konten}
-              controls
-              className="w-full h-full"
-            >
-              Browser tidak mendukung pemutaran video.
-            </video>
-          )}
-        </div>
-      )}
+              {tipe === "text" && (
+                <div className="prose prose-gray max-w-none">
+                  <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+                    {konten}
+                  </div>
+                </div>
+              )}
 
-      {!["text", "image", "video"].includes(tipe) && (
-        <div className="whitespace-pre-wrap text-gray-700">{konten}</div>
+              {tipe === "image" && konten && (
+                <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={konten}
+                    alt={judul}
+                    className="w-full max-h-[480px] object-contain mx-auto"
+                  />
+                </div>
+              )}
+
+              {tipe === "video" && konten && (
+                <div className="rounded-xl overflow-hidden border border-gray-200 bg-black aspect-video w-4/5">
+                  {youtubeEmbedUrl ? (
+                    <iframe
+                      title={`${judul} - video ${urutan}`}
+                      src={youtubeEmbedUrl}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : isYoutubeUrl(konten) ? (
+                    <div className="flex h-full min-h-[200px] items-center justify-center p-6 text-center text-sm text-white/90">
+                      URL YouTube tidak valid atau tidak bisa di-embed. Periksa link di
+                      admin.
+                    </div>
+                  ) : (
+                    <video
+                      src={konten}
+                      controls
+                      className="w-full h-full"
+                    >
+                      Browser tidak mendukung pemutaran video.
+                    </video>
+                  )}
+                </div>
+              )}
+
+              {!["text", "image", "video"].includes(tipe) && (
+                <div className="whitespace-pre-wrap text-gray-700">{konten}</div>
+              )}
+            </section>
+          );
+        })
       )}
 
       {quiz?.id && (

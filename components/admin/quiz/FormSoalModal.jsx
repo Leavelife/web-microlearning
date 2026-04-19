@@ -96,6 +96,7 @@ export default function FormSoalModal({
           onChange={(e) =>
             setForm({ ...form, jawabanBenar: e.target.value })
           }
+          className="bg-gray-900 text-white"
         >
           {["A","B","C","D"].map(opt => (
             <option key={opt}>{opt}</option>
