@@ -57,9 +57,16 @@ export default function FormMateriModal({ isOpen, onClose, initialData, onSucces
     const data = await res.json();
     console.log('Response data:', data);
 
-    // Extract lesson/data from response
-    const newData = data.lesson || data.data || data;
-    console.log('Extracted newData:', newData);
+    if (!res.ok) {
+      alert(data.error || "Gagal menyimpan materi");
+      return;
+    }
+
+    const newData = data.materi ?? data.lesson ?? data.data ?? data;
+    if (!newData?.id) {
+      alert("Respons server tidak valid");
+      return;
+    }
 
     onSuccess(newData);
     handleClose();

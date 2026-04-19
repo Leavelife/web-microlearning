@@ -89,7 +89,7 @@ export default async function SimulasiPage() {
   const completedSet = new Set(completedSimulations.map((sim) => sim.idSimulasi));
   const hasCompletedAnyTopology = completedSet.has("topologi");
   const completedCount = completedSet.size;
-  const completionRate = Math.round((completedCount / SIMULATIONS.length) * 100);
+  const completionRate = Math.round((completedCount / (SIMULATIONS.length + 5)) * 100);
 
   return (
     <main className="min-h-screen bg-slate-100 text-slate-950">
@@ -110,7 +110,7 @@ export default async function SimulasiPage() {
             <div className="space-y-4">
               <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
                 <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Simulasi selesai</p>
-                <p className="mt-3 text-4xl font-semibold text-slate-950">{completedCount}/{SIMULATIONS.length}</p>
+                <p className="mt-3 text-4xl font-semibold text-slate-950">{completedCount}/{SIMULATIONS.length + 5}</p>
                 <p className="mt-2 text-sm text-slate-600">Selesaikan semua modul untuk meraih badge penuh.</p>
               </div>
               <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm">

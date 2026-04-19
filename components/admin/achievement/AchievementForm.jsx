@@ -27,8 +27,6 @@ export default function AchievementForm() {
 
     if (!urlGambar) {
       newErrors.urlGambar = "URL gambar wajib diisi"
-    } else if (!urlGambar.startsWith("@/")) {
-      newErrors.urlGambar = "URL gambar harus dimulai dengan @/"
     }
 
     return newErrors

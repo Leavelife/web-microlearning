@@ -22,6 +22,10 @@
 # production
 /build
 
+# unggahan pengguna (avatar profil, dll.)
+/public/uploads/profile/*
+!/public/uploads/profile/.gitkeep
+
 # misc
 .DS_Store
 *.pem

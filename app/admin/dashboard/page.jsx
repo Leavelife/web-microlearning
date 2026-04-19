@@ -10,10 +10,24 @@ export default async function DashboardPage() {
     if (roleError.message === "UNAUTHORIZED") {
         redirect("/");
     }
-    const materi = await prisma.materi.findMany({
+    const materiRows = await prisma.materi.findMany({
         take: 10,
-        orderBy: { createdAt: "asc" }
+        orderBy: { createdAt: "asc" },
+        include: {
+            _count: { select: { steps: true } },
+        },
     });
+
+    const materi = materiRows.map((m) => ({
+        id: m.id,
+        judul: m.judul,
+        deskripsi: m.deskripsi,
+        genre: m.genre,
+        thumbnail: m.thumbnail,
+        totalStep: m._count.steps,
+        tahap: 1,
+        tipe: m.genre,
+    }));
 
     const quiz = await prisma.quiz.findMany({
         take: 10,

@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import ChartCard from "./ChartCard";
 import FormMateriModal from "@/components/admin/materi/FormMateriModal";
 import TableStep from "@/components/admin/materi/TableStep";
@@ -10,7 +10,9 @@ import AchievementForm from "@/components/admin/achievement/AchievementForm";
 import AchievementTable from "@/components/admin/achievement/AchievementTable";
 import LevelForm from "@/components/admin/level/LevelForm";
 import LevelTable from "@/components/admin/level/LevelTable";
-
+import Link from "next/link";
+import Image from "next/image";
+  
 function StatCard({ title, value }) {
   return (
     <div className="bg-white/5 backdrop-blur rounded-2xl p-4 shadow">
@@ -28,7 +30,9 @@ function Sidebar({ currentView, onChangeView }) {
   ];
   return (
     <div className="fixed left-0 top-0 z-40 w-64 h-screen bg-black/40 backdrop-blur p-4">
-      <h1 className="text-xl font-bold mb-6">MICROLAB</h1>
+      <Link href="/" className="text-xl font-bold mb-6">
+        <Image src="/microlab.svg" alt="Logo" width={150} height={150} className="inline-block mr-2" />
+      </Link>
       <ul className="space-y-3">
         {menu.map((item) => (
           <li key={item.label}>
@@ -58,31 +62,14 @@ function Topbar() {
   );
 }
 
-function TableMateri({ initialData = [], onManageSteps }) {
+function TableMateri({ initialData = [], onManageSteps, listVersion = 0 }) {
   const [data, setData] = useState(initialData);
-  const [loading, setLoading] = useState(!initialData || initialData.length === 0);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMateri, setSelectedMateri] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const hasInitialized = useRef(false);
-  const initialDataRef = useRef(initialData);
 
-  // Fetch materi data on mount or when initialData changes
   useEffect(() => {
-    // Prevent infinite loop - only initialize once
-    if (hasInitialized.current) return;
-    hasInitialized.current = true;
-
-    const currentInitialData = initialDataRef.current;
-
-    // If initialData is provided and not empty, use it
-    if (currentInitialData && currentInitialData.length > 0) {
-      setData(currentInitialData);
-      setLoading(false);
-      return;
-    }
-
-    // Otherwise fetch from API
     let cancelled = false;
 
     const fetchMateri = async () => {
@@ -94,11 +81,13 @@ function TableMateri({ initialData = [], onManageSteps }) {
         const result = await res.json();
         if (!cancelled) {
           setData(result.materis || result.data || []);
-          setLoading(false);
         }
       } catch (err) {
         if (!cancelled) {
           setError(err.message);
+        }
+      } finally {
+        if (!cancelled) {
           setLoading(false);
         }
       }
@@ -108,7 +97,7 @@ function TableMateri({ initialData = [], onManageSteps }) {
     return () => {
       cancelled = true;
     };
-  }, []); // Empty dependency array - only run once on mount
+  }, [listVersion]);
 
     const handleAdd = () => {
         setSelectedMateri(null);
@@ -123,12 +112,23 @@ function TableMateri({ initialData = [], onManageSteps }) {
     const handleDelete = async (id) => {
         if (!confirm("Yakin hapus materi?")) return;
 
-        await fetch(`/api/admin/materi/${id}`, {
+        const res = await fetch(`/api/admin/materi/${id}`, {
             method: "DELETE",
         });
 
-        // refresh data (simple version)
-        setData(prev => prev.filter(item => item.id !== id));
+        if (!res.ok) {
+          let msg = "Gagal menghapus materi";
+          try {
+            const body = await res.json();
+            if (body?.error) msg = body.error;
+          } catch {
+            /* ignore */
+          }
+          alert(msg);
+          return;
+        }
+
+        setData((prev) => prev.filter((item) => item.id !== id));
     };
 
   return (
@@ -154,17 +154,18 @@ function TableMateri({ initialData = [], onManageSteps }) {
             <th>Deskripsi</th>
             <th>Thumbnail</th>
             <th>Total Steps</th>
+            <th>Aksi</th>
           </tr>
         </thead>
 
         <tbody>
           {loading ? (
             <tr key="loading-row">
-              <td colSpan="7">Loading...</td>
+              <td colSpan="8">Loading...</td>
             </tr>
           ) : data.length === 0 ? (
             <tr key="empty-row">
-              <td colSpan="7">Tidak ada data</td>
+              <td colSpan="8">Tidak ada data</td>
             </tr>
           ) : (
             data.map((item, i) => (
@@ -208,25 +209,35 @@ function TableMateri({ initialData = [], onManageSteps }) {
         onClose={() => setIsOpen(false)}
         initialData={selectedMateri}
         onSuccess={(newData) => {
-            console.log('onSuccess called with:', newData);
-            console.log('selectedMateri:', selectedMateri);
-
             if (selectedMateri) {
-            // edit - update existing item
-            console.log('Updating item with ID:', newData.id);
-            setData(prev =>
-                prev.map(item => {
-                    console.log('Comparing:', item.id, 'with', newData.id);
-                    return item.id === newData.id ? newData : item;
-                })
-            );
+              setData((prev) =>
+                prev.map((item) =>
+                  item.id === newData.id
+                    ? {
+                        ...item,
+                        ...newData,
+                        totalStep:
+                          newData.totalStep !== undefined
+                            ? newData.totalStep
+                            : item.totalStep,
+                        tahap:
+                          newData.tahap !== undefined ? newData.tahap : item.tahap,
+                      }
+                    : item
+                )
+              );
             } else {
-            // add - prepend new item
-            console.log('Adding new item');
-            setData(prev => [newData, ...prev]);
+              setData((prev) => [
+                {
+                  ...newData,
+                  totalStep: newData.totalStep ?? 0,
+                  tahap: newData.tahap ?? 1,
+                  tipe: newData.tipe ?? newData.genre,
+                },
+                ...prev,
+              ]);
             }
 
-            // Reset selectedMateri after operation
             setSelectedMateri(null);
         }}
         />
@@ -241,6 +252,8 @@ export default function DashboardClient({ stats, initialMateri, initialQuiz, ini
   const [selectedQuizForDetail, setSelectedQuizForDetail] = useState(null);
   const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard', 'steps', 'achievement'
   const [selectedMateriId, setSelectedMateriId] = useState(null);
+  const [materiListVersion, setMateriListVersion] = useState(0);
+
   return (
     <div className="flex text-white min-h-screen bg-linear-to-br from-black via-gray-900 to-black">
       <Sidebar currentView={currentView} onChangeView={setCurrentView} />
@@ -271,6 +284,7 @@ export default function DashboardClient({ stats, initialMateri, initialQuiz, ini
             <>
               <TableMateri
                 initialData={initialMateri}
+                listVersion={materiListVersion}
                 onManageSteps={(materiId) => {
                   setSelectedMateriId(materiId);
                   setCurrentView('steps');
@@ -324,7 +338,10 @@ export default function DashboardClient({ stats, initialMateri, initialQuiz, ini
           {currentView === 'steps' && (
             <TableStep
               materiId={selectedMateriId}
-              onClose={() => setCurrentView('dashboard')}
+              onClose={() => {
+                setCurrentView('dashboard');
+                setMateriListVersion((v) => v + 1);
+              }}
             />
           )}
         </div>

@@ -2,13 +2,22 @@
 
 import Image from "next/image"
 import EditProfile from "./EditProfile"
+import HexagonStats from "../HexagonStats"
+import { useEffect, useState } from "react"
 
 export default function ProfileSection({ user }) {
   const minExp = user.level?.minExp ?? 0
   const maxExp = user.level?.maxExp ?? (user.totalExp ?? 0)
+  const [stats, setStats] = useState(null)
+
   const progress = maxExp > minExp
-    ? Math.min(100, Math.max(0, ((user.totalExp ?? 0) - minExp) / (maxExp - minExp) * 100))
-    : 0
+  ? Math.min(100, Math.max(0, ((user.totalExp ?? 0) - minExp) / (maxExp - minExp) * 100))
+  : 0
+  useEffect(() => {
+    fetch("/api/profile/stats")
+      .then(res => res.json())
+      .then(setStats)
+  }, [])
 
   return (
     <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -39,6 +48,10 @@ export default function ProfileSection({ user }) {
             <div className="mx-auto lg:mx-0">
               <EditProfile user={user} />
             </div>
+          </div>
+          <div className="w-10/12">
+            {/* Hexagon Statistics Section */}
+            {stats && <HexagonStats stats={stats} />}
           </div>
         </section>
 

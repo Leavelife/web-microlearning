@@ -35,8 +35,12 @@ export default async function LearnMateriPage({ params }) {
       id: s.id,
       urutan: s.urutan,
       judul: s.judul,
-      tipe: s.tipe,
-      konten: s.konten,
+      contents: s.contents?.map((content) => ({
+        id: content.id,
+        tipe: content.tipe,
+        konten: content.konten,
+        urutan: content.urutan,
+      })) || [],
       quiz: s.quiz
         ? { id: s.quiz.id, judul: s.quiz.judul }
         : null,

@@ -20,10 +20,6 @@ export async function createAchievement(formData) {
     throw new Error("XP tidak valid")
   }
 
-  if (!urlGambar.startsWith("@/")) {
-    throw new Error("URL gambar tidak valid")
-  }
-
   await prisma.achievement.create({
     data: {
       nama,

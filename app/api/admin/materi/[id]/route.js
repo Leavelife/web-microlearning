@@ -68,8 +68,25 @@ export async function DELETE(req, { params }) {
 
     const { id } = await params;
 
-    await prisma.materi.delete({
-      where: { id },
+    await prisma.$transaction(async (tx) => {
+      const steps = await tx.materiStep.findMany({
+        where: { materiId: id },
+        include: { quiz: true },
+      });
+
+      for (const step of steps) {
+        if (step.quiz) {
+          const qid = step.quiz.id;
+          await tx.hasilQuizUser.deleteMany({ where: { quizId: qid } });
+          await tx.soalQuiz.deleteMany({ where: { quizId: qid } });
+          await tx.quiz.delete({ where: { id: qid } });
+        }
+        await tx.stepContent.deleteMany({ where: { stepId: step.id } });
+      }
+
+      await tx.materiStep.deleteMany({ where: { materiId: id } });
+      await tx.progressMateri.deleteMany({ where: { materiId: id } });
+      await tx.materi.delete({ where: { id } });
     });
 
     return Response.json({
@@ -77,6 +94,7 @@ export async function DELETE(req, { params }) {
     });
 
   } catch (err) {
+    console.error(err);
     return Response.json({ error: "Error delete" }, { status: 500 });
   }
 }
