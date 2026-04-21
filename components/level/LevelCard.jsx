@@ -10,7 +10,7 @@ export default function LevelCard({ level }) {
           <div className="absolute inset-0 rounded-full bg-linear-to-r from-violet-500/20 via-sky-400/0 to-fuchsia-500/15 blur-2xl" />
           <div className="relative z-10 flex h-28 w-28 items-center justify-center rounded-full border border-violet-200 bg-violet-50 p-3 shadow-lg shadow-violet-200/40">
             <Image
-              src={`/${level.urlGambar}`}
+              src={`${level.urlGambar}`}
               alt={level.nama}
               width={112}
               height={112}

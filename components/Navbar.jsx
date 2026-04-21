@@ -53,7 +53,7 @@ export default function Navbar() {
       <nav className="fixed top-0 w-full z-50 flex items-center justify-between px-4 md:px-8 bg-[#6F27FF] shadow-lg">
         
         {/* Logo */}
-        <Link href="/" className="text-xl md:text-2xl font-bold text-white">
+        <Link href="/" className="text-lg md:text-xl font-bold text-white">
           <Image src="/microlab.svg" alt="Logo" width={150} height={150} className="inline-block mr-2" />
         </Link>
 
@@ -125,7 +125,7 @@ export default function Navbar() {
       )}
 
       {/* ===== SIDEBAR ===== */}
-      <div className={`fixed top-17 right-0 h-1/2 w-full rounded-xl bg-white text-[#6F27FF] font-semibold z-50 transform transition-transform duration-300
+      <div className={`fixed top-17 right-0 h-max w-full rounded-xl bg-white text-[#6F27FF] font-semibold z-50 transform transition-transform duration-300
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}>
 
         <div className="p-6 flex flex-col gap-6">
