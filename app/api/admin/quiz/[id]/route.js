@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { requireRole } from "@/lib/auth-guard"
+import { revalidatePath } from "next/cache"
 
 export async function PUT(req, { params }) {
   try {
@@ -23,6 +24,8 @@ export async function PUT(req, { params }) {
       data: updateData
     })
 
+    revalidatePath("/quiz");
+
     return Response.json({
       message: "Quiz berhasil diupdate",
       quiz
@@ -45,6 +48,8 @@ export async function DELETE(req, { params }) {
       prisma.soalQuiz.deleteMany({ where: { quizId: id } }),
       prisma.quiz.delete({ where: { id } }),
     ])
+
+    revalidatePath("/quiz");
 
     return Response.json({
       message: "Quiz berhasil dihapus"

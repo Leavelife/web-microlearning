@@ -3,6 +3,9 @@ import Navbar from "@/components/Navbar";
 import { getMateriListFormatted } from "@/lib/materi-list";
 import Image from "next/image";
 
+// Force dynamic rendering untuk real-time updates
+export const dynamic = "force-dynamic";
+
 export default async function LearnPage() {
   const lessons = await getMateriListFormatted();
 

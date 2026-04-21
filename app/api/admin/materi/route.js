@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth-guard";
 import { uploadAdminImage } from "@/lib/cloudinary-upload";
+import { revalidatePath } from "next/cache";
 
 //  CREATE MATERI
 export async function POST(req) {
@@ -64,6 +65,8 @@ export async function POST(req) {
         },
       });
 
+      revalidatePath("/learn");
+
       return Response.json({
         message: "Materi berhasil dibuat",
         materi,
@@ -87,6 +90,8 @@ export async function POST(req) {
           thumbnail,
         },
       });
+
+      revalidatePath("/learn");
 
       return Response.json({
         message: "Materi berhasil dibuat",

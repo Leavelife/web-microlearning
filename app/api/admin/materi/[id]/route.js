@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth-guard";
+import { revalidatePath } from "next/cache";
 
 // ✅ GET DETAIL (STEP + QUIZ)
 export async function GET(req, { params }) {
@@ -51,6 +52,8 @@ export async function PUT(req, { params }) {
       },
     });
 
+    revalidatePath("/learn");
+
     return Response.json({
       message: "Materi berhasil diupdate",
       materi,
@@ -88,6 +91,8 @@ export async function DELETE(req, { params }) {
       await tx.progressMateri.deleteMany({ where: { materiId: id } });
       await tx.materi.delete({ where: { id } });
     });
+
+    revalidatePath("/learn");
 
     return Response.json({
       message: "Materi berhasil dihapus",

@@ -57,6 +57,8 @@ export async function createAchievement(formData) {
   })
 
   revalidatePath("/admin/dashboard")
+  revalidatePath("/learn")
+  revalidatePath("/quiz")
 }
 
 // DELETE
@@ -66,4 +68,6 @@ export async function deleteAchievement(id) {
   })
 
   revalidatePath("/admin/dashboard")
+  revalidatePath("/learn")
+  revalidatePath("/quiz")
 }

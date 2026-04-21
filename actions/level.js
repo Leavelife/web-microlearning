@@ -68,6 +68,8 @@ export async function createLevel(formData) {
   })
 
   revalidatePath("/admin/dashboard")
+  revalidatePath("/learn")
+  revalidatePath("/quiz")
 }
 
 // DELETE
@@ -77,4 +79,6 @@ export async function deleteLevel(id) {
   })
 
   revalidatePath("/admin/dashboard")
+  revalidatePath("/learn")
+  revalidatePath("/quiz")
 }

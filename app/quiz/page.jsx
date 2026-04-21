@@ -4,6 +4,8 @@ import { getQuizListForBrowse } from "@/lib/quiz-for-pages";
 import Navbar from "@/components/Navbar";
 import Image from "next/image";
 
+// Force dynamic rendering untuk real-time updates
+export const dynamic = "force-dynamic";
 
 export default async function QuizPage() {
   const quizzes = await getQuizListForBrowse();

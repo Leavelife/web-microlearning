@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { requireRole } from "@/lib/auth-guard"
+import { revalidatePath } from "next/cache"
 
 export async function POST(req) {
   try {
@@ -22,6 +23,8 @@ export async function POST(req) {
         passingScore: passingScore ? Number(passingScore) : 70
       }
     })
+
+    revalidatePath("/quiz");
 
     return Response.json({
       message: "Quiz berhasil dibuat",
