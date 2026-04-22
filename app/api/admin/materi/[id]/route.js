@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/auth-guard";
 import { revalidatePath } from "next/cache";
+import { uploadAdminImage } from "@/lib/cloudinary-upload";
 
-// ✅ GET DETAIL (STEP + QUIZ)
+// GET DETAIL (STEP + QUIZ)
 export async function GET(req, { params }) {
   try {
     const { id } = await params;
@@ -34,22 +35,36 @@ export async function GET(req, { params }) {
   }
 }
 
-// ✅ UPDATE MATERI
+// UPDATE MATERI
 export async function PUT(req, { params }) {
   try {
     await requireRole("admin");
 
     const { id } = await params;
-    const { judul, deskripsi, genre, thumbnail } = await req.json();
+    const formData = await req.formData();
+
+    const judul = formData.get('judul');
+    const deskripsi = formData.get('deskripsi');
+    const genre = formData.get('genre');
+    const thumbnailFile = formData.get('thumbnail');
+
+    const updateData = {
+      judul,
+      deskripsi,
+      genre,
+    };
+
+    // Handle thumbnail upload if provided
+    if (thumbnailFile && thumbnailFile.size > 0) {
+      const buffer = Buffer.from(await thumbnailFile.arrayBuffer());
+      const filename = `materi-${id}-${Date.now()}`;
+      const uploadResult = await uploadAdminImage(buffer, filename, 'materi');
+      updateData.thumbnail = uploadResult.secure_url;
+    }
 
     const materi = await prisma.materi.update({
       where: { id },
-      data: {
-        judul,
-        deskripsi,
-        genre,
-        thumbnail,
-      },
+      data: updateData,
     });
 
     revalidatePath("/learn");
@@ -60,11 +75,12 @@ export async function PUT(req, { params }) {
     });
 
   } catch (err) {
-    return Response.json({ error: "Error update" }, { status: 500 });
+    console.error(err);
+    return Response.json({ error: err.message || "Error update" }, { status: 500 });
   }
 }
 
-// ✅ DELETE
+// DELETE
 export async function DELETE(req, { params }) {
   try {
     await requireRole("admin");

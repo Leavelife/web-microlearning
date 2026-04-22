@@ -60,14 +60,14 @@ export default function StepContent({ step, materiJudul }) {
 
               {tipe === "text" && (
                 <div className="prose prose-gray max-w-none">
-                  <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+                  <div className="whitespace-pre-wrap text-gray-700 text-lg leading-relaxed">
                     {konten}
                   </div>
                 </div>
               )}
 
               {tipe === "image" && konten && (
-                <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+                <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 w-1/2">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={konten}

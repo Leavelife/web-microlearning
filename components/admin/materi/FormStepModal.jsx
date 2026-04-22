@@ -18,6 +18,7 @@ export default function FormStepModal({
 
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
+  const [imagePreviews, setImagePreviews] = useState({});
 
   useEffect(() => {
     if (initialData) {
@@ -32,8 +33,17 @@ export default function FormStepModal({
               }))
             : [{ tipe: "text", konten: "", urutan: 1 }],
       });
+      // Set image previews for existing images
+      const previews = {};
+      initialData.contents?.forEach((content, index) => {
+        if (content.tipe === "image" && content.konten) {
+          previews[index] = content.konten;
+        }
+      });
+      setImagePreviews(previews);
     } else {
       setForm(emptyForm);
+      setImagePreviews({});
     }
   }, [initialData]);
 
@@ -44,6 +54,21 @@ export default function FormStepModal({
         i === index ? { ...content, [field]: value } : content
       ),
     }));
+  };
+
+  const handleImageChange = (index, file) => {
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setImagePreviews(prev => ({ ...prev, [index]: url }));
+      updateContent(index, "konten", file); // Store file object
+    } else {
+      setImagePreviews(prev => {
+        const newPreviews = { ...prev };
+        delete newPreviews[index];
+        return newPreviews;
+      });
+      updateContent(index, "konten", "");
+    }
   };
 
   const addContent = () => {
@@ -82,21 +107,56 @@ export default function FormStepModal({
         ? `/api/admin/materi/${materiId}/step/${initialData.id}`
         : `/api/admin/materi/${materiId}/step`;
 
-      const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      // Check if any content has image files
+      const hasImages = form.contents.some(content => content.tipe === "image" && content.konten instanceof File);
 
-      if (!res.ok) {
-        throw new Error("Gagal menyimpan step");
+      if (hasImages) {
+        // Use FormData for file uploads
+        const formData = new FormData();
+        formData.append('judul', form.judul);
+        
+        form.contents.forEach((content, index) => {
+          formData.append(`contents[${index}][tipe]`, content.tipe);
+          formData.append(`contents[${index}][urutan]`, content.urutan.toString());
+          if (content.tipe === "image" && content.konten instanceof File) {
+            formData.append(`contents[${index}][file]`, content.konten);
+          } else {
+            formData.append(`contents[${index}][konten]`, content.konten);
+          }
+        });
+
+        const res = await fetch(url, {
+          method,
+          body: formData,
+        });
+
+        if (!res.ok) {
+          throw new Error("Gagal menyimpan step");
+        }
+
+        const result = await res.json();
+        const step = result.step || result;
+
+        onSuccess(step);
+        onClose();
+      } else {
+        // Use JSON for text-only content
+        const res = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+
+        if (!res.ok) {
+          throw new Error("Gagal menyimpan step");
+        }
+
+        const result = await res.json();
+        const step = result.step || result;
+
+        onSuccess(step);
+        onClose();
       }
-
-      const result = await res.json();
-      const step = result.step || result;
-
-      onSuccess(step);
-      onClose();
     } catch (err) {
       alert(err.message);
     } finally {
@@ -158,12 +218,32 @@ export default function FormStepModal({
 
                 <div>
                   <label className="block text-sm font-medium p-2 text-white">Isi Konten</label>
-                  <textarea
-                    value={content.konten}
-                    onChange={(e) => updateContent(index, "konten", e.target.value)}
-                    placeholder="Masukkan isi konten atau URL"
-                    className="w-full p-2 bg-white/10 rounded h-24"
-                  />
+                  {content.tipe === "image" ? (
+                    <div className="space-y-2">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageChange(index, e.target.files[0])}
+                        className="w-full p-2 bg-white/10 rounded text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600"
+                      />
+                      {imagePreviews[index] && (
+                        <div className="mt-2">
+                          <img
+                            src={imagePreviews[index]}
+                            alt="Preview"
+                            className="w-32 h-32 object-cover rounded border"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <textarea
+                      value={content.konten}
+                      onChange={(e) => updateContent(index, "konten", e.target.value)}
+                      placeholder={content.tipe === "video" ? "Masukkan URL video" : "Masukkan isi konten"}
+                      className="w-full p-2 bg-white/10 rounded h-24"
+                    />
+                  )}
                 </div>
               </div>
             </div>
