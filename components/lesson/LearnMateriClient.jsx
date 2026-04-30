@@ -153,7 +153,7 @@ export default function LearnMateriClient({
 
   return (
     <div className="flex flex-1 min-h-[calc(100vh-4rem)] flex-col lg:flex-row">
-      <aside className="w-full lg:w-64 shrink-0 border-r border-gray-200 bg-gray-50/80 p-4 flex flex-col mt-20 lg:mt-20">
+      <aside className="fixed w-full lg:w-64 shrink-0 border-r border-gray-200 bg-gray-50/80 p-4 flex flex-col mt-20 lg:mt-20">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
           Tahap materi
         </p>
@@ -196,7 +196,7 @@ export default function LearnMateriClient({
         )}
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0 bg-white">
+      <main className="flex-1 flex flex-col min-w-0 ml-64 bg-white">
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-10">
           {error && (
             <div className="mb-4 rounded-lg bg-amber-50 text-amber-900 text-sm px-4 py-3 border border-amber-200">

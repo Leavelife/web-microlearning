@@ -14,6 +14,7 @@ export default function FormMateriModal({ isOpen, onClose, initialData, onSucces
   const [form, setForm] = useState(defaultForm);
   const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [imageError, setImageError] = useState("");
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   // Reset form when initialData changes or modal opens
@@ -65,108 +66,192 @@ export default function FormMateriModal({ isOpen, onClose, initialData, onSucces
   };
 
   const handleSubmit = async () => {
-    console.log('handleSubmit called, initialData:', initialData);
-    console.log('Form data:', form);
+    try {
+      if (!form.judul.trim()) {
+        setImageError("Judul tidak boleh kosong");
+        return;
+      }
 
-    const method = initialData ? "PUT" : "POST";
-    const url = initialData
-      ? `/api/admin/materi/${initialData.id}`
-      : `/api/admin/materi`;
+      setLoading(true);
+      const method = initialData ? "PUT" : "POST";
+      const url = initialData
+        ? `/api/admin/materi/${initialData.id}`
+        : `/api/admin/materi`;
 
-    console.log('Request:', method, url);
+      const formData = new FormData();
+      formData.append('judul', form.judul);
+      formData.append('deskripsi', form.deskripsi);
+      formData.append('genre', form.genre);
+      if (form.thumbnail instanceof File) {
+        formData.append('thumbnail', form.thumbnail);
+      }
 
-    const formData = new FormData();
-    formData.append('judul', form.judul);
-    formData.append('deskripsi', form.deskripsi);
-    formData.append('genre', form.genre);
-    if (form.thumbnail instanceof File) {
-      formData.append('thumbnail', form.thumbnail);
+      const res = await fetch(url, {
+        method,
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Gagal menyimpan materi");
+      }
+
+      const newData = data.materi ?? data.lesson ?? data.data ?? data;
+      if (!newData?.id) {
+        throw new Error("Respons server tidak valid");
+      }
+
+      onSuccess(newData);
+      handleClose();
+    } catch (err) {
+      setImageError(err.message);
+    } finally {
+      setLoading(false);
     }
-
-    const res = await fetch(url, {
-      method,
-      body: formData,
-    });
-
-    console.log('Response status:', res.status);
-
-    const data = await res.json();
-    console.log('Response data:', data);
-
-    if (!res.ok) {
-      alert(data.error || "Gagal menyimpan materi");
-      return;
-    }
-
-    const newData = data.materi ?? data.lesson ?? data.data ?? data;
-    if (!newData?.id) {
-      alert("Respons server tidak valid");
-      return;
-    }
-
-    onSuccess(newData);
-    handleClose();
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
-      <div className="bg-gray-900 p-6 rounded-2xl w-96 space-y-4">
-        <h2 className="text-lg font-bold">
-          {initialData ? "Edit Materi" : "Tambah Materi"}
-        </h2>
-        <div>
-          <label htmlFor="judul" className="block text-sm font-medium p-2 text-white">Judul</label>
-          <input name="judul" placeholder="Judul" onChange={handleChange} value={form.judul} className="w-full p-2 bg-white/10 rounded" />
-        </div>
-        <div>
-          <label htmlFor="deskripsi" className="block text-sm font-medium p-2 text-white">Deskripsi</label>
-          <input name="deskripsi" placeholder="Deskripsi" onChange={handleChange} value={form.deskripsi} className="w-full p-2 bg-white/10 rounded" />
-        </div>
-        <div>
-          <label htmlFor="genre" className="block text-sm font-medium p-2 text-white">Genre</label>
-          <input name="genre" placeholder="Genre" onChange={handleChange} value={form.genre} className="w-full p-2 bg-white/10 rounded" />
-        </div>
-        <div>
-          <label htmlFor="thumbnail" className="block text-sm font-medium p-2 text-white">Thumbnail</label>
-          <input
-            ref={fileInputRef}
-            name="thumbnail"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            onChange={handleChange}
-            className="w-full p-2 bg-white/10 rounded text-white"
-          />
-          {imageError && (
-            <p className="text-red-400 text-sm mt-1">{imageError}</p>
-          )}
-          <p className="text-xs text-gray-400 mt-1">
-            Gambar disimpan di Cloudinary; maks. 2MB.
-          </p>
-        </div>
-
-        {/* THUMBNAIL PREVIEW */}
-        {thumbnailPreview && (
-          <div className="mt-4">
-            <p className="text-sm text-gray-400 mb-2">Preview:</p>
-            <div className="w-24 h-24 rounded-lg overflow-hidden border border-gray-600">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={thumbnailPreview}
-                alt="Thumbnail Preview"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        )}
-
-        <div className="flex justify-end space-x-2">
-          <button onClick={handleClose} className="px-3 py-1 bg-gray-500 rounded">
-            Cancel
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-50 p-4">
+      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl shadow-2xl w-full max-w-sm sm:max-w-md max-h-[90vh] overflow-y-auto border border-white/10">
+        {/* Header */}
+        <div className="sticky top-0 bg-gray-900/95 border-b border-white/10 px-6 py-4 flex justify-between items-center">
+          <h2 className="text-xl font-bold text-white">
+            {initialData ? "✏️ Edit Materi" : "➕ Tambah Materi"}
+          </h2>
+          <button
+            onClick={handleClose}
+            className="text-gray-400 hover:text-white transition-colors text-2xl leading-none"
+          >
+            ×
           </button>
-          <button onClick={handleSubmit} className="px-3 py-1 bg-blue-500 rounded">
-            Save
+        </div>
+
+        {/* Body */}
+        <div className="p-6 space-y-5">
+          {/* Judul */}
+          <div className="space-y-2">
+            <label htmlFor="judul" className="block text-sm font-semibold text-gray-200">
+              Judul Materi <span className="text-red-400">*</span>
+            </label>
+            <input
+              id="judul"
+              name="judul"
+              placeholder="Contoh: Pengenalan Jaringan Komputer"
+              onChange={handleChange}
+              value={form.judul}
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+          </div>
+
+          {/* Deskripsi */}
+          <div className="space-y-2">
+            <label htmlFor="deskripsi" className="block text-sm font-semibold text-gray-200">
+              Deskripsi
+            </label>
+            <textarea
+              id="deskripsi"
+              name="deskripsi"
+              placeholder="Jelaskan apa yang akan dipelajari dalam materi ini..."
+              onChange={handleChange}
+              value={form.deskripsi}
+              rows={3}
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+            />
+          </div>
+
+          {/* Genre */}
+          <div className="space-y-2">
+            <label htmlFor="genre" className="block text-sm font-semibold text-gray-200">
+              Genre/Kategori
+            </label>
+            <input
+              id="genre"
+              name="genre"
+              placeholder="Contoh: Networking, Programming, dll"
+              onChange={handleChange}
+              value={form.genre}
+              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+          </div>
+
+          {/* Thumbnail */}
+          <div className="space-y-3 border-t border-white/10 pt-4">
+            <label htmlFor="thumbnail" className="block text-sm font-semibold text-gray-200">
+              Thumbnail
+            </label>
+            <div className="relative">
+              <input
+                id="thumbnail"
+                ref={fileInputRef}
+                name="thumbnail"
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleChange}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                📤 Pilih Gambar
+              </button>
+            </div>
+            <p className="text-xs text-gray-400">
+              Format: JPG, PNG, WebP, GIF • Ukuran maks: 2MB
+            </p>
+          </div>
+
+          {/* Thumbnail Preview */}
+          {thumbnailPreview && (
+            <div className="space-y-2 bg-white/5 p-4 rounded-lg border border-white/10">
+              <p className="text-sm font-medium text-gray-300">Preview Thumbnail:</p>
+              <div className="relative w-full h-40 rounded-lg overflow-hidden bg-black/30 border border-white/10">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={thumbnailPreview}
+                  alt="Thumbnail Preview"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Error Message */}
+          {imageError && (
+            <div className="p-3 bg-red-500/20 border border-red-500/50 rounded-lg">
+              <p className="text-sm text-red-300">⚠️ {imageError}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="sticky bottom-0 bg-gray-900/95 border-t border-white/10 px-6 py-4 flex justify-end gap-3">
+          <button
+            onClick={handleClose}
+            disabled={loading}
+            className="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+          >
+            Batal
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-2"
+          >
+            {loading ? (
+              <>
+                <span className="animate-spin">⏳</span>
+                Menyimpan...
+              </>
+            ) : (
+              <>
+                💾 Simpan
+              </>
+            )}
           </button>
         </div>
       </div>

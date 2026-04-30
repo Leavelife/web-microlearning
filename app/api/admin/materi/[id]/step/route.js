@@ -8,6 +8,10 @@ export async function GET(req, { params }) {
 
     const { id } = await params;
 
+    if (!id) {
+      return Response.json({ error: "ID materi tidak ditemukan" }, { status: 400 });
+    }
+
     const steps = await prisma.materiStep.findMany({
       where: { materiId: id },
       orderBy: { urutan: "asc" },
@@ -21,7 +25,8 @@ export async function GET(req, { params }) {
     return Response.json({ steps });
 
   } catch (err) {
-    return Response.json({ error: "Error fetch steps" }, { status: 500 });
+    console.error("[GET /api/admin/materi/[id]/step] Error:", err);
+    return Response.json({ error: err.message || "Error fetch steps" }, { status: 500 });
   }
 }
 
