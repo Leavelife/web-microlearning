@@ -53,7 +53,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="w-full max-w-5xl bg-white rounded-xl shadow-lg overflow-hidden flex">
 
         {/* LEFT SIDE (ILLUSTRATION) */}

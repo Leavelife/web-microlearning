@@ -38,13 +38,13 @@ export default function Footer() {
             <h4 className="font-semibold text-slate-900 mb-5">Ikuti Kami</h4>
             <ul className="space-y-3 text-sm text-slate-500">
               <li>
-                <a href="#" className="hover:text-[#6F27FF] transition-colors">Instagram</a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#6F27FF] transition-colors">Instagram</a>
               </li>
               <li>
-                <a href="#" className="hover:text-[#6F27FF] transition-colors">GitHub</a>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#6F27FF] transition-colors">GitHub</a>
               </li>
               <li>
-                <a href="#" className="hover:text-[#6F27FF] transition-colors">LinkedIn</a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#6F27FF] transition-colors">LinkedIn</a>
               </li>
             </ul>
           </div>
@@ -56,8 +56,8 @@ export default function Footer() {
           
           {/* Tautan Legal (Opsional tapi menambah kesan profesional) */}
           <div className="flex gap-6">
-            <a href="#" className="hover:text-slate-900 transition-colors">Syarat & Ketentuan</a>
-            <a href="#" className="hover:text-slate-900 transition-colors">Kebijakan Privasi</a>
+            <a href="/terms" className="hover:text-slate-900 transition-colors">Syarat & Ketentuan</a>
+            <a href="/privacy" className="hover:text-slate-900 transition-colors">Kebijakan Privasi</a>
           </div>
         </div>
 
