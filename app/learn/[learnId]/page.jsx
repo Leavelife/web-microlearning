@@ -57,7 +57,7 @@ export default async function LearnMateriPage({ params }) {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className="min-h-screen bg-white flex flex-col pt-16">
         <LearnMateriClient
           materi={payload}
           initialProgress={progressProps}

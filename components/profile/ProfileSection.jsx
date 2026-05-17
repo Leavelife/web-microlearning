@@ -62,7 +62,7 @@ export default function ProfileSection({ user }) {
             <div className="flex flex-col items-center gap-6">
               <div className="relative flex h-46 w-46 items-center justify-center rounded-full bg-transparent shadow-2xl">
                 <Image
-                  src={user.level?.urlGambar || "/default-avatar.png"}
+                  src={user.level?.urlGambar || "/default-level.png"}
                   alt={user.level?.nama || "Pemula"}
                   width={160}
                   height={160}

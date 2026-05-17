@@ -3,15 +3,14 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import StepContent from "./StepContent";
-import { useGamification } from "@/components/gamification/GamificationProvider"
+import { useGamification } from "@/components/gamification/GamificationProvider";
 
 export default function LearnMateriClient({
   materi,
   initialProgress,
   isLoggedIn,
 }) {
-  const [gamificationData, setGamificationData] = useState(null)
-  const { showGamification } = useGamification()
+  const { showGamification } = useGamification();
   const steps = materi.steps ?? [];
   const sorted = useMemo(
     () => [...steps].sort((a, b) => a.urutan - b.urutan),
@@ -67,11 +66,10 @@ export default function LearnMateriClient({
       const data = await res.json().catch(() => ({}));
 
       if (data.gamification) {
-        showGamification(data.gamification)
+        showGamification(data.gamification);
       }
 
       if (!res.ok) {
-
         if (data?.progress) {
           setFrontier(data.progress.stepSekarang);
           setSelesai(!!data.progress.selesai);
@@ -152,12 +150,95 @@ export default function LearnMateriClient({
   }
 
   return (
-    <div className="flex flex-1 min-h-[calc(100vh-4rem)] flex-col lg:flex-row">
-      <aside className="fixed w-full lg:w-64 shrink-0 border-r border-gray-200 bg-gray-50/80 p-4 flex flex-col mt-20 lg:mt-20">
+    <LearnMateriLayout
+      sorted={sorted}
+      activeUrutan={activeUrutan}
+      setActiveUrutan={setActiveUrutan}
+      tabUnlocked={tabUnlocked}
+      isLoggedIn={isLoggedIn}
+      selesai={selesai}
+      frontier={frontier}
+      activeStep={activeStep}
+      materi={materi}
+      error={error}
+      saving={saving}
+      primaryDisabled={primaryDisabled}
+      nextLabel={nextLabel}
+      handlePrimary={handlePrimary}
+    />
+  );
+}
+
+function LearnMateriLayout({
+  sorted,
+  activeUrutan,
+  setActiveUrutan,
+  tabUnlocked,
+  isLoggedIn,
+  selesai,
+  frontier,
+  activeStep,
+  materi,
+  error,
+  saving,
+  primaryDisabled,
+  nextLabel,
+  handlePrimary,
+}) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleStepClick = (urutan, unlocked) => {
+    if (!unlocked) return;
+    setActiveUrutan(urutan);
+    setSidebarOpen(false);
+  };
+
+  const activeTitle = sorted.find((s) => s.urutan === activeUrutan)?.judul ?? "";
+
+  return (
+    <div className="flex flex-1 min-h-[calc(100vh-4rem)] overflow-hidden">
+      {/* ── Mobile overlay backdrop ─────────────────────────────── */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* ── Sidebar ─────────────────────────────────────────────── */}
+      {/* Mobile: fixed off-canvas drawer (z-40, slides in/out)      */}
+      {/* Desktop (lg+): sticky in-flow panel, no margin hack needed */}
+      <aside
+        className={[
+          /* --- shared --- */
+          "flex flex-col border-r border-gray-200 bg-gray-50/95 p-4",
+          /* --- mobile: fixed off-canvas drawer --- */
+          "fixed top-0 left-0 z-40 h-full w-72 max-w-[85vw] pt-16",
+          "transition-transform duration-300 ease-in-out backdrop-blur-sm",
+          sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full",
+          /* --- desktop: in-flow sticky panel --- */
+          /* page.jsx already has pt-16, so sticky top-0 = just below navbar */
+          "lg:static lg:translate-x-0 lg:shadow-none lg:backdrop-blur-none",
+          "lg:w-64 lg:shrink-0 lg:sticky lg:top-0 lg:h-[calc(100vh-4rem)] lg:pt-4 lg:z-auto",
+        ].join(" ")}
+      >
+        {/* Mobile close button */}
+        <button
+          type="button"
+          onClick={() => setSidebarOpen(false)}
+          aria-label="Tutup daftar tahap"
+          className="absolute top-4 right-4 p-1.5 rounded-lg text-gray-500 hover:bg-gray-200 lg:hidden"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">
           Tahap materi
         </p>
-        <nav className="space-y-1 flex-1 overflow-y-auto max-h-96 lg:max-h-none">
+        <nav className="space-y-1 flex-1 overflow-y-auto">
           {sorted.map((s, i) => {
             const unlocked = tabUnlocked(s.urutan);
             const active = s.urutan === activeUrutan;
@@ -166,15 +247,14 @@ export default function LearnMateriClient({
                 key={s.id}
                 type="button"
                 disabled={!unlocked}
-                onClick={() => unlocked && setActiveUrutan(s.urutan)}
-                className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors
-                  ${
-                    active
-                      ? "bg-purple-700 text-white shadow"
-                      : unlocked
-                        ? "text-gray-800 hover:bg-gray-200/80"
-                        : "text-gray-400 cursor-not-allowed opacity-60"
-                  }`}
+                onClick={() => handleStepClick(s.urutan, unlocked)}
+                className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${
+                  active
+                    ? "bg-purple-700 text-white shadow"
+                    : unlocked
+                      ? "text-gray-800 hover:bg-gray-200/80"
+                      : "text-gray-400 cursor-not-allowed opacity-60"
+                }`}
               >
                 <span className="font-medium">{i + 1}.</span>{" "}
                 <span className="line-clamp-2">{s.judul}</span>
@@ -182,6 +262,7 @@ export default function LearnMateriClient({
             );
           })}
         </nav>
+
         {isLoggedIn && (
           <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-500">
             {selesai ? (
@@ -196,7 +277,25 @@ export default function LearnMateriClient({
         )}
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0 ml-64 bg-white">
+      {/* ── Main content ─────────────────────────────────────────── */}
+      {/* No ml-64 needed — sidebar is in-flow on desktop            */}
+      <main className="flex-1 flex flex-col min-w-0 bg-white">
+        {/* Mobile top bar with sidebar toggle */}
+        <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 bg-gray-50/80 lg:hidden sticky top-0 z-20">
+          <button
+            type="button"
+            onClick={() => setSidebarOpen(true)}
+            aria-label="Buka daftar tahap"
+            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 shadow-sm hover:bg-gray-100 active:scale-95 transition-all shrink-0"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <span>Tahap</span>
+          </button>
+          <span className="text-xs text-gray-500 truncate min-w-0">{activeTitle}</span>
+        </div>
+
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-10">
           {error && (
             <div className="mb-4 rounded-lg bg-amber-50 text-amber-900 text-sm px-4 py-3 border border-amber-200">
